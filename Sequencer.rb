@@ -66,8 +66,8 @@ Step = Struct.new(
     self.channel     = channel.to_i.abs
     self.repeats     = repeats.to_i.abs
     self.duration    = duration.to_f
-    self.velocity    = normalize(velocity)
-    self.probability = normalize(probability)
+    self.velocity    = velocity
+    self.probability = probability
   end
 
   def play
@@ -81,33 +81,27 @@ Step = Struct.new(
       $core.sleep duration
     end
   end
-
-  def normalize(number, range: 0..1)
-    if number > range.end
-      range.end
-    elsif number < range.begin
-      range.begin
-    else
-      number
-    end
-  end
-
-  def to_s
-    if probability.zero?
-      '_'
-    else
-      result = ":#{note}".dup
-      result << " v#{(velocity * 100).to_i}" if velocity < 1
-      result << " p#{(probability * 100).to_i}" if probability < 1
-      result << " r#{repeats}" if repeats > 1
-      result
-    end
-  end
 end
 
 
 class Sequence
 
+  PRESET = [
+    'v100|_|_|_',
+    '_|_|v74|_',
+    '_|_|_|_|  v100|_|_|_|  _|v55 p25|_|_|  v100|_|_|_',
+    '_|_|_|v85|  _|_|v81|_|  _|v62|_|v85|  _|_|v81|_',
+    '_|_|v62|_|  _|v62|_|_|  v62|_|_|v62|  _|_|v62|_',
+    'v62|_|_|v62|  _|_|v62|_|  _|v62|_|_|  v62|_|_|v34',
+    '_|_|v85|_|  _|v62|_|v88|  _|v62|_|_|  v91|_|v37|v62',
+    'v78|_|v62|_',
+    '_|v28|v94|_|  _|_|v62|v75',
+    'v62|v78|_|v62|  v88|_|v62|v78|  _|v62|v88|_|  v62|v81|_|v62',
+    'v62|_|v94|v34',
+    'v78|v50|v100|v62',
+  ].freeze
+
+  @cache = {}
   attr_accessor :steps
 
   # @param pattern [String] Defines notes sequence
@@ -127,27 +121,32 @@ class Sequence
   # @see Step.initialize
   # @return [Array<Step>] Parsed steps
   def self.parse(pattern)
-    normalized = pattern.tr("\n", '|').split('|').reject { |s| s.strip.empty? }
-    normalized.map do |params|
-      params.split(' ').each_with_object(Step.new) do |param, step|
-        if param.squeeze == '_'
-          step.probability = 0
-        else
-          prefix = param[0]
-          value  = param[1..-1]
-          case prefix
-          when ':'
-            step.note = value.to_sym
-          when 'v'
-            step.velocity = value.to_i / 100.0
-          when 'p'
-            step.probability = value.to_i / 100.0
-          when 'r'
-            step.repeats = value.to_i
+    @cache[pattern] ||= begin
+      normalized = pattern.tr("\n", '|').split('|').reject { |s| s.strip.empty? }
+      normalized.map do |params|
+        step = Step.new
+        params.split(' ').each do |param|
+          if param.squeeze == '_'
+            step.probability = 0
+          else
+            prefix = param[0]
+            value  = param[1..-1]
+            case prefix
+            when ':'
+              step.note = value.to_sym
+            when 'v'
+              step.velocity = value.to_i / 100.0
+            when 'p'
+              step.probability = value.to_i / 100.0
+            when 'r'
+              step.repeats = value.to_i
+            end
           end
         end
-      end
+        step.freeze
+      end.freeze
     end
+    @cache[pattern]
   end
 
   # @param pattern [String, Enumerable<Step>] Defines notes sequence
@@ -201,11 +200,6 @@ class Sequence
 
   def finite?
     !steps.size.nil?
-  end
-
-  def to_s
-    seq = finite? ? steps : steps.take(16)
-    seq.map(&:to_s).to_a.join('|')
   end
 end
 
