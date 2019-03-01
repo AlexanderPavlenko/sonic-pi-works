@@ -1,91 +1,5 @@
 $core = self
 use_timing_guarantees true
-TRACK = {}
-
-def show_must_go_on!
-  # TRACK[:ConSequence].call
-  TRACK[:PiChill].call
-end
-
-TRACK[:ConSequence] = -> do
-  live_loop :cs_high_hat do
-    seq = Sequence.new(%(
-      v900000 | ______ | v60 p20 | v40 p40 r3
-      v80 p50 | v20 r2 |  _____  | v30 p10 r4
-    ), note: :G2)
-    with_bpm(120) { seq.play }
-  end
-
-  live_loop :cs_kick do
-    seq = [
-      Sequence.new('.|_|v10 p50 r3|v88|_', note: :E2),
-      Sequence.new('_|v30 p40 r2|v5 p15 r4|v40|v88|_|v10 p15 r3|_', note: :E2)
-    ]
-    seq[0].play(4, pendulum: true)
-    seq[1].play
-  end
-
-  live_loop :cs_ride do
-    seq = Sequence.new(
-      (0..0.8).step(0.02).lazy.map { |v|
-        Step.new(velocity: v, note: :Ds3)
-      }
-    )
-    seq.play(pendulum: true)
-  end
-
-  live_loop :cs_keys do
-    generator = -> (&block) {
-      notes    = scale(:A3, :phrygian).to_a
-      max_note = notes.max.to_f
-      notes.shuffle.each_with_index { |n, i|
-        block.call Step.new(
-          channel:     2,
-          note:        n,
-          velocity:    (i + 1) / notes.size.to_f,
-          repeats:     [1, 2, 3].choose,
-          probability: 0.7 + 0.3 * n / max_note,
-        )
-      }
-    }
-    seq       = Sequence.new(generator.to_enum(:call))
-    with_bpm(30) { seq.play }
-  end
-end
-
-TRACK[:PiChill] = -> do
-  generator = -> (notes, density: 0.7) {
-    -> (&block) {
-      notes    = notes.to_a
-      max_note = notes.max.to_f
-      notes.shuffle.each_with_index { |n, i|
-        block.call Step.new(
-          note:        n,
-          velocity:    (i + 1) / notes.size.to_f,
-          probability: density + 0.3 * n / max_note,
-        )
-      }
-    }.to_enum(:call)
-  }
-
-  live_loop :pc_av do
-    seq = Sequence.new(generator[scale(:A3, :phrygian)])
-    with_bpm(8) { seq.play }
-  end
-
-  live_loop :pc_eai do
-    seq = Sequence.new(generator[scale(:A3, :minor_pentatonic), density: 0], channel: 2)
-    with_bpm(12) { seq.play }
-  end
-
-  live_loop :pc_st do
-    seq = Sequence.new(generator[scale(:A1, :phrygian), density: 0.2], channel: 3)
-    with_bpm(16) { seq.play }
-  end
-end
-
-# SCALE_NAMES = [:aeolian, :ahirbhairav, :augmented, :augmented2, :bartok, :bhairav, :blues_major, :blues_minor, :chinese, :chromatic, :diatonic, :diminished, :diminished2, :dorian, :egyptian, :enigmatic, :gong, :harmonic_major, :harmonic_minor, :hex_aeolian, :hex_dorian, :hex_major6, :hex_major7, :hex_phrygian, :hex_sus, :hindu, :hirajoshi, :hungarian_minor, :indian, :ionian, :iwato, :jiao, :kumoi, :leading_whole, :locrian, :locrian_major, :lydian, :lydian_minor, :major, :major_pentatonic, :marva, :melodic_major, :melodic_minor, :melodic_minor_asc, :melodic_minor_desc, :messiaen1, :messiaen2, :messiaen3, :messiaen4, :messiaen5, :messiaen6, :messiaen7, :minor, :minor_pentatonic, :mixolydian, :neapolitan_major, :neapolitan_minor, :octatonic, :pelog, :phrygian, :prometheus, :purvi, :ritusen, :romanian_minor, :scriabin, :shang, :spanish, :super_locrian, :todi, :whole, :whole_tone, :yu, :zhi]
-
 
 Step = Struct.new(
   *%i[note channel velocity probability repeats duration],
@@ -121,7 +35,6 @@ Step = Struct.new(
     end
   end
 end
-
 
 class Sequence
 
@@ -241,7 +154,3 @@ class Sequence
     !steps.size.nil?
   end
 end
-
-show_must_go_on!
-
-# @author Alexander Pavlenko <alerticus@pm.me>
