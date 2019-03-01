@@ -2,7 +2,7 @@
 # Return a list of all the sample names available
 # @accepts_block false
 # @introduced 2.0.0
-def all_sample_names()
+def all_sample_names
   #This is a stub, used for indexing
 end
 
@@ -27,7 +27,7 @@ end
 #   assert (1 + 1) == 2 # Ensure that arithmetic is sane!
 #   assert [:a, :b, :c].size == 3 # ensure lists can be correctly counted
 #
-def assert(_arg)
+def assert(_arg = nil)
   #This is a stub, used for indexing
 end
 
@@ -50,7 +50,7 @@ end
 #   # Add messages to the exceptions
 #   assert_equal 3, 5, "something is seriously wrong!"
 #
-def assert_equal(_arg1, _arg2)
+def assert_equal(_arg1 = nil, _arg2 = nil)
   #This is a stub, used for indexing
 end
 
@@ -61,27 +61,27 @@ end
 # @introduced 3.0.0
 # @example
 #   assert_error do
-#   play 70
+#     play 70
 #   end                         # Will throw an exception: "Assert error failed!" as the block
-#   # contains no errors.
+#                               # contains no errors.
 #
 # @example
 #   assert_error do
-#   1 / 0
+#     1 / 0
 #   end                         # Will not throw an exception as the block contains an error.
 #
 # @example
 #   assert_error ZeroDivisionError do
-#   1 / 0
+#     1 / 0
 #   end                         # Will not throw an exception as the block contains a ZeroDivisionError.
 #
 # @example
 #   assert_error ThreadError do
-#   1 / 0
+#     1 / 0
 #   end                         # Will throw an exception as the block contains a ZeroDivisionError rather than
-#   # a ThreadError.
+#                               # a ThreadError.
 #
-def assert_error(_class)
+def assert_error(_class = nil)
   #This is a stub, used for indexing
 end
 
@@ -103,7 +103,7 @@ end
 #   # Handles floating point imprecision
 #   assert_similar(4.9999999999, 5.0) #=> True
 #
-def assert_similar(_arg1, _arg2)
+def assert_similar(_arg1 = nil, _arg2 = nil)
   #This is a stub, used for indexing
 end
 
@@ -119,53 +119,53 @@ end
 # @introduced 2.1.0
 # @example
 #   at 4 do
-#   sample :ambi_choir    # play sample after waiting for 4 beats
-#   end
+#       sample :ambi_choir    # play sample after waiting for 4 beats
+#     end
 #
 # @example
 #   at [1, 2, 4] do  # plays a note after waiting 1 beat,
-#   play 75           # then after 1 more beat,
-#   end                 # then after 2 more beats (4 beats total)
+#       play 75           # then after 1 more beat,
+#     end                 # then after 2 more beats (4 beats total)
 #
 # @example
 #   at [1, 2, 3], [75, 76, 77] do |n|  # plays 3 different notes
-#   play n
-#   end
+#       play n
+#     end
 #
 # @example
 #   at [1, 2, 3],
-#   [{:amp=>0.5}, {:amp=> 0.8}] do |p| # alternate soft and loud
-#   sample :drum_cymbal_open, p          # cymbal hits three times
-#   end
+#         [{:amp=>0.5}, {:amp=> 0.8}] do |p| # alternate soft and loud
+#       sample :drum_cymbal_open, p          # cymbal hits three times
+#     end
 #
 # @example
 #   at [0, 1, 2] do |t| # when no params are given to at, the times are fed through to the block
-#   puts t #=> prints 0, 1, then 2
-#   end
+#       puts t #=> prints 0, 1, then 2
+#     end
 #
 # @example
 #   at [0, 1, 2], [:a, :b] do |t, b|  #If you specify the block with 2 args, it will pass through both the time and the param
-#   puts [t, b] #=> prints out [0, :a], [1, :b], then [2, :a]
-#   end
+#       puts [t, b] #=> prints out [0, :a], [1, :b], then [2, :a]
+#     end
 #
 # @example
 #   at [0, 0.5, 2] do |t, idx|  #If you specify the block with 2 args, and no param list to at, it will pass through both the time and the index
-#   puts [t, idx] #=> prints out [0, 0], [0.5, 1], then [2, 2]
-#   end
+#       puts [t, idx] #=> prints out [0, 0], [0.5, 1], then [2, 2]
+#     end
 #
 # @example
 #   at [0, 0.5, 2], [:a, :b] do |t, b, idx|  #If you specify the block with 3 args, it will pass through the time, the param and the index
-#   puts [t, b, idx] #=> prints out [0, :a, 0], [0.5, :b, 1], then [2, :a, 2]
-#   end
+#       puts [t, b, idx] #=> prints out [0, :a, 0], [0.5, :b, 1], then [2, :a, 2]
+#     end
 #
 # @example
 #   # at does not consume & interfere with the outer random stream
 #   puts "main: ", rand  # 0.75006103515625
 #   rand_back
 #   at 1 do         # the random stream inside the at block is separate and
-#   # isolated from the outer stream.
-#   puts "at:", rand # 0.9287109375
-#   puts "at:", rand # 0.1043701171875
+#                   # isolated from the outer stream.
+#     puts "at:", rand # 0.9287109375
+#     puts "at:", rand # 0.1043701171875
 #   end
 #   
 #   sleep 2
@@ -174,47 +174,45 @@ end
 # @example
 #   # Each block run within at has its own isolated random stream:
 #   at [1, 2] do
-#   # first time round (after 1 beat) prints:
-#   puts rand # 0.9287109375
-#   puts rand # 0.1043701171875
+#               # first time round (after 1 beat) prints:
+#     puts rand # 0.9287109375
+#     puts rand # 0.1043701171875
 #   end
-#   # second time round (after 2 beats) prints:
-#   # 0.1043701171875
-#   # 0.764617919921875
+#               # second time round (after 2 beats) prints:
+#               # 0.1043701171875
+#               # 0.764617919921875
 #
-def at(_times, _params)
+def at(_times = nil, _params = nil)
   #This is a stub, used for indexing
 end
 
 # Get current beat
 # Returns the beat value for the current thread/live_loop. Beats are advanced only by calls to `sleep` and `sync`. Beats are distinct from virtual time (the value obtained by calling `vt`) in that it has no notion of rate. It is just essentially a counter for sleeps. After a `sync`, the beat is overridden with the beat value from the thread which called `cue`. 
-# @param _ []
 # @accepts_block false
 # @introduced 2.10.0
 # @example
 #   use_bpm 120  # The current BPM makes no difference
-#   puts beat    #=> 0
-#   sleep 1
-#   puts beat    #=> 1
-#   use_bpm 2000
-#   sleep 2
-#   puts beat    #=> 3
+#     puts beat    #=> 0
+#     sleep 1
+#     puts beat    #=> 1
+#     use_bpm 2000
+#     sleep 2
+#     puts beat    #=> 3
 #
-def beat(_)
+def beat
   #This is a stub, used for indexing
 end
 
 # Return block duration
 # Given a block, runs it and returns the amount of time that has passed. This time is in seconds and is not scaled to the current BPM. Any threads spawned in the block are not accounted for.
-# @param _ []
 # @accepts_block true
 # @introduced 2.9.0
 # @example
 #   dur = block_duration do
-#   play 50
-#   sleep 1
-#   play 62
-#   sleep 2
+#     play 50
+#     sleep 1
+#     play 62
+#     sleep 2
 #   end
 #   
 #   puts dur #=> Returns 3 as 3 seconds have passed within the block
@@ -222,56 +220,55 @@ end
 # @example
 #   use_bpm 120
 #   dur = block_duration do
-#   play 50
-#   sleep 1
-#   play 62
-#   sleep 2
+#     play 50
+#     sleep 1
+#     play 62
+#     sleep 2
 #   end
 #   
 #   puts dur #=> Returns 1.5 as 1.5 seconds have passed within the block
-#   #   (due to the BPM being 120)
+#            #   (due to the BPM being 120)
 #
-def block_duration(_)
+def block_duration
   #This is a stub, used for indexing
 end
 
 # Determine if block contains sleep time
 # Given a block, runs it and returns whether or not the block contained sleeps or syncs
-# @param _ []
 # @accepts_block true
 # @introduced 2.9.0
 # @example
 #   slept = block_slept? do
-#   play 50
-#   sleep 1
-#   play 62
-#   sleep 2
+#     play 50
+#     sleep 1
+#     play 62
+#     sleep 2
 #   end
 #   
 #   puts slept #=> Returns true as there were sleeps in the block
 #
 # @example
 #   in_thread do
-#   sleep 1
-#   cue :foo  # trigger a cue on a different thread
+#     sleep 1
+#     cue :foo  # trigger a cue on a different thread
 #   end
 #   
 #   slept = block_slept? do
-#   sync :foo  # wait for the cue before playing the note
-#   play 62
+#     sync :foo  # wait for the cue before playing the note
+#     play 62
 #   end
 #   
 #   puts slept #=> Returns true as the block contained a sync.
 #
 # @example
 #   slept = block_slept? do
-#   play 50
-#   play 62
+#     play 50
+#     play 62
 #   end
 #   
 #   puts slept #=> Returns false as there were no sleeps in the block
 #
-def block_slept?(_)
+def block_slept?
   #This is a stub, used for indexing
 end
 
@@ -286,7 +283,7 @@ end
 # @example
 #   (bools 1, 0, true, false, nil) #=> (ring true, false, true, false, false)
 #
-def bools(_list)
+def bools(_list = nil)
   #This is a stub, used for indexing
 end
 
@@ -297,20 +294,18 @@ end
 # @introduced 2.8.0
 # @example
 #   use_bpm 120  # Set the BPM to be double the default
-#   puts bt(1) # 0.5
-#   use_bpm 60   # BPM is now default
-#   puts bt(1) # 1
-#   use_bpm 30   # BPM is now half the default
-#   puts bt(1) # 2
+#     puts bt(1) # 0.5
+#     use_bpm 60   # BPM is now default
+#     puts bt(1) # 1
+#     use_bpm 30   # BPM is now half the default
+#     puts bt(1) # 2
 #
-def bt(_seconds)
+def bt(_seconds = nil)
   #This is a stub, used for indexing
 end
 
 # Intialise or return named buffer
 # Initialise or return a named buffer with a specific duration (defaults to 8 beats). Useful for working with the `:record` FX. If the buffer is requested with a different duration, then a new buffer will be initialised and the old one recycled.
-# @param _symbol [name]
-# @param _number [duration]
 # @accepts_block false
 # @introduced 3.0.0
 # @example
@@ -324,8 +319,8 @@ end
 # @example
 #   use_bpm 120
 #   buffer(:foo, 16) # load a 8s buffer and name it :foo
-#   # (this isn't 16s as the BPM has been
-#   # doubled from the default of 60)
+#                    # (this isn't 16s as the BPM has been
+#                    # doubled from the default of 60)
 #
 # @example
 #   buffer(:foo)     # init a 8s buffer and name it :foo
@@ -335,7 +330,7 @@ end
 #   buffer(:foo)     # init a 8s buffer and name it :foo
 #   buffer(:foo)     # return cached 8s buffer (has the same duration)
 #
-def buffer(_symbol, _number)
+def buffer
   #This is a stub, used for indexing
 end
 
@@ -350,20 +345,20 @@ end
 # @introduced 2.0.0
 # @example
 #   loop do
-#   play choose([60, 64, 67]) #=> plays one of 60, 64 or 67 at random
-#   sleep 1
-#   play chord(:c, :major).choose #=> You can also call .choose on the list
-#   sleep 1
-#   end
+#       play choose([60, 64, 67]) #=> plays one of 60, 64 or 67 at random
+#       sleep 1
+#       play chord(:c, :major).choose #=> You can also call .choose on the list
+#       sleep 1
+#     end
 #
 # @example
 #   # Using choose for random sample onsets
 #   live_loop :foo do
-#   sample :loop_amen, onset: choose   # choose a random onset value each time
-#   sleep 0.125
+#     sample :loop_amen, onset: choose   # choose a random onset value each time
+#     sleep 0.125
 #   end
 #
-def choose(_list)
+def choose(_list = nil)
   #This is a stub, used for indexing
 end
 
@@ -371,8 +366,8 @@ end
 # Creates an immutable ring of Midi note numbers when given a tonic note and a chord type. If only passed a chord type, will default the tonic to 0. See examples.
 # @param _tonic [symbol]
 # @param _name [symbol]
-# @option opts :invert Apply the specified num inversions to chord. See the fn `chord_invert`.
-# @option opts :num_octaves Create an arpeggio of the chord over n octaves
+# @param invert Apply the specified num inversions to chord. See the fn `chord_invert`.
+# @param num_octaves Create an arpeggio of the chord over n octaves
 # @accepts_block false
 # @introduced 2.0.0
 # @example
@@ -395,13 +390,13 @@ end
 # @example
 #   # chords are great for arpeggiators
 #   live_loop :arp do
-#   play chord(:e, :minor, num_octaves: 2).tick, release: 0.1
-#   sleep 0.125
+#     play chord(:e, :minor, num_octaves: 2).tick, release: 0.1
+#     sleep 0.125
 #   end
 #
 # @example
 #   # Sonic Pi supports a large range of chords
-#   # Notice that the more exotic ones have to be surrounded by ' quotes
+#    # Notice that the more exotic ones have to be surrounded by ' quotes
 #   (chord :C, '1')
 #   (chord :C, '5')
 #   (chord :C, '+5')
@@ -466,7 +461,7 @@ end
 #   (chord :C, :dim7)
 #   (chord :C, :i7)
 #
-def chord(_tonic, _name, invert: nil, num_octaves: nil)
+def chord(_tonic = nil, _name = nil, invert: nil, num_octaves: nil)
   #This is a stub, used for indexing
 end
 
@@ -499,7 +494,7 @@ end
 # @example
 #   play (chord_degree :i, :C4, :major, 5) # Taking five notes gives us 9th chords - here it plays a C major 9 chord
 #
-def chord_degree(_degree, _tonic, _scale, _number_of_notes)
+def chord_degree(_degree = nil, _tonic = nil, _scale = nil, _number_of_notes = nil)
   #This is a stub, used for indexing
 end
 
@@ -520,7 +515,7 @@ end
 #   sleep 1
 #   play (chord_invert (chord :A3, "M"), 2) #Second inversion - (ring 64, 69, 73)
 #
-def chord_invert(_notes, _shift)
+def chord_invert(_notes = nil, _shift = nil)
   #This is a stub, used for indexing
 end
 
@@ -531,13 +526,12 @@ end
 # @example
 #   puts chord_names #=>  prints a list of all the chords
 #
-def chord_names()
+def chord_names
   #This is a stub, used for indexing
 end
 
 # Clear all thread locals to defaults
 # All settings such as the current synth, BPM, random stream and tick values will be reset to their defaults. Consider using `reset` to reset all these values to those inherited from the parent thread.
-# @param _ []
 # @accepts_block false
 # @introduced 2.11.0
 # @example
@@ -552,28 +546,28 @@ end
 #   puts tick               #=> 0
 #   
 #   at do
-#   use_synth :tb303
-#   puts rand               #=> 0.9287109375
-#   clear
-#   puts "thread"         #=> "thread"
+#     use_synth :tb303
+#     puts rand               #=> 0.9287109375
+#     clear
+#     puts "thread"         #=> "thread"
 #   
 #   
-#   # The clear reset the current synth to the default
-#   # of :beep. We are therefore ignoring any inherited
-#   # synth settings. It is as if the thread was a completely
-#   # new Run.
-#   puts current_synth      #=> :beep
+#                             # The clear reset the current synth to the default
+#                             # of :beep. We are therefore ignoring any inherited
+#                             # synth settings. It is as if the thread was a completely
+#                             # new Run.
+#     puts current_synth      #=> :beep
 #   
-#   # The current octave defaults back to 0
-#   puts current_octave     #=> 0
+#                             # The current octave defaults back to 0
+#     puts current_octave     #=> 0
 #   
-#   # The random stream defaults back to the standard
-#   # stream used by every new Run.
-#   puts rand               #=> 0.75006103515625
-#   puts tick               #=> 0
+#                             # The random stream defaults back to the standard
+#                             # stream used by every new Run.
+#     puts rand               #=> 0.75006103515625
+#     puts tick               #=> 0
 #   end
 #
-def clear(_)
+def clear
   #This is a stub, used for indexing
 end
 
@@ -583,12 +577,12 @@ end
 # @introduced 2.0.0
 # @example
 #   comment do # starting a block level comment:
-#   play 50 # not played
-#   sleep 1 # no sleep happens
-#   play 62 # not played
-#   end
+#       play 50 # not played
+#       sleep 1 # no sleep happens
+#       play 62 # not played
+#     end
 #
-def comment()
+def comment
   #This is a stub, used for indexing
 end
 
@@ -613,7 +607,7 @@ end
 #   
 #   s = synth :prophet, note: :e1, cutoff: 70, cutoff_slide: 8, release: 8 # start synth and specify slide time for cutoff opt
 #   control s, cutoff: 130 # Change the cutoff value with a control.
-#   # Cutoff will now slide over 8 beats from 70 to 130
+#                          # Cutoff will now slide over 8 beats from 70 to 130
 #
 # @example
 #   ## Use a short slide time and many controls to create a sliding melody
@@ -622,19 +616,19 @@ end
 #   
 #   s = synth :beep, note: :e3, sustain: 8, note_slide: 0.05 # Start our synth running with a long sustain and short note slide time
 #   64.times do
-#   control s, note: notes.tick                            # Keep quickly changing the note by ticking through notes repeatedly
-#   sleep 0.125
+#     control s, note: notes.tick                            # Keep quickly changing the note by ticking through notes repeatedly
+#     sleep 0.125
 #   end
 #
 # @example
 #   ## Controlling FX
 #   
 #   with_fx :bitcrusher, sample_rate: 1000, sample_rate_slide: 8 do |bc| # Start FX but also use the handy || goalposts
-#   # to grab a handle on the running FX. We can call
-#   # our handle anything we want. Here we've called it bc
-#   sample :loop_garzul, rate: 1
-#   control bc, sample_rate: 5000                                      # We can use our handle bc now just like we used s in the
-#   # previous example to modify the FX as it runs.
+#                                                                        # to grab a handle on the running FX. We can call
+#                                                                        # our handle anything we want. Here we've called it bc
+#     sample :loop_garzul, rate: 1
+#     control bc, sample_rate: 5000                                      # We can use our handle bc now just like we used s in the
+#                                                                        # previous example to modify the FX as it runs.
 #   end
 #
 # @example
@@ -643,8 +637,8 @@ end
 #   cg = play (chord :e4, :minor), sustain: 2  # start a chord
 #   sleep 1
 #   control cg, notes: (chord :c3, :major)     # transition to new chord.
-#   # Each note in the original chord is mapped onto
-#   # the equivalent in the new chord.
+#                                              # Each note in the original chord is mapped onto
+#                                              # the equivalent in the new chord.
 #
 # @example
 #   ## Sliding between chords
@@ -652,8 +646,8 @@ end
 #   cg = play (chord :e4, :minor), sustain: 4, note_slide: 3  # start a chord
 #   sleep 1
 #   control cg, notes: (chord :c3, :major)                    # slide to new chord.
-#   # Each note in the original chord is mapped onto
-#   # the equivalent in the new chord.
+#                                                             # Each note in the original chord is mapped onto
+#                                                             # the equivalent in the new chord.
 #
 # @example
 #   ## Sliding from a larger to smaller chord
@@ -661,21 +655,21 @@ end
 #   cg = play (chord :e3, :m13), sustain: 4, note_slide: 3  # start a chord with 7 notes
 #   sleep 1
 #   control cg, notes: (chord :c3, :major)                    # slide to new chord with fewer notes (3)
-#   # Each note in the original chord is mapped onto
-#   # the equivalent in the new chord using ring-like indexing.
-#   # This means that the 4th note in the original chord will
-#   # be mapped onto the 1st note in the second chord and so-on.
+#                                                             # Each note in the original chord is mapped onto
+#                                                             # the equivalent in the new chord using ring-like indexing.
+#                                                             # This means that the 4th note in the original chord will
+#                                                             # be mapped onto the 1st note in the second chord and so-on.
 #
 # @example
 #   ## Sliding from a smaller to larger chord
 #   cg = play (chord :c3, :major), sustain: 4, note_slide: 3  # start a chord with 3 notes
 #   sleep 1
 #   control cg, notes: (chord :e3, :m13)                     # slide to new chord with more notes (7)
-#   # Each note in the original chord is mapped onto
-#   # the equivalent in the new chord.
-#   # This means that the 4th note in the new chord
-#   # will not sound as there is no 4th note in the
-#   # original chord.
+#                                                             # Each note in the original chord is mapped onto
+#                                                             # the equivalent in the new chord.
+#                                                             # This means that the 4th note in the new chord
+#                                                             # will not sound as there is no 4th note in the
+#                                                             # original chord.
 #
 # @example
 #   ## Changing the slide rate
@@ -685,8 +679,8 @@ end
 #   control s, cutoff: 130                                                 # change the cutoff so it starts sliding slowly
 #   sleep 3                                                                # wait for 3 beats
 #   control s, cutoff_slide: 1                                             # Change the cutoff_slide - the cutoff now slides more quickly to 130
-#   # it will now take 1 beat to slide from its *current* value
-#   # (somewhere between 70 and 130) to 130
+#                                                                          # it will now take 1 beat to slide from its *current* value
+#                                                                          # (somewhere between 70 and 130) to 130
 #
 # @example
 #   ## Controlling the last triggered synth
@@ -694,8 +688,8 @@ end
 #   synth :prophet, note: :e1, release: 8                                  # Every time a synth is triggered, Sonic Pi automatically remembers the node
 #   sleep 1
 #   16.times do
-#   control note: (octs :e1, 3).tick                                     # This means we don't need to use an explicit variable to control the synth
-#   sleep 0.125                                                          # we last triggered.
+#     control note: (octs :e1, 3).tick                                     # This means we don't need to use an explicit variable to control the synth
+#     sleep 0.125                                                          # we last triggered.
 #   end
 #
 # @example
@@ -709,90 +703,90 @@ end
 #   sleep 0.1
 #   control note: :e4                        # Control last triggered synth (:dsaw)
 #
-def control(_node)
+def control(_node = nil)
   #This is a stub, used for indexing
 end
 
 # Cue other threads
 # Send a heartbeat synchronisation message containing the (virtual) timestamp of the current thread. Useful for syncing up external threads via the `sync` fn. Any opts which are passed are given to the thread which syncs on the `cue_id`. The values of the opts must be immutable. Currently numbers, symbols, booleans, nil and frozen strings, or vectors/rings/frozen arrays/maps of immutable values are supported.
 # @param _cue_id [symbol]
-# @option opts :your_key Your value
-# @option opts :another_key Another value
-# @option opts :key All these opts are passed through to the thread which syncs
+# @param your_key Your value
+# @param another_key Another value
+# @param key All these opts are passed through to the thread which syncs
 # @accepts_block false
 # @introduced 2.0.0
 # @example
 #   in_thread do
-#   sync :foo # this parks the current thread waiting for a foo cue message to be received.
-#   sample :ambi_lunar_land
-#   end
+#       sync :foo # this parks the current thread waiting for a foo cue message to be received.
+#       sample :ambi_lunar_land
+#     end
 #   
-#   sleep 5
+#     sleep 5
 #   
-#   cue :foo # We send a cue message from the main thread.
-#   # This then unblocks the thread above and we then hear the sample
+#     cue :foo # We send a cue message from the main thread.
+#               # This then unblocks the thread above and we then hear the sample
 #
 # @example
 #   in_thread do   # Start a metronome thread
-#   loop do      # Loop forever:
-#   cue :tick  # sending tick heartbeat messages
-#   sleep 0.5  # and sleeping for 0.5 beats between ticks
-#   end
-#   end
+#       loop do      # Loop forever:
+#         cue :tick  # sending tick heartbeat messages
+#         sleep 0.5  # and sleeping for 0.5 beats between ticks
+#       end
+#     end
 #   
-#   # We can now play sounds using the metronome.
-#   loop do                    # In the main thread, just loop
-#   sync :tick               # waiting for :tick cue messages
-#   sample :drum_heavy_kick  # after which play the drum kick sample
-#   end
+#     # We can now play sounds using the metronome.
+#     loop do                    # In the main thread, just loop
+#       sync :tick               # waiting for :tick cue messages
+#       sample :drum_heavy_kick  # after which play the drum kick sample
+#     end
 #
 # @example
 #   in_thread do   # Start a metronome thread
-#   loop do      # Loop forever:
-#   cue [:foo, :bar, :baz].choose # sending one of three tick heartbeat messages randomly
-#   sleep 0.5  # and sleeping for 0.5 beats between ticks
-#   end
-#   end
+#       loop do      # Loop forever:
+#         cue [:foo, :bar, :baz].choose # sending one of three tick heartbeat messages randomly
+#         sleep 0.5  # and sleeping for 0.5 beats between ticks
+#       end
+#     end
 #   
-#   # We can now play sounds using the metronome:
+#     # We can now play sounds using the metronome:
 #   
-#   in_thread do
-#   loop do              # In the main thread, just loop
-#   sync :foo          # waiting for :foo cue messages
-#   sample :elec_beep  # after which play the elec beep sample
-#   end
-#   end
+#     in_thread do
+#       loop do              # In the main thread, just loop
+#         sync :foo          # waiting for :foo cue messages
+#         sample :elec_beep  # after which play the elec beep sample
+#       end
+#     end
 #   
-#   in_thread do
-#   loop do              # In the main thread, just loop
-#   sync :bar          # waiting for :bar cue messages
-#   sample :elec_flip  # after which play the elec flip sample
-#   end
-#   end
+#     in_thread do
+#       loop do              # In the main thread, just loop
+#         sync :bar          # waiting for :bar cue messages
+#         sample :elec_flip  # after which play the elec flip sample
+#       end
+#     end
 #   
-#   in_thread do
-#   loop do              # In the main thread, just loop
-#   sync :baz          # waiting for :baz cue messages
-#   sample :elec_blup  # after which play the elec blup sample
-#   end
-#   end
+#     in_thread do
+#       loop do              # In the main thread, just loop
+#         sync :baz          # waiting for :baz cue messages
+#         sample :elec_blup  # after which play the elec blup sample
+#       end
+#     end
 #
 # @example
 #   in_thread do
-#   loop do
-#   cue :tick, foo: 64  # sending tick heartbeat messages with a value :foo
-#   sleep 0.5
-#   end
-#   end
+#       loop do
+#         cue :tick, foo: 64  # sending tick heartbeat messages with a value :foo
+#         sleep 0.5
+#       end
+#     end
 #   
-#   # The value for :foo can now be used in synced threads
+#     # The value for :foo can now be used in synced threads
 #   
-#   loop do
-#   values = sync :tick
-#   play values[:foo]    # play the note value from :foo
-#   end
+#     loop do
+#       values = sync :tick
+#       play values[:foo]    # play the note value from :foo
+#     end
 #
-def cue(_cue_id, your_key: nil, another_key: nil, key: nil)
+def cue(_cue_id = nil, your_key: nil, another_key: nil, key: nil)
   #This is a stub, used for indexing
 end
 
@@ -805,7 +799,7 @@ end
 # @example
 #   puts current_arg_checks # Print out the current arg check setting
 #
-def current_arg_checks()
+def current_arg_checks
   #This is a stub, used for indexing
 end
 
@@ -817,12 +811,12 @@ end
 # @introduced 2.6.0
 # @example
 #   use_bpm 60
-#   puts current_beat_duration #=> 1
+#     puts current_beat_duration #=> 1
 #   
-#   use_bpm 120
-#   puts current_beat_duration #=> 0.5
+#     use_bpm 120
+#     puts current_beat_duration #=> 0.5
 #
-def current_beat_duration()
+def current_beat_duration
   #This is a stub, used for indexing
 end
 
@@ -835,7 +829,7 @@ end
 # @example
 #   puts current_bpm # Print out the current bpm
 #
-def current_bpm()
+def current_bpm
   #This is a stub, used for indexing
 end
 
@@ -848,7 +842,7 @@ end
 # @example
 #   puts current_cent_tuning # Print out the current cent shift
 #
-def current_cent_tuning()
+def current_cent_tuning
   #This is a stub, used for indexing
 end
 
@@ -861,7 +855,7 @@ end
 # @example
 #   puts current_debug # Print out the current debug setting
 #
-def current_debug()
+def current_debug
   #This is a stub, used for indexing
 end
 
@@ -876,7 +870,7 @@ end
 #   midi_note_on :e1 # Sends MIDI :e1 note on to channel 1 on port "foo"
 #   current_midi_defaults #=> Prints {channel: 1, port: "foo"}
 #
-def current_midi_defaults()
+def current_midi_defaults
   #This is a stub, used for indexing
 end
 
@@ -889,7 +883,7 @@ end
 # @example
 #   puts current_octave # Print out the current octave shift
 #
-def current_octave()
+def current_octave
   #This is a stub, used for indexing
 end
 
@@ -910,11 +904,11 @@ end
 #   puts rand               #=> 0.464202880859375
 #   puts rand               #=> 0.24249267578125
 #   use_random_seed a       # Restore the seed
-#   # we'll now get the same random values:
+#                           # we'll now get the same random values:
 #   puts rand               #=> 0.464202880859375
 #   puts rand               #=> 0.24249267578125
 #
-def current_random_seed()
+def current_random_seed
   #This is a stub, used for indexing
 end
 
@@ -929,7 +923,7 @@ end
 #   sample :loop_amen # Plays amen break with amp 0.5 and cutoff 80
 #   puts current_sample_defaults #=> Prints {amp: 0.5, cutoff: 80}
 #
-def current_sample_defaults()
+def current_sample_defaults
   #This is a stub, used for indexing
 end
 
@@ -943,7 +937,7 @@ end
 #   set_sched_ahead_time! 0.5
 #   puts current_sched_ahead_time # Prints 0.5
 #
-def current_sched_ahead_time()
+def current_sched_ahead_time
   #This is a stub, used for indexing
 end
 
@@ -956,7 +950,7 @@ end
 # @example
 #   puts current_synth # Print out the current synth name
 #
-def current_synth()
+def current_synth
   #This is a stub, used for indexing
 end
 
@@ -971,7 +965,7 @@ end
 #   play 50 # Plays note 50 with amp 0.5 and cutoff 80
 #   puts current_synth_defaults #=> Prints {amp: 0.5, cutoff: 80}
 #
-def current_synth_defaults()
+def current_synth_defaults
   #This is a stub, used for indexing
 end
 
@@ -995,7 +989,7 @@ end
 #   puts "D", __system_thread_locals.get(:sonic_pi_spider_time).to_f # ├─ "D" 1489966042.760181
 #   puts "E", __system_thread_locals.get(:sonic_pi_spider_time).to_f # └─ "E" 1489966042.760181
 #
-def current_time()
+def current_time
   #This is a stub, used for indexing
 end
 
@@ -1008,7 +1002,7 @@ end
 # @example
 #   puts current_transpose # Print out the current transpose value
 #
-def current_transpose()
+def current_transpose
   #This is a stub, used for indexing
 end
 
@@ -1025,7 +1019,7 @@ end
 #   set_volume! 2
 #   puts current_volume #=> 2
 #
-def current_volume()
+def current_volume
   #This is a stub, used for indexing
 end
 
@@ -1040,7 +1034,7 @@ end
 # @example
 #   dec -1 # returns -2
 #
-def dec(_n)
+def dec(_n = nil)
   #This is a stub, used for indexing
 end
 
@@ -1051,80 +1045,80 @@ end
 # @introduced 2.0.0
 # @example
 #   # Define a new function called foo
-#   define :foo do
-#   play 50
-#   sleep 1
-#   end
+#     define :foo do
+#       play 50
+#       sleep 1
+#     end
 #   
-#   # Call foo on its own
-#   foo
+#     # Call foo on its own
+#     foo
 #   
-#   # You can use foo anywhere you would use normal code.
-#   # For example, in a block:
-#   3.times do
-#   foo
-#   end
+#     # You can use foo anywhere you would use normal code.
+#     # For example, in a block:
+#     3.times do
+#       foo
+#     end
 #
-def define(_name)
+def define(_name = nil)
   #This is a stub, used for indexing
 end
 
 # Define a named value only once
 # Allows you to assign the result of some code to a name, with the property that the code will only execute once - therefore stopping re-definitions. This is useful for defining values that you use in your compositions but you don't want to reset every time you press run. You may force the block to execute again regardless of whether or not it has executed once already by using the override option (see examples).
 # @param _name [symbol]
-# @option opts :override If set to true, re-definitions are allowed and this acts like define
+# @param override If set to true, re-definitions are allowed and this acts like define
 # @accepts_block true
 # @introduced 2.0.0
 # @example
 #   defonce :foo do  # Define a new function called foo
-#   sleep 1        # Sleep for a beat in the function definition. Note that this amount
-#   # of time in seconds will depend on the current BPM of the live_loop
-#   # or thread calling this function.
-#   puts "hello" # Print hello
-#   10             # Return a value of 10
-#   end
+#       sleep 1        # Sleep for a beat in the function definition. Note that this amount
+#                      # of time in seconds will depend on the current BPM of the live_loop
+#                      # or thread calling this function.
+#       puts "hello" # Print hello
+#       10             # Return a value of 10
+#     end
 #   
-#   # Call foo on its own
-#   puts foo # The run sleeps for a beat and prints "hello" before returning 10
+#     # Call foo on its own
+#     puts foo # The run sleeps for a beat and prints "hello" before returning 10
 #   
-#   # Try it again:
-#   puts foo # This time the run doesn't sleep or print anything out. However, 10 is still returned.
+#     # Try it again:
+#     puts foo # This time the run doesn't sleep or print anything out. However, 10 is still returned.
 #   
 #   
 #   
-#   defonce :foo do # Try redefining foo
-#   puts "you can't redefine me"
-#   15
-#   end
+#     defonce :foo do # Try redefining foo
+#       puts "you can't redefine me"
+#       15
+#     end
 #   
-#   puts foo # We still don't see any printing or sleeping, and the result is still 10
+#     puts foo # We still don't see any printing or sleeping, and the result is still 10
 #   
-#   # You can use foo anywhere you would use normal code.
-#   # For example, in a block:
-#   3.times do
-#   play foo  # play 10
-#   end
+#     # You can use foo anywhere you would use normal code.
+#     # For example, in a block:
+#     3.times do
+#       play foo  # play 10
+#     end
 #
 # @example
 #   defonce :bar do
-#   50
-#   end
+#       50
+#     end
 #   
-#   play bar # plays 50
+#     play bar # plays 50
 #   
-#   defonce :bar do # This redefinition doesn't work due to the behaviour of defonce
-#   70
-#   end
+#     defonce :bar do # This redefinition doesn't work due to the behaviour of defonce
+#       70
+#     end
 #   
-#   play bar # Still plays 50
+#     play bar # Still plays 50
 #   
-#   defonce :bar, override: true do  # Force definition to take place with override option
-#   80
-#   end
+#     defonce :bar, override: true do  # Force definition to take place with override option
+#       80
+#     end
 #   
-#   play bar # plays 80
+#     play bar # plays 80
 #
-def defonce(_name, override: nil)
+def defonce(_name = nil, override: nil)
   #This is a stub, used for indexing
 end
 
@@ -1139,7 +1133,7 @@ end
 #   play degree(:ii, :D3, :major)
 #   play degree(2, :C3, :minor)
 #
-def degree(_degree, _tonic, _scale)
+def degree(_degree = nil, _tonic = nil, _scale = nil)
   #This is a stub, used for indexing
 end
 
@@ -1151,27 +1145,27 @@ end
 # @example
 #   use_bpm 60   # Set the BPM to 60
 #   
-#   density 2 do       # BPM for block is now 120
-#   # block is called 2.times
-#   sample :bd_haus # sample is played twice
-#   sleep 0.5        # sleep is 0.25s
-#   end
+#     density 2 do       # BPM for block is now 120
+#                        # block is called 2.times
+#       sample :bd_haus # sample is played twice
+#       sleep 0.5        # sleep is 0.25s
+#     end
 #
 # @example
 #   density 2 do |idx| # You may also pass a param to the block similar to n.times
-#   puts idx         # prints out 0, 1
-#   sleep 0.5        # sleep is 0.25s
-#   end
+#       puts idx         # prints out 0, 1
+#       sleep 0.5        # sleep is 0.25s
+#     end
 #
 # @example
 #   density 0.5 do          # Specifying a density val of < 1 will stretch out time
-#   # A density of 0.5 will double the length of the block's
-#   # execution time.
-#   play 80, release: 1   # plays note 80 with 2s release
-#   sleep 0.5             # sleep is 1s
-#   end
+#                             # A density of 0.5 will double the length of the block's
+#                             # execution time.
+#       play 80, release: 1   # plays note 80 with 2s release
+#       sleep 0.5             # sleep is 1s
+#     end
 #
-def density(_d)
+def density(_d = nil)
   #This is a stub, used for indexing
 end
 
@@ -1182,12 +1176,12 @@ end
 # @introduced 2.0.0
 # @example
 #   dice # will return a number between 1 and 6 inclusively
-#   # (with an even probability distribution).
+#          # (with an even probability distribution).
 #
 # @example
 #   dice 3 # will return a number between 1 and 3 inclusively
 #
-def dice(_num_sides)
+def dice(_num_sides = nil)
   #This is a stub, used for indexing
 end
 
@@ -1209,19 +1203,7 @@ end
 # @example
 #   (doubles 100, -4) #=> (ring 100, 50, 25, 12.5)
 #
-def doubles(_start, _num_doubles)
-  #This is a stub, used for indexing
-end
-
-# Evaluate the contents of the file inline in the current thread like a function.
-# Reads the full contents of the file with `path` and executes within the current thread like a function call.
-# @param _filename [path]
-# @accepts_block false
-# @introduced 3.2.0
-# @example
-#   eval_file "~/path/to/sonic-pi-code.rb" #=> will run the contents of this file
-#
-def eval_file(_filename)
+def doubles(_start = nil, _num_doubles = nil)
   #This is a stub, used for indexing
 end
 
@@ -1240,7 +1222,7 @@ end
 # @example
 #   factor?(2, 0.5) #true - 2 is a multiple of 0.5 (0.5 * 4 = 2)
 #
-def factor?(_val, _factor)
+def factor?(_val = nil, _factor = nil)
   #This is a stub, used for indexing
 end
 
@@ -1248,7 +1230,7 @@ end
 # Return a list of all the FX available
 # @accepts_block false
 # @introduced 2.10.0
-def fx_names()
+def fx_names
   #This is a stub, used for indexing
 end
 
@@ -1268,14 +1250,14 @@ end
 #
 # @example
 #   in_thread do
-#   set :foo, 3
+#     set :foo, 3
 #   end
 #   
 #   in_thread do
-#   puts get[:foo]  #=> always returns 3 (no race conditions here!)
+#     puts get[:foo]  #=> always returns 3 (no race conditions here!)
 #   end
 #
-def get(_time_state_key)
+def get(_time_state_key = nil)
   #This is a stub, used for indexing
 end
 
@@ -1297,7 +1279,7 @@ end
 # @example
 #   (halves 30, -5) #=> (ring 30, 60, 120, 240, 480)
 #
-def halves(_start, _num_halves)
+def halves(_start = nil, _num_halves = nil)
   #This is a stub, used for indexing
 end
 
@@ -1309,7 +1291,7 @@ end
 # @example
 #   hz_to_midi(261.63) #=> 60.0003
 #
-def hz_to_midi(_freq)
+def hz_to_midi(_freq = nil)
   #This is a stub, used for indexing
 end
 
@@ -1317,105 +1299,105 @@ end
 # Execute a given block (between `do` ... `end`) in a new thread. Use for playing multiple 'parts' at once. Each new thread created inherits all the use/with defaults of the parent thread such as the time, current synth, bpm, default synth args, etc. Despite inheriting defaults from the parent thread, any modifications of the defaults in the new thread will *not* affect the parent thread. Threads may be named with the `name:` optional arg. Named threads will print their name in the logging pane when they print their activity. If you attempt to create a new named thread with a name that is already in use by another executing thread, no new thread will be created.
 # 
 # It is possible to delay the initial trigger of the thread on creation with both the `delay:` and `sync:` opts. See their respective docstrings. If both `delay:` and `sync:` are specified, on initial thread creation first the delay will be honoured and then the sync.
-# @option opts :name Make this thread a named thread with name. If a thread with this name already exists, a new thread will not be created.
-# @option opts :delay Initial delay in beats before the thread starts. Default is 0.
-# @option opts :sync Initial sync symbol. Will sync with this symbol before the thread starts.
-# @option opts :sync_bpm Initial sync symbol. Will sync with this symbol before the live_loop starts. Live loop will also inherit the BPM of the thread which cued the symbol.
+# @param name Make this thread a named thread with name. If a thread with this name already exists, a new thread will not be created.
+# @param delay Initial delay in beats before the thread starts. Default is 0.
+# @param sync Initial sync symbol. Will sync with this symbol before the thread starts.
+# @param sync_bpm Initial sync symbol. Will sync with this symbol before the live_loop starts. Live loop will also inherit the BPM of the thread which cued the symbol.
 # @accepts_block true
 # @introduced 2.0.0
 # @example
 #   loop do      # If you write two loops one after another like this,
-#   play 50    # then only the first loop will execute as the loop acts
-#   sleep 1    # like a trap not letting the flow of control out
-#   end
+#       play 50    # then only the first loop will execute as the loop acts
+#       sleep 1    # like a trap not letting the flow of control out
+#     end
 #   
-#   loop do      # This code is never executed.
-#   play 55
-#   sleep 0.5
-#   end
+#     loop do      # This code is never executed.
+#       play 55
+#       sleep 0.5
+#     end
 #
 # @example
 #   # In order to play two loops at the same time, the first loops need to
-#   # be in a thread (note that it's probably more idiomatic to use live_loop
-#   # when performing):
+#     # be in a thread (note that it's probably more idiomatic to use live_loop
+#     # when performing):
 #   
-#   # By wrapping our loop in an in_thread block, we split the
-#   # control flow into two parts. One flows into the loop (a) and
-#   # the other part flows immediately after the in_thread block (b).
-#   # both parts of the control flow execute at exactly the same time.
+#     # By wrapping our loop in an in_thread block, we split the
+#     # control flow into two parts. One flows into the loop (a) and
+#     # the other part flows immediately after the in_thread block (b).
+#     # both parts of the control flow execute at exactly the same time.
 #   
-#   in_thread do
-#   # (a)
-#   loop do
-#   # (a)
-#   play 50
-#   sleep 1
-#   end
-#   end
+#     in_thread do
+#       # (a)
+#       loop do
+#         # (a)
+#         play 50
+#         sleep 1
+#       end
+#     end
 #   
-#   # (b)
+#     # (b)
 #   
-#   loop do      # This loop is executed thanks to the thread above
-#   play 55
-#   sleep 0.5
-#   end
+#     loop do      # This loop is executed thanks to the thread above
+#       play 55
+#       sleep 0.5
+#     end
 #
 # @example
 #   use_bpm 120  # Set the bpm to be double rate
-#   use_synth :dsaw  # Set the current synth to be :dsaw
+#     use_synth :dsaw  # Set the current synth to be :dsaw
 #   
-#   in_thread do     # Create a new thread
-#   play 50        # Play note 50 at time 0
-#   use_synth :fm  # Switch to fm synth (only affects this thread)
-#   sleep 1        # sleep for 0.5 seconds (as we're double rate)
-#   play 38        # Play note 38 at time 0.5
-#   end
+#     in_thread do     # Create a new thread
+#       play 50        # Play note 50 at time 0
+#       use_synth :fm  # Switch to fm synth (only affects this thread)
+#       sleep 1        # sleep for 0.5 seconds (as we're double rate)
+#       play 38        # Play note 38 at time 0.5
+#     end
 #   
-#   play 62          # Play note 62 at time 0 (with dsaw synth)
-#   sleep 2          # sleep 1s
-#   play 67          # Play note 67 at time 1s (also with dsaw synth)
+#     play 62          # Play note 62 at time 0 (with dsaw synth)
+#     sleep 2          # sleep 1s
+#     play 67          # Play note 67 at time 1s (also with dsaw synth)
 #
 # @example
 #   in_thread(name: :foo) do # Here we've created a named thread
-#   loop do
-#   sample :drum_bass_hard
-#   sleep 1
-#   end
-#   end
+#       loop do
+#         sample :drum_bass_hard
+#         sleep 1
+#       end
+#     end
 #   
-#   in_thread(name: :foo) do # This thread isn't created as the name is
-#   loop do                # the same as the previous thread which is
-#   sample :elec_chime   # still executing.
-#   sleep 0.5
-#   end
-#   end
+#     in_thread(name: :foo) do # This thread isn't created as the name is
+#       loop do                # the same as the previous thread which is
+#         sample :elec_chime   # still executing.
+#         sleep 0.5
+#       end
+#     end
 #
 # @example
 #   # Named threads work well with functions for live coding:
-#   define :foo do  # Create a function foo
-#   play 50       # which does something simple
-#   sleep 1       # and sleeps for some time
-#   end
+#     define :foo do  # Create a function foo
+#       play 50       # which does something simple
+#       sleep 1       # and sleeps for some time
+#     end
 #   
-#   in_thread(name: :main) do  # Create a named thread
-#   loop do                  # which loops forever
-#   foo                    # calling our function
-#   end
-#   end
+#     in_thread(name: :main) do  # Create a named thread
+#       loop do                  # which loops forever
+#         foo                    # calling our function
+#       end
+#     end
 #   
-#   # We are now free to modify the contents of :foo and re-run the entire buffer.
-#   # We'll hear the effect immediately without having to stop and re-start the code.
-#   # This is because our fn has been redefined, (which our thread will pick up) and
-#   # due to the thread being named, the second re-run will not create a new similarly
-#   # named thread. This is a nice pattern for live coding and is the basis of live_loop.
+#     # We are now free to modify the contents of :foo and re-run the entire buffer.
+#     # We'll hear the effect immediately without having to stop and re-start the code.
+#     # This is because our fn has been redefined, (which our thread will pick up) and
+#     # due to the thread being named, the second re-run will not create a new similarly
+#     # named thread. This is a nice pattern for live coding and is the basis of live_loop.
 #
 # @example
 #   #Delaying the start of a thread
-#   in_thread delay: 1 do
-#   sample :ambi_lunar_land # this sample is not triggered at time 0 but after 1 beat
-#   end
+#     in_thread delay: 1 do
+#       sample :ambi_lunar_land # this sample is not triggered at time 0 but after 1 beat
+#     end
 #   
-#   play 80                   # Note 80 is played at time 0
+#     play 80                   # Note 80 is played at time 0
 #
 def in_thread(name: nil, delay: nil, sync: nil, sync_bpm: nil)
   #This is a stub, used for indexing
@@ -1432,7 +1414,7 @@ end
 # @example
 #   inc -1 # returns 0
 #
-def inc(_n)
+def inc(_n = nil)
   #This is a stub, used for indexing
 end
 
@@ -1453,7 +1435,7 @@ end
 #   sleep 0.5
 #   kill bar
 #
-def kill(_node)
+def kill(_node = nil)
   #This is a stub, used for indexing
 end
 
@@ -1469,16 +1451,16 @@ end
 # @example
 #   (knit :e2, 2, :c2, 3) #=> (ring :e2, :e2, :c2, :c2, :c2)
 #
-def knit(_value, _count)
+def knit(_value = nil, _count = nil)
   #This is a stub, used for indexing
 end
 
 # Create a ring buffer representing a straight line
-# Create a ring buffer representing a straight line between start and finish of steps elements. Steps defaults to `4`. Indexes wrap around positively and negatively. Similar to `range`.
+# Create a ring buffer representing a straight line between start and finish of num_slices elements. Num slices defaults to `8`. Indexes wrap around positively and negatively. Similar to `range`.
 # @param _start [number]
 # @param _finish [number]
-# @option opts :steps number of slices or segments along the line
-# @option opts :inclusive boolean value representing whether or not to include finish value in line
+# @param steps number of slices or segments along the line
+# @param inclusive boolean value representing whether or not to include finish value in line
 # @accepts_block false
 # @introduced 2.5.0
 # @example
@@ -1490,7 +1472,7 @@ end
 # @example
 #   (line 0, 3, inclusive: true) #=> (ring 0.0, 1.0, 2.0, 3.0)
 #
-def line(_start, _finish, steps: nil, inclusive: nil)
+def line(_start = nil, _finish = nil, steps: nil, inclusive: nil)
   #This is a stub, used for indexing
 end
 
@@ -1505,9 +1487,6 @@ end
 # 
 # To stop a `live_audio` synth, use the `:stop` arg: `live_audio :foo, :stop`.
 # .
-# @param _name [symbol]
-# @option opts :input The audio card input to read audio from.
-# @option opts :stereo If set to truthy value (true, 1) will read from two consecutive audio card inputs.
 # @accepts_block false
 # @introduced 3.0.0
 # @example
@@ -1521,7 +1500,7 @@ end
 # @example
 #   # Work with stereo input
 #   live_audio :foo, input: 3, stereo: true  # Play whatever audio is coming into the sound card on inputs 3 and 4
-#   # as a stereo stream
+#                                            # as a stereo stream
 #
 # @example
 #   # Switching audio contexts (i.e. changing FX)
@@ -1530,7 +1509,7 @@ end
 #   sleep 2                # Wait for 2 seconds then...
 #   
 #   with_fx :reverb do
-#   live_audio :guitar   # Add reverb to the audio from input 1
+#     live_audio :guitar   # Add reverb to the audio from input 1
 #   end
 #   
 #   sleep 2                # Wait for another 2 seconds then...
@@ -1541,10 +1520,10 @@ end
 #   # Working with live_loops
 #   
 #   live_loop :foo do
-#   with_fx [:reverb, :distortion, :echo].choose do   # chooses a new FX each time round the live loop
-#   live_audio :voice                               # the audio stream from input 1 will be moved to the
-#   end                                               # new FX and the old FX will complete and finish as normal.
-#   sleep 8
+#     with_fx [:reverb, :distortion, :echo].choose do   # chooses a new FX each time round the live loop
+#       live_audio :voice                               # the audio stream from input 1 will be moved to the
+#     end                                               # new FX and the old FX will complete and finish as normal.
+#     sleep 8
 #   end
 #
 # @example
@@ -1556,9 +1535,9 @@ end
 #   sleep 3                    #=> wait for 3s...
 #   
 #   live_audio :foo, :stop     #=> stop playing audio from input 1
-#   #=> (live_audio :bar is still playing)
+#                              #=> (live_audio :bar is still playing)
 #
-def live_audio(_name, input: nil, stereo: nil)
+def live_audio
   #This is a stub, used for indexing
 end
 
@@ -1575,111 +1554,111 @@ end
 # 
 # Finally, it is possible to delay the initial trigger of the live_loop on creation with both the `delay:` and `sync:` opts. See their respective docstrings. If both `delay:` and `sync:` are specified, on initial live_loop creation first the delay will be honoured and then the sync.
 # @param _name [symbol]
-# @option opts :init initial value for optional block arg
-# @option opts :auto_cue enable or disable automatic cue (default is true)
-# @option opts :delay Initial delay in beats before the live_loop starts. Default is 0.
-# @option opts :sync Initial sync symbol. Will sync with this symbol before the live_loop starts.
-# @option opts :sync_bpm Initial sync symbol. Will sync with this symbol before the live_loop starts. Live loop will also inherit the BPM of the thread which cued the symbol.
-# @option opts :seed override initial random generator seed before starting loop.
+# @param init initial value for optional block arg
+# @param auto_cue enable or disable automatic cue (default is true)
+# @param delay Initial delay in beats before the live_loop starts. Default is 0.
+# @param sync Initial sync symbol. Will sync with this symbol before the live_loop starts.
+# @param sync_bpm Initial sync symbol. Will sync with this symbol before the live_loop starts. Live loop will also inherit the BPM of the thread which cued the symbol.
+# @param seed override initial random generator seed before starting loop.
 # @accepts_block true
 # @introduced 2.1.0
 # @example
 #   ## Define and start a simple live loop
 #   
 #   live_loop :ping do  # Create a live loop called :ping
-#   sample :elec_ping # This live loops plays the :elec_ping sample
-#   sleep 1           # Then sleeps for 1 beat before repeating
+#     sample :elec_ping # This live loops plays the :elec_ping sample
+#     sleep 1           # Then sleeps for 1 beat before repeating
 #   end
 #
 # @example
 #   ## Every live loop must sleep or sync
 #   
 #   live_loop :ping do  # Create a live loop called :ping
-#   sample :elec_ping # This live loops plays the :elec_ping sample
-#   # However, because the do/end lock of the live loop does not
-#   # contain any calls to sleep or sync, the live loop stops at
-#   # the end of the first loop with a 'Did not sleep' error.
+#     sample :elec_ping # This live loops plays the :elec_ping sample
+#                       # However, because the do/end lock of the live loop does not
+#                       # contain any calls to sleep or sync, the live loop stops at
+#                       # the end of the first loop with a 'Did not sleep' error.
 #   end
 #
 # @example
 #   ## Multiple live loops will play at the same time
 #   live_loop :foo do  # Start a live loop called :foo
-#   play 70
-#   sleep 1
+#     play 70
+#     sleep 1
 #   end
 #   
 #   live_loop :bar do  # Start another live loop called :bar
-#   sample :bd_haus  # Both :foo and :bar will be playing
-#   sleep 0.5        # at the same time.
+#     sample :bd_haus  # Both :foo and :bar will be playing
+#     sleep 0.5        # at the same time.
 #   end
 #
 # @example
 #   ## Live loops inherit external use_* thread locals
 #   use_bpm 30
 #   live_loop :foo do
-#   play 70           # live loop :foo now has a BPM of 30
-#   sleep 1           # This sleep will be for 2 seconds
+#     play 70           # live loop :foo now has a BPM of 30
+#     sleep 1           # This sleep will be for 2 seconds
 #   end
 #
 # @example
 #   ## Live loops can have their own thread locals
 #   live_loop :foo do
-#   use_bpm 30       # Set the BPM of live loop :foo to 30
-#   play 70
-#   sleep 1          # This sleep will be for 2 seconds
+#     use_bpm 30       # Set the BPM of live loop :foo to 30
+#     play 70
+#     sleep 1          # This sleep will be for 2 seconds
 #   end
 #   
 #   live_loop :bar do
-#   use_bpm 120      # Set the BPM of live loop :bar to 120
-#   play 82
-#   sleep 1          # This sleep will be for 0.5 seconds
+#     use_bpm 120      # Set the BPM of live loop :bar to 120
+#     play 82
+#     sleep 1          # This sleep will be for 0.5 seconds
 #   end
 #
 # @example
 #   ## Live loops can pass values between iterations
 #   live_loop :foo do |a|  # pass a param (a) to the block (inits to 0)
-#   puts a               # prints out all the integers
-#   sleep 1
-#   a += 1               # increment a by 1 (last value is passed back into the loop)
+#     puts a               # prints out all the integers
+#     sleep 1
+#     a += 1               # increment a by 1 (last value is passed back into the loop)
 #   end
 #
 # @example
 #   ## Live loop names must be unique
 #   live_loop :foo do  # Start a live loop called :foo
-#   play 70
-#   sleep 1
+#     play 70
+#     sleep 1
 #   end
 #   
 #   live_loop :foo do  # Attempt to start another also called :foo
-#   sample :bd_haus  # With a different do/end block
-#   sleep 0.5        # This will not start another live loop
-#   # but instead replace the behaviour of the first.
+#     sample :bd_haus  # With a different do/end block
+#     sleep 0.5        # This will not start another live loop
+#                      # but instead replace the behaviour of the first.
 #   end                # There will only be one live loop running playing
-#   # The bass drum
+#                      # The bass drum
 #
 # @example
 #   ## You can sync multiple live loops together
 #   live_loop :foo, sync: :bar do # Wait for a :bar cue event before starting :foo
-#   play 70                      # Live loop :foo is therefore blocked and does
-#   sleep 1                      # not make a sound initially
+#    play 70                      # Live loop :foo is therefore blocked and does
+#    sleep 1                      # not make a sound initially
 #   end
 #   
 #   sleep 4                       # Wait for 4 beats
 #   
 #   live_loop :bar do             # Start a live loop called :foo which will emit a :bar
-#   sample :bd_haus             # cue message therefore releasing the :foo live loop.
-#   sleep 0.5                   # Live loop :foo therefore starts and also inherits the
+#     sample :bd_haus             # cue message therefore releasing the :foo live loop.
+#     sleep 0.5                   # Live loop :foo therefore starts and also inherits the
 #   end                           # logical time of live loop :bar.
 #   
-#   # This pattern is also useful to re-sync live loops after
-#   # errors are made. For example, when modifying live loop :foo
-#   # it is possible to introduce a runtime error which will stop
-#   # :foo but not :bar (as they are separate, isolated threads).
-#   # Once the error has been fixed and the code is re-run, :foo
-#   # will automatically wait for :bar to loop round and restart
-#   # in sync with the correct virtual clock.
+#                                 # This pattern is also useful to re-sync live loops after
+#                                 # errors are made. For example, when modifying live loop :foo
+#                                 # it is possible to introduce a runtime error which will stop
+#                                 # :foo but not :bar (as they are separate, isolated threads).
+#                                 # Once the error has been fixed and the code is re-run, :foo
+#                                 # will automatically wait for :bar to loop round and restart
+#                                 # in sync with the correct virtual clock.
 #
-def live_loop(_name, init: nil, auto_cue: nil, delay: nil, sync: nil, sync_bpm: nil, seed: nil)
+def live_loop(_name = nil, init: nil, auto_cue: nil, delay: nil, sync: nil, sync_bpm: nil, seed: nil)
   #This is a stub, used for indexing
 end
 
@@ -1691,7 +1670,7 @@ end
 # @example
 #   load_buffer "~/sonic-pi-tracks/phat-beats.rb" # will replace content of current buffer with contents of the file
 #
-def load_buffer(_path)
+def load_buffer(_path = nil)
   #This is a stub, used for indexing
 end
 
@@ -1703,7 +1682,7 @@ end
 # @example
 #   load_example :rerezzed # will replace content of current buffer with the rerezzed example
 #
-def load_example(_path)
+def load_example(_path = nil)
   #This is a stub, used for indexing
 end
 
@@ -1727,7 +1706,7 @@ end
 #   load_sample dir, "quux" # loads first sample with file name containing "quux" in "/path/to/sample/dir"
 #   load_sample dir, /[Bb]ar/ # loads first sample which matches regex /[Bb]ar/ in "/path/to/sample/dir"
 #
-def load_sample(_path)
+def load_sample(_path = nil)
   #This is a stub, used for indexing
 end
 
@@ -1740,18 +1719,18 @@ end
 # @introduced 2.0.0
 # @example
 #   load_sample :elec_blip # :elec_blip is now loaded and ready to play as a sample
-#   sample :elec_blip # No delay takes place when attempting to trigger it
+#    sample :elec_blip # No delay takes place when attempting to trigger it
 #
 # @example
 #   # Using source and filter pre-args
-#   dir = "/path/to/sample/dir"
-#   load_sample dir # loads all samples in "/path/to/sample/dir"
-#   load_sample dir, 1 # loads sample with index 1 in "/path/to/sample/dir"
-#   load_sample dir, :foo # loads sample with name "foo" in "/path/to/sample/dir"
-#   load_sample dir, "quux" # loads all samples with file names containing "quux" in "/path/to/sample/dir"
-#   load_sample dir, /[Bb]ar/ # loads all samples which match regex /[Bb]ar/ in "/path/to/sample/dir"
+#    dir = "/path/to/sample/dir"
+#    load_sample dir # loads all samples in "/path/to/sample/dir"
+#    load_sample dir, 1 # loads sample with index 1 in "/path/to/sample/dir"
+#    load_sample dir, :foo # loads sample with name "foo" in "/path/to/sample/dir"
+#    load_sample dir, "quux" # loads all samples with file names containing "quux" in "/path/to/sample/dir"
+#    load_sample dir, /[Bb]ar/ # loads all samples which match regex /[Bb]ar/ in "/path/to/sample/dir"
 #
-def load_samples(_paths)
+def load_samples(_paths = nil)
   #This is a stub, used for indexing
 end
 
@@ -1785,48 +1764,48 @@ end
 # @example
 #   load_synthdefs "~/Desktop/my_noises" # Load all synthdefs in my_noises folder
 #
-def load_synthdefs(_path)
+def load_synthdefs(_path = nil)
   #This is a stub, used for indexing
 end
 
 # Obtain value of a tick
 # Read and return value of default tick. If a `key` is specified, read the value of that specific tick. Ticks are `in_thread` and `live_loop` local, so the tick read will be the tick of the current thread calling `look`.
-# @option opts :offset Offset to add to index returned. Useful when calling look on lists, rings and vectors to offset the returned value
+# @param offset Offset to add to index returned. Useful when calling look on lists, rings and vectors to offset the returned value
 # @accepts_block false
 # @introduced 2.6.0
 # @example
 #   puts look #=> 0
-#   puts look #=> 0
-#   puts look #=> 0 # look doesn't advance the tick, it just returns the current value
+#     puts look #=> 0
+#     puts look #=> 0 # look doesn't advance the tick, it just returns the current value
 #
 # @example
 #   puts look #=> 0 # A look is always 0 before the first tick
-#   tick # advance the tick
-#   puts look #=> 0 # Note: a look is still 0 after the first tick.
-#   tick
-#   puts look #=> 1
-#   puts look #=> 1 # making multiple calls to look doesn't affect tick value
-#   tick
-#   puts look #=> 2
+#     tick # advance the tick
+#     puts look #=> 0 # Note: a look is still 0 after the first tick.
+#     tick
+#     puts look #=> 1
+#     puts look #=> 1 # making multiple calls to look doesn't affect tick value
+#     tick
+#     puts look #=> 2
 #
 # @example
 #   tick(:foo)
-#   tick(:foo)
-#   puts look(:foo) #=> 1 (keyed look :foo has been advanced)
-#   puts look #=> 0 (default look hasn't been advanced)
-#   puts look(:bar) #=> 0 (other keyed looks haven't been advanced either)
+#     tick(:foo)
+#     puts look(:foo) #=> 1 (keyed look :foo has been advanced)
+#     puts look #=> 0 (default look hasn't been advanced)
+#     puts look(:bar) #=> 0 (other keyed looks haven't been advanced either)
 #
 # @example
 #   # You can call look on lists and rings
-#   live_loop :foo do
-#   tick                                      # advance the default tick
-#   use_synth :beep
-#   play (scale :e3, :minor_pentatonic).look  # look into the default tick to play all notes in sequence
-#   sleep 0.5
-#   use_synth :square
-#   play (ring :e1, :e2, :e3).look, release: 0.25 # use the same look on another ring
-#   sleep 0.25
-#   end
+#     live_loop :foo do
+#       tick                                      # advance the default tick
+#       use_synth :beep
+#       play (scale :e3, :minor_pentatonic).look  # look into the default tick to play all notes in sequence
+#       sleep 0.5
+#       use_synth :square
+#       play (ring :e1, :e2, :e3).look, release: 0.25 # use the same look on another ring
+#       sleep 0.25
+#     end
 #
 # @example
 #   # Returns numbers unchanged if single argument
@@ -1845,22 +1824,21 @@ end
 # The loop must either `sleep` or `sync` each time round otherwise it will stop and throw an error. This is to stop the loop from spinning out of control and locking the system.
 # 
 # For a more powerful, flexible loop built for live coding see `live_loop`.
-# @param _ []
 # @accepts_block true
 # @introduced 2.0.0
 # @example
 #   play 70       # note 70 is played
 #   
 #   loop do
-#   play 50     # This loop will repeat notes 50 and 62 forever
-#   sleep 1
-#   play 62
-#   sleep 2
+#     play 50     # This loop will repeat notes 50 and 62 forever
+#     sleep 1
+#     play 62
+#     sleep 2
 #   end
 #   
 #   play 80      # This is *never* played as the program is trapped in the loop above
 #
-def loop(_)
+def loop
   #This is a stub, used for indexing
 end
 
@@ -1878,7 +1856,7 @@ end
 # @example
 #   (map foo: 1, bar: 2)[:quux] #=> nil
 #
-def map(_list)
+def map(_list = nil)
   #This is a stub, used for indexing
 end
 
@@ -1899,7 +1877,7 @@ end
 # @example
 #   puts mc_block_id :foo #=> Throws an invalid block name exception
 #
-def mc_block_id(_name)
+def mc_block_id(_name = nil)
   #This is a stub, used for indexing
 end
 
@@ -1910,7 +1888,7 @@ end
 # @example
 #   puts mc_block_ids #=> [0, 1, 2, 3, 4, 5...
 #
-def mc_block_ids()
+def mc_block_ids
   #This is a stub, used for indexing
 end
 
@@ -1931,7 +1909,7 @@ end
 # @example
 #   puts mc_block_name :foo #=> Throws an invalid block name exception
 #
-def mc_block_name(_id)
+def mc_block_name(_id = nil)
   #This is a stub, used for indexing
 end
 
@@ -1942,7 +1920,7 @@ end
 # @example
 #   puts mc_block_names #=> [:air, :stone, :grass, :dirt, :cobblestone...
 #
-def mc_block_names()
+def mc_block_names
   #This is a stub, used for indexing
 end
 
@@ -1952,7 +1930,7 @@ end
 # @introduced 2.5.0
 # @example
 #
-def mc_camera_fixed()
+def mc_camera_fixed
   #This is a stub, used for indexing
 end
 
@@ -1962,7 +1940,7 @@ end
 # @introduced 2.5.0
 # @example
 #
-def mc_camera_normal()
+def mc_camera_normal
   #This is a stub, used for indexing
 end
 
@@ -1972,7 +1950,7 @@ end
 # @introduced 2.5.0
 # @example
 #
-def mc_camera_set_location()
+def mc_camera_set_location
   #This is a stub, used for indexing
 end
 
@@ -1982,7 +1960,7 @@ end
 # @introduced 2.5.0
 # @example
 #
-def mc_camera_third_person()
+def mc_camera_third_person
   #This is a stub, used for indexing
 end
 
@@ -1990,7 +1968,7 @@ end
 # See mc_message
 # @accepts_block false
 # @introduced 2.5.0
-def mc_chat_post()
+def mc_chat_post
   #This is a stub, used for indexing
 end
 
@@ -2000,7 +1978,7 @@ end
 # @introduced 2.5.0
 # @example
 #
-def mc_checkpoint_restore()
+def mc_checkpoint_restore
   #This is a stub, used for indexing
 end
 
@@ -2010,7 +1988,7 @@ end
 # @introduced 2.5.0
 # @example
 #
-def mc_checkpoint_save()
+def mc_checkpoint_save
   #This is a stub, used for indexing
 end
 
@@ -2024,7 +2002,7 @@ end
 # @example
 #   puts mc_get_block 40, 50, 60 #=> :air
 #
-def mc_get_block(_x, _y, _z)
+def mc_get_block(_x = nil, _y = nil, _z = nil)
   #This is a stub, used for indexing
 end
 
@@ -2032,7 +2010,7 @@ end
 # See `mc_ground_height`
 # @accepts_block false
 # @introduced 2.5.0
-def mc_get_height()
+def mc_get_height
   #This is a stub, used for indexing
 end
 
@@ -2040,7 +2018,7 @@ end
 # See `mc_location`
 # @accepts_block false
 # @introduced 2.5.0
-def mc_get_pos()
+def mc_get_pos
   #This is a stub, used for indexing
 end
 
@@ -2051,7 +2029,7 @@ end
 # @example
 #   puts mc_get_tile #=> [10, 20, 101]
 #
-def mc_get_tile()
+def mc_get_tile
   #This is a stub, used for indexing
 end
 
@@ -2064,7 +2042,7 @@ end
 # @example
 #   puts mc_ground_height 40, 50 #=> 43 (height of world at x=40, z=50)
 #
-def mc_ground_height(_x, _z)
+def mc_ground_height(_x = nil, _z = nil)
   #This is a stub, used for indexing
 end
 
@@ -2078,7 +2056,7 @@ end
 # @example
 #   x, y, z = mc_location       #=> Find the current location and store in x, y and z variables.
 #
-def mc_location()
+def mc_location
   #This is a stub, used for indexing
 end
 
@@ -2090,7 +2068,7 @@ end
 # @example
 #   mc_message "Hello from Sonic Pi" #=> Displays "Hello from Sonic Pi" on Minecraft's chat display
 #
-def mc_message(_msg)
+def mc_message(_msg = nil)
   #This is a stub, used for indexing
 end
 
@@ -2105,7 +2083,7 @@ end
 # @param _z2 [number]
 # @accepts_block false
 # @introduced 2.5.0
-def mc_set_area(_block_name, _x, _y, _z, _x2, _y2, _z2)
+def mc_set_area(_block_name = nil, _x = nil, _y = nil, _z = nil, _x2 = nil, _y2 = nil, _z2 = nil)
   #This is a stub, used for indexing
 end
 
@@ -2120,7 +2098,7 @@ end
 # @example
 #   mc_set_block :glass, 40, 50, 60 #=> set block at coords 40, 50, 60 to type glass
 #
-def mc_set_block(_x, _y, _z, _block_name)
+def mc_set_block(_x = nil, _y = nil, _z = nil, _block_name = nil)
   #This is a stub, used for indexing
 end
 
@@ -2128,7 +2106,7 @@ end
 # See `mc_teleport`
 # @accepts_block false
 # @introduced 2.5.0
-def mc_set_pos()
+def mc_set_pos
   #This is a stub, used for indexing
 end
 
@@ -2140,7 +2118,7 @@ end
 # @introduced 2.5.0
 # @example
 #
-def mc_set_tile(_x, _y, _z)
+def mc_set_tile(_x = nil, _y = nil, _z = nil)
   #This is a stub, used for indexing
 end
 
@@ -2153,7 +2131,7 @@ end
 # @example
 #   mc_surface_teleport 40, 50 #=> Teleport user to coords x = 40, y = height of surface, z = 50
 #
-def mc_surface_teleport(_x, _z)
+def mc_surface_teleport(_x = nil, _z = nil)
   #This is a stub, used for indexing
 end
 
@@ -2166,9 +2144,9 @@ end
 # @introduced 2.5.0
 # @example
 #   mc_teleport 40, 50, 60  # The player will be moved to the position with coords:
-#   # x: 40, y: 50, z: 60
+#                           # x: 40, y: 50, z: 60
 #
-def mc_teleport(_x, _y, _z)
+def mc_teleport(_x = nil, _y = nil, _z = nil)
   #This is a stub, used for indexing
 end
 
@@ -2177,9 +2155,9 @@ end
 # 
 # If `note` is specified as `:off` then all notes will be turned off (same as `midi_all_notes_off`).
 # @param _note [number]
-# @option opts :sustain Duration of note event in beats
-# @option opts :vel Velocity of note as a MIDI number
-# @option opts :on If specified and false/nil/0 will stop the midi on/off messages from being sent out. (Ensures all opts are evaluated in this call to `midi` regardless of value).
+# @param sustain Duration of note event in beats
+# @param vel Velocity of note as a MIDI number
+# @param on If specified and false/nil/0 will stop the midi on/off messages from being sent out. (Ensures all opts are evaluated in this call to `midi` regardless of value).
 # @accepts_block false
 # @introduced 3.0.0
 # @example
@@ -2193,11 +2171,11 @@ end
 #
 # @example
 #   live_loop :arp do
-#   midi (octs :e1, 3).tick, sustain: 0.1 # repeatedly play a ring of octaves
-#   sleep 0.125
+#     midi (octs :e1, 3).tick, sustain: 0.1 # repeatedly play a ring of octaves
+#     sleep 0.125
 #   end
 #
-def midi(_note, sustain: nil, vel: nil, on: nil)
+def midi(_note = nil, sustain: nil, vel: nil, on: nil)
   #This is a stub, used for indexing
 end
 
@@ -2207,9 +2185,9 @@ end
 # When an All Notes Off event is received, all oscillators will turn off.
 # 
 # [MIDI 1.0 Specification - Channel Mode Messages - All Notes Off](https://www.midi.org/specifications/item/table-1-summary-of-midi-message)
-# @option opts :channel Channel to send the all notes off message to
-# @option opts :port MIDI port to send to
-# @option opts :on If specified and false/nil/0 will stop the midi all notes off message from being sent out. (Ensures all opts are evaluated in this call to `midi_all_notes_off` regardless of value).
+# @param channel Channel to send the all notes off message to
+# @param port MIDI port to send to
+# @param on If specified and false/nil/0 will stop the midi all notes off message from being sent out. (Ensures all opts are evaluated in this call to `midi_all_notes_off` regardless of value).
 # @accepts_block false
 # @introduced 3.0.0
 # @example
@@ -2232,11 +2210,11 @@ end
 # [MIDI 1.0 Specification - Channel Voice Messages - Control change](https://www.midi.org/specifications/item/table-1-summary-of-midi-message)
 # @param _control_num [midi]
 # @param _value [midi]
-# @option opts :channel Channel(s) to send to
-# @option opts :port MIDI port(s) to send to
-# @option opts :value Control value as a MIDI number.
-# @option opts :val_f Control value as a value between 0 and 1 (will be converted to a MIDI value)
-# @option opts :on If specified and false/nil/0 will stop the midi cc message from being sent out. (Ensures all opts are evaluated in this call to `midi_cc` regardless of value).
+# @param channel Channel(s) to send to
+# @param port MIDI port(s) to send to
+# @param value Control value as a MIDI number.
+# @param val_f Control value as a value between 0 and 1 (will be converted to a MIDI value)
+# @param on If specified and false/nil/0 will stop the midi cc message from being sent out. (Ensures all opts are evaluated in this call to `midi_cc` regardless of value).
 # @accepts_block false
 # @introduced 3.0.0
 # @example
@@ -2254,7 +2232,7 @@ end
 # @example
 #   midi_cc 100, value: 102, channel: [1, 5]  #=> Sends MIDI cc message to control 100 with value 102 on channel 1 and 5 to all ports
 #
-def midi_cc(_control_num, _value, channel: nil, port: nil, value: nil, val_f: nil, on: nil)
+def midi_cc(_control_num = nil, _value = nil, channel: nil, port: nil, value: nil, val_f: nil, on: nil)
   #This is a stub, used for indexing
 end
 
@@ -2267,11 +2245,11 @@ end
 # 
 # [MIDI 1.0 Specification - Channel Voice Messages - Channel Pressure (Aftertouch)](https://www.midi.org/specifications/item/table-1-summary-of-midi-message)
 # @param _val [midi]
-# @option opts :channel Channel(s) to send to
-# @option opts :port MIDI port(s) to send to
-# @option opts :value Pressure value as a MIDI number.
-# @option opts :val_f Pressure value as a value between 0 and 1 (will be converted to a MIDI value)
-# @option opts :on If specified and false/nil/0 will stop the midi channel pressure message from being sent out. (Ensures all opts are evaluated in this call to `midi_channel_pressure` regardless of value).
+# @param channel Channel(s) to send to
+# @param port MIDI port(s) to send to
+# @param value Pressure value as a MIDI number.
+# @param val_f Pressure value as a value between 0 and 1 (will be converted to a MIDI value)
+# @param on If specified and false/nil/0 will stop the midi channel pressure message from being sent out. (Ensures all opts are evaluated in this call to `midi_channel_pressure` regardless of value).
 # @accepts_block false
 # @introduced 3.0.0
 # @example
@@ -2286,7 +2264,7 @@ end
 # @example
 #   midi_channel_pressure 30, channel: [1, 5]  #=> Sends MIDI channel pressure message with value 30 on channel 1 and 5 to all ports
 #
-def midi_channel_pressure(_val, channel: nil, port: nil, value: nil, val_f: nil, on: nil)
+def midi_channel_pressure(_val = nil, channel: nil, port: nil, value: nil, val_f: nil, on: nil)
   #This is a stub, used for indexing
 end
 
@@ -2295,8 +2273,8 @@ end
 # 
 # The MIDI specification requires 24 clock tick events to be sent per beat. These can either be sent manually using `midi_clock_tick` or all 24 can be scheduled in one go using this fn. `midi_clock_beat` will therefore schedule for 24 clock ticks to be sent linearly spread over duration beats. This fn will automatically take into account the current BPM and any `time_warp`s.
 # @param _duration [beats]
-# @option opts :port MIDI port to send to
-# @option opts :on If specified and false/nil/0 will stop the midi clock tick messages from being sent out. (Ensures all opts are evaluated in this call to `midi_clock_beat` regardless of value).
+# @param port MIDI port to send to
+# @param on If specified and false/nil/0 will stop the midi clock tick messages from being sent out. (Ensures all opts are evaluated in this call to `midi_clock_beat` regardless of value).
 # @accepts_block false
 # @introduced 3.0.0
 # @example
@@ -2307,19 +2285,19 @@ end
 #
 # @example
 #   live_loop :clock do  # Create a live loop which continually sends out MIDI clock
-#   midi_clock_beat    # events at the current BPM
-#   sleep 1
+#     midi_clock_beat    # events at the current BPM
+#     sleep 1
 #   end
 #
 # @example
 #   # Ensuring Clock Phase is Correct
 #   live_loop :clock do
-#   midi_start if tick == 0 # Send a midi_start event the first time round the live loop only
-#   midi_clock_beat         # this will not just send a steady clock beat, but also ensure
-#   sleep 1                 # the clock phase of the MIDI device matches Sonic Pi.
+#     midi_start if tick == 0 # Send a midi_start event the first time round the live loop only
+#     midi_clock_beat         # this will not just send a steady clock beat, but also ensure
+#     sleep 1                 # the clock phase of the MIDI device matches Sonic Pi.
 #   end
 #
-def midi_clock_beat(_duration, port: nil, on: nil)
+def midi_clock_beat(_duration = nil, port: nil, on: nil)
   #This is a stub, used for indexing
 end
 
@@ -2329,15 +2307,14 @@ end
 # Typical MIDI devices expect the clock to send 24 ticks per quarter note (typically a beat). See `midi_clock_beat` for a simple way of sending all the ticks for a given beat.
 # 
 # [MIDI 1.0 Specification - System Real-Time Messages - Timing Clock](https://www.midi.org/specifications/item/table-1-summary-of-midi-message)
-# @param _ []
-# @option opts :port MIDI port to send to
-# @option opts :on If specified and false/nil/0 will stop the midi clock tick message from being sent out. (Ensures all opts are evaluated in this call to `midi_clock_tick` regardless of value).
+# @param port MIDI port to send to
+# @param on If specified and false/nil/0 will stop the midi clock tick message from being sent out. (Ensures all opts are evaluated in this call to `midi_clock_tick` regardless of value).
 # @accepts_block false
 # @introduced 3.0.0
 # @example
 #   midi_clock_tick #=> Send an individual clock tick to all connected MIDI devices on all ports.
 #
-def midi_clock_tick(_, port: nil, on: nil)
+def midi_clock_tick(port: nil, on: nil)
   #This is a stub, used for indexing
 end
 
@@ -2347,14 +2324,13 @@ end
 # Upon receiving the MIDI continue event, the MIDI device(s) will continue at the point the sequence was stopped.
 # 
 # [MIDI 1.0 Specification - System Real-Time Messages - Continue](https://www.midi.org/specifications/item/table-1-summary-of-midi-message)
-# @param _ []
-# @option opts :port MIDI Port(s) to send the continue message to
+# @param port MIDI Port(s) to send the continue message to
 # @accepts_block false
 # @introduced 3.0.0
 # @example
 #   midi_continue #=> Send continue message to all connected MIDI devices
 #
-def midi_continue(_, port: nil)
+def midi_continue(port: nil)
   #This is a stub, used for indexing
 end
 
@@ -2364,9 +2340,9 @@ end
 # All devices on a given channel will respond only to data received over MIDI. Played data, etc. will be ignored. See `midi_local_control_on` to enable local control.
 # 
 # [MIDI 1.0 Specification - Channel Mode Messages - Local Control Off](https://www.midi.org/specifications/item/table-1-summary-of-midi-message)
-# @option opts :channel Channel to send the local control off message to
-# @option opts :port MIDI port to send to
-# @option opts :on If specified and false/nil/0 will stop the midi local control off message from being sent out. (Ensures all opts are evaluated in this call to `midi_local_control_off` regardless of value).
+# @param channel Channel to send the local control off message to
+# @param port MIDI port to send to
+# @param on If specified and false/nil/0 will stop the midi local control off message from being sent out. (Ensures all opts are evaluated in this call to `midi_local_control_off` regardless of value).
 # @accepts_block false
 # @introduced 3.0.0
 # @example
@@ -2385,9 +2361,9 @@ end
 # All devices on a given channel will respond both to data received over MIDI and played data, etc. See `midi_local_control_off` to disable local control.
 # 
 # [MIDI 1.0 Specification - Channel Mode Messages - Local Control On](https://www.midi.org/specifications/item/table-1-summary-of-midi-message)
-# @option opts :channel Channel to send the local control on message to
-# @option opts :port MIDI port to send to
-# @option opts :on If specified and false/nil/0 will stop the midi local control on message from being sent out. (Ensures all opts are evaluated in this call to `midi_local_control_on` regardless of value).
+# @param channel Channel to send the local control on message to
+# @param port MIDI port to send to
+# @param on If specified and false/nil/0 will stop the midi local control on message from being sent out. (Ensures all opts are evaluated in this call to `midi_local_control_on` regardless of value).
 # @accepts_block false
 # @introduced 3.0.0
 # @example
@@ -2414,11 +2390,11 @@ end
 # 
 # [MIDI 1.0 Specification - Channel Mode Messages - Omni Mode Off | Omni Mode On | Mono Mode On (Poly Off) | Poly Mode On](https://www.midi.org/specifications/item/table-1-summary-of-midi-message)
 # @param _mode [mode_keyword]
-# @option opts :channel Channel to send the MIDI mode message to
-# @option opts :port MIDI port to send to
-# @option opts :mode Mode keyword - one of :omni_off, :omni_on, :mono or :poly
-# @option opts :num_chans Used in mono mode only - Number of channels (defaults to 16)
-# @option opts :on If specified and false/nil/0 will stop the midi local control off message from being sent out. (Ensures all opts are evaluated in this call to `midi_local_control_off` regardless of value).
+# @param channel Channel to send the MIDI mode message to
+# @param port MIDI port to send to
+# @param mode Mode keyword - one of :omni_off, :omni_on, :mono or :poly
+# @param num_chans Used in mono mode only - Number of channels (defaults to 16)
+# @param on If specified and false/nil/0 will stop the midi local control off message from being sent out. (Ensures all opts are evaluated in this call to `midi_local_control_off` regardless of value).
 # @accepts_block false
 # @introduced 3.0.0
 # @example
@@ -2433,7 +2409,7 @@ end
 # @example
 #   midi_mode :mono #=> Mono Mode On, Omni off using 16 channels (the default) .
 #
-def midi_mode(_mode, channel: nil, port: nil, mode: nil, num_chans: nil, on: nil)
+def midi_mode(_mode = nil, channel: nil, port: nil, mode: nil, num_chans: nil, on: nil)
   #This is a stub, used for indexing
 end
 
@@ -2449,11 +2425,11 @@ end
 # [MIDI 1.0 Specification - Channel Voice Messages - Note off event](https://www.midi.org/specifications/item/table-1-summary-of-midi-message)
 # @param _note [midi]
 # @param _release_velocity [midi]
-# @option opts :channel MIDI channel(s) to send event on as a number or list of numbers.
-# @option opts :port MIDI port(s) to send to as a string or list of strings.
-# @option opts :velocity Release velocity as a MIDI number.
-# @option opts :vel_f Release velocity as a value between 0 and 1 (will be converted to a MIDI velocity)
-# @option opts :on If specified and false/nil/0 will stop the midi note off message from being sent out. (Ensures all opts are evaluated in this call to `midi_note_off` regardless of value).
+# @param channel MIDI channel(s) to send event on as a number or list of numbers.
+# @param port MIDI port(s) to send to as a string or list of strings.
+# @param velocity Release velocity as a MIDI number.
+# @param vel_f Release velocity as a value between 0 and 1 (will be converted to a MIDI velocity)
+# @param on If specified and false/nil/0 will stop the midi note off message from being sent out. (Ensures all opts are evaluated in this call to `midi_note_off` regardless of value).
 # @accepts_block false
 # @introduced 3.0.0
 # @example
@@ -2483,7 +2459,7 @@ end
 # @example
 #   midi_note_off :e3, channel: 1, port: "foo" #=> Send MIDI note off on :e3 only on channel 1 on port "foo"
 #
-def midi_note_off(_note, _release_velocity, channel: nil, port: nil, velocity: nil, vel_f: nil, on: nil)
+def midi_note_off(_note = nil, _release_velocity = nil, channel: nil, port: nil, velocity: nil, vel_f: nil, on: nil)
   #This is a stub, used for indexing
 end
 
@@ -2499,11 +2475,11 @@ end
 # [MIDI 1.0 Specification - Channel Voice Messages - Note on event](https://www.midi.org/specifications/item/table-1-summary-of-midi-message)
 # @param _note [midi]
 # @param _velocity [midi]
-# @option opts :channel MIDI channel(s) to send event on
-# @option opts :port MIDI port(s) to send to
-# @option opts :velocity Note velocity as a MIDI number.
-# @option opts :vel_f Velocity as a value between 0 and 1 (will be converted to a MIDI velocity between 0 and 127)
-# @option opts :on If specified and false/nil/0 will stop the midi note on message from being sent out. (Ensures all opts are evaluated in this call to `midi_note_on` regardless of value).
+# @param channel MIDI channel(s) to send event on
+# @param port MIDI port(s) to send to
+# @param velocity Note velocity as a MIDI number.
+# @param vel_f Velocity as a value between 0 and 1 (will be converted to a MIDI velocity between 0 and 127)
+# @param on If specified and false/nil/0 will stop the midi note on message from being sent out. (Ensures all opts are evaluated in this call to `midi_note_on` regardless of value).
 # @accepts_block false
 # @introduced 3.0.0
 # @example
@@ -2533,7 +2509,7 @@ end
 # @example
 #   midi_note_on :e3, channel: 1, port: "foo" #=> Send MIDI note :e3 on only on channel 1 on port "foo"
 #
-def midi_note_on(_note, _velocity, channel: nil, port: nil, velocity: nil, vel_f: nil, on: nil)
+def midi_note_on(_note = nil, _velocity = nil, channel: nil, port: nil, velocity: nil, vel_f: nil, on: nil)
   #This is a stub, used for indexing
 end
 
@@ -2548,7 +2524,7 @@ end
 # @example
 #   (midi_notes :d3, 62,  nil) #=> (ring 50, 62, nil)
 #
-def midi_notes(_list)
+def midi_notes(_list = nil)
   #This is a stub, used for indexing
 end
 
@@ -2559,9 +2535,9 @@ end
 # 
 # [MIDI 1.0 Specification - Channel Voice Messages - Program change](https://www.midi.org/specifications/item/table-1-summary-of-midi-message)
 # @param _program_num [midi]
-# @option opts :channel Channel(s) to send to
-# @option opts :port MIDI port(s) to send to
-# @option opts :on If specified and false/nil/0 will stop the midi pc message from being sent out. (Ensures all opts are evaluated in this call to `midi_pc` regardless of value).
+# @param channel Channel(s) to send to
+# @param port MIDI port(s) to send to
+# @param on If specified and false/nil/0 will stop the midi pc message from being sent out. (Ensures all opts are evaluated in this call to `midi_pc` regardless of value).
 # @accepts_block false
 # @introduced 3.0.2
 # @example
@@ -2579,7 +2555,7 @@ end
 # @example
 #   midi_pc 100, channel: [1, 5]  #=> Sends MIDI pc message on channel 1 and 5 to all ports
 #
-def midi_pc(_program_num, channel: nil, port: nil, on: nil)
+def midi_pc(_program_num = nil, channel: nil, port: nil, on: nil)
   #This is a stub, used for indexing
 end
 
@@ -2595,11 +2571,11 @@ end
 # 
 # [MIDI 1.0 Specification - Channel Voice Messages - Pitch Bend Change](https://www.midi.org/specifications/item/table-1-summary-of-midi-message)
 # @param _delta [float01]
-# @option opts :channel Channel(s) to send to
-# @option opts :port MIDI port(s) to send to
-# @option opts :delta Pitch bend value as a number between 0 and 1 (will be converted to a value between 0 and 16383). No bend is the central value 0.5
-# @option opts :delta_midi Pitch bend value as a number between 0 and 16383 inclusively. No bend is central value 8192.
-# @option opts :on If specified and false/nil/0 will stop the midi pitch bend message from being sent out. (Ensures all opts are evaluated in this call to `midi_pitch_bend` regardless of value).
+# @param channel Channel(s) to send to
+# @param port MIDI port(s) to send to
+# @param delta Pitch bend value as a number between 0 and 1 (will be converted to a value between 0 and 16383). No bend is the central value 0.5
+# @param delta_midi Pitch bend value as a number between 0 and 16383 inclusively. No bend is central value 8192.
+# @param on If specified and false/nil/0 will stop the midi pitch bend message from being sent out. (Ensures all opts are evaluated in this call to `midi_pitch_bend` regardless of value).
 # @accepts_block false
 # @introduced 3.0.0
 # @example
@@ -2617,7 +2593,7 @@ end
 # @example
 #   midi_pitch_bend 0, channel: [1, 5]  #=> Sends MIDI pitch bend message with value 0 on channel 1 and 5 to all ports
 #
-def midi_pitch_bend(_delta, channel: nil, port: nil, delta: nil, delta_midi: nil, on: nil)
+def midi_pitch_bend(_delta = nil, channel: nil, port: nil, delta: nil, delta_midi: nil, on: nil)
   #This is a stub, used for indexing
 end
 
@@ -2631,11 +2607,11 @@ end
 # [MIDI 1.0 Specification - Channel Voice Messages - Polyphonic Key Pressure (Aftertouch)](https://www.midi.org/specifications/item/table-1-summary-of-midi-message)
 # @param _note [midi]
 # @param _value [midi]
-# @option opts :channel Channel(s) to send to
-# @option opts :port MIDI port(s) to send to
-# @option opts :value Pressure value as a MIDI number.
-# @option opts :val_f Pressure value as a value between 0 and 1 (will be converted to a MIDI value)
-# @option opts :on If specified and false/nil/0 will stop the midi poly pressure message from being sent out. (Ensures all opts are evaluated in this call to `midi_poly_pressure` regardless of value).
+# @param channel Channel(s) to send to
+# @param port MIDI port(s) to send to
+# @param value Pressure value as a MIDI number.
+# @param val_f Pressure value as a value between 0 and 1 (will be converted to a MIDI value)
+# @param on If specified and false/nil/0 will stop the midi poly pressure message from being sent out. (Ensures all opts are evaluated in this call to `midi_poly_pressure` regardless of value).
 # @accepts_block false
 # @introduced 3.0.0
 # @example
@@ -2653,7 +2629,7 @@ end
 # @example
 #   midi_poly_pressure 100, value: 102, channel: [1, 5]  #=> Sends MIDI poly key pressure message to control note 100 with value 102 on channel 1 and 5 to all ports
 #
-def midi_poly_pressure(_note, _value, channel: nil, port: nil, value: nil, val_f: nil, on: nil)
+def midi_poly_pressure(_note = nil, _value = nil, channel: nil, port: nil, value: nil, val_f: nil, on: nil)
   #This is a stub, used for indexing
 end
 
@@ -2670,8 +2646,8 @@ end
 # @param _a [byte]
 # @param _b [byte]
 # @param _c [byte]
-# @option opts :port Port(s) to send the raw MIDI message events to
-# @option opts :on If specified and false/nil/0 will stop the raw midi message from being sent out. (Ensures all opts are evaluated in this call to `midi_raw` regardless of value).
+# @param port Port(s) to send the raw MIDI message events to
+# @param on If specified and false/nil/0 will stop the raw midi message from being sent out. (Ensures all opts are evaluated in this call to `midi_raw` regardless of value).
 # @accepts_block false
 # @introduced 3.0.0
 # @example
@@ -2686,7 +2662,7 @@ end
 # @example
 #   midi_raw 0b10110000, 0b01111001, 0b00000000  #=> Sends the MIDI reset command
 #
-def midi_raw(_a, _b, _c, port: nil, on: nil)
+def midi_raw(_a = nil, _b = nil, _c = nil, port: nil, on: nil)
   #This is a stub, used for indexing
 end
 
@@ -2697,10 +2673,10 @@ end
 # 
 # [MIDI 1.0 Specification - Channel Mode Messages - Reset All Controllers](https://www.midi.org/specifications/item/table-1-summary-of-midi-message)
 # @param _value [number]
-# @option opts :channel Channel to send the midi reset message to
-# @option opts :port MIDI port to send to
-# @option opts :value Value must only be zero (the default) unless otherwise allowed in a specific Recommended Practice
-# @option opts :on If specified and false/nil/0 will stop the midi reset message from being sent out. (Ensures all opts are evaluated in this call to `midi_reset` regardless of value).
+# @param channel Channel to send the midi reset message to
+# @param port MIDI port to send to
+# @param value Value must only be zero (the default) unless otherwise allowed in a specific Recommended Practice
+# @param on If specified and false/nil/0 will stop the midi reset message from being sent out. (Ensures all opts are evaluated in this call to `midi_reset` regardless of value).
 # @accepts_block false
 # @introduced 3.0.0
 # @example
@@ -2709,7 +2685,7 @@ end
 # @example
 #   midi_reset channel: 2 #=> Reset MIDI devices on channel 2
 #
-def midi_reset(_value, channel: nil, port: nil, value: nil, on: nil)
+def midi_reset(_value = nil, channel: nil, port: nil, value: nil, on: nil)
   #This is a stub, used for indexing
 end
 
@@ -2719,9 +2695,9 @@ end
 # All oscillators will turn off, and their volume envelopes are set to zero as soon as possible.
 # 
 # [MIDI 1.0 Specification - Channel Mode Messages - All Sound Off](https://www.midi.org/specifications/item/table-1-summary-of-midi-message)
-# @option opts :channel Channel to send the sound off message to
-# @option opts :port MIDI port to send to
-# @option opts :on If specified and false/nil/0 will stop the midi sound off on message from being sent out. (Ensures all opts are evaluated in this call to `midi_sound_off` regardless of value).
+# @param channel Channel to send the sound off message to
+# @param port MIDI port to send to
+# @param on If specified and false/nil/0 will stop the midi sound off on message from being sent out. (Ensures all opts are evaluated in this call to `midi_sound_off` regardless of value).
 # @accepts_block false
 # @introduced 3.0.0
 # @example
@@ -2740,13 +2716,12 @@ end
 # Start the current sequence playing. (This message should be followed with calls to `midi_clock_tick` or `midi_clock_beat`).
 # 
 # [MIDI 1.0 Specification - System Real-Time Messages - Start](https://www.midi.org/specifications/item/table-1-summary-of-midi-message)
-# @param _ []
 # @accepts_block false
 # @introduced 3.0.0
 # @example
 #   midi_start #=> Send start message to all connected MIDI devices
 #
-def midi_start(_)
+def midi_start
   #This is a stub, used for indexing
 end
 
@@ -2756,14 +2731,13 @@ end
 # Stops the current sequence.
 # 
 # [MIDI 1.0 Specification - System Real-Time Messages - Start](https://www.midi.org/specifications/item/table-1-summary-of-midi-message)
-# @param _ []
-# @option opts :port MIDI Port(s) to send the stop message to
+# @param port MIDI Port(s) to send the stop message to
 # @accepts_block false
 # @introduced 3.0.0
 # @example
 #   midi_stop #=> Send stop message to all connected MIDI devices
 #
-def midi_stop(_, port: nil)
+def midi_stop(port: nil)
   #This is a stub, used for indexing
 end
 
@@ -2775,7 +2749,7 @@ end
 # @example
 #   midi_to_hz(60) #=> 261.6256
 #
-def midi_to_hz(_note)
+def midi_to_hz(_note = nil)
   #This is a stub, used for indexing
 end
 
@@ -2784,14 +2758,14 @@ end
 # @param _name [symbol]
 # @accepts_block true
 # @introduced 2.1.0
-def ndefine(_name)
+def ndefine(_name = nil)
   #This is a stub, used for indexing
 end
 
 # Describe note
 # Takes a midi note, a symbol (e.g. `:C`) or a string (e.g. `"C"`) and resolves it to a midi note. You can also pass an optional `octave:` parameter to get the midi note for a given octave. Please note - `octave:` param overrides any octave specified in a symbol i.e. `:c3`. If the note is `nil`, `:r` or `:rest`, then `nil` is returned (`nil` represents a rest)
 # @param _note [symbol_or_number]
-# @option opts :octave The octave of the note. Overrides any octave declaration in the note symbol such as :c2. Default is 4
+# @param octave The octave of the note. Overrides any octave declaration in the note symbol such as :c2. Default is 4
 # @accepts_block false
 # @introduced 2.0.0
 # @example
@@ -2810,21 +2784,21 @@ end
 #   puts note(:C4, octave: 2) # note the octave param overrides any octaves specified in a symbol
 #   puts note('C', octave: 2)
 #
-def note(_note, octave: nil)
+def note(_note = nil, octave: nil)
   #This is a stub, used for indexing
 end
 
 # Get note info
 # Returns an instance of `SonicPi::Note`. Please note - `octave:` param overrides any octave specified in a symbol i.e. `:c3`
 # @param _note [symbol_or_number]
-# @option opts :octave The octave of the note. Overrides any octave declaration in the note symbol such as :c2. Default is 4
+# @param octave The octave of the note. Overrides any octave declaration in the note symbol such as :c2. Default is 4
 # @accepts_block false
 # @introduced 2.0.0
 # @example
 #   puts note_info(:C, octave: 2)
 #   # returns #<SonicPi::Note :C2>
 #
-def note_info(_note, octave: nil)
+def note_info(_note = nil, octave: nil)
   #This is a stub, used for indexing
 end
 
@@ -2832,7 +2806,7 @@ end
 # Produces a ring of all the notes between a low note and a high note. By default this is chromatic (all the notes) but can be filtered with a pitches: argument. This opens the door to arpeggiator style sequences and other useful patterns. If you try to specify only pitches which aren't in the range it will raise an error - you have been warned!
 # @param _low_note [note]
 # @param _high_note [note]
-# @option opts :pitches An array of notes (symbols or ints) to filter on. Octave information is ignored.
+# @param pitches An array of notes (symbols or ints) to filter on. Octave information is ignored.
 # @accepts_block false
 # @introduced 2.6.0
 # @example
@@ -2852,12 +2826,12 @@ end
 #
 # @example
 #   live_loop :arpeggiator do
-#   # try changing the chord
-#   play (note_range :c4, :c5, pitches: (chord :c, :major)).tick
-#   sleep 0.125
+#     # try changing the chord
+#     play (note_range :c4, :c5, pitches: (chord :c, :major)).tick
+#     sleep 0.125
 #   end
 #
-def note_range(_low_note, _high_note, pitches: nil)
+def note_range(_low_note = nil, _high_note = nil, pitches: nil)
   #This is a stub, used for indexing
 end
 
@@ -2873,7 +2847,7 @@ end
 # @example
 #   (octs :e3, 3) #=> (ring 52, 64, 76)
 #
-def octs(_start, _num_octaves)
+def octs(_start = nil, _num_octaves = nil)
   #This is a stub, used for indexing
 end
 
@@ -2884,45 +2858,45 @@ end
 # @introduced 2.10.0
 # @example
 #   on true do
-#   play 70     #=> will play 70 as true is truthy
+#     play 70     #=> will play 70 as true is truthy
 #   end
 #
 # @example
 #   on 1 do
-#   play 70     #=> will play 70 as 1 is truthy
+#     play 70     #=> will play 70 as 1 is truthy
 #   end
 #
 # @example
 #   on 0 do
-#   play 70     #=> will *not* play 70 as 0 is not truthy
+#     play 70     #=> will *not* play 70 as 0 is not truthy
 #   end
 #
 # @example
 #   on false do
-#   play 70     #=> will *not* play 70 as false is not truthy
+#     play 70     #=> will *not* play 70 as false is not truthy
 #   end
 #
 # @example
 #   on nil do
-#   play 70     #=> will *not* play 70 as nil is not truthy
+#     play 70     #=> will *not* play 70 as nil is not truthy
 #   end
 #
 # @example
 #   on lambda{true} do
-#   play 70     #=> will play 70 as the lambda returns a truthy value
+#     play 70     #=> will play 70 as the lambda returns a truthy value
 #   end
 #
 # @example
 #   on lambda{false} do
-#   play 70     #=> will *not* play 70 as the lambda does not return a truthy value
+#     play 70     #=> will *not* play 70 as the lambda does not return a truthy value
 #   end
 #
 # @example
 #   on lambda{[true, false].choose} do
-#   play 70     #=> will maybe play 70 depending on the choice in the lambda
+#     play 70     #=> will maybe play 70 depending on the choice in the lambda
 #   end
 #
-def on(_condition)
+def on(_condition = nil)
   #This is a stub, used for indexing
 end
 
@@ -2940,7 +2914,7 @@ end
 # @example
 #   one_in 100 # will return true with a probability of 1/100, false with a probability of 99/100
 #
-def one_in(_num)
+def one_in(_num = nil)
   #This is a stub, used for indexing
 end
 
@@ -2983,27 +2957,27 @@ end
 #   
 #   use_osc "localhost", 7000  # Specify port 7000 on this machine
 #   osc "/foo/bar"             # Send an OSC message with path "/foo/bar"
-#   # and no arguments
+#                                # and no arguments
 #
 # @example
 #   # Send an OSC messages with arguments to another program on the same machine
 #   
 #   use_osc "localhost", 7000        # Specify port 7000 on this machine
 #   osc "/foo/bar", 1, 3.89, "baz" # Send an OSC message with path "/foo/bar"
-#   # and three arguments:
-#   # 1) The whole number (integer) 1
-#   # 2) The fractional number (float) 3.89
-#   # 3) The string "baz"
+#                                      # and three arguments:
+#                                      # 1) The whole number (integer) 1
+#                                      # 2) The fractional number (float) 3.89
+#                                      # 3) The string "baz"
 #
 # @example
 #   # Send an OSC messages with arguments to another program on a different machine
 #   
 #   use_osc "10.0.1.5", 7000         # Specify port 7000 on the machine with address 10.0.1.5
 #   osc "/foo/bar", 1, 3.89, "baz" # Send an OSC message with path "/foo/bar"
-#   # and three arguments:
-#   # 1) The whole number (integer) 1
-#   # 2) The fractional number (float) 3.89
-#   # 3) The string "baz"
+#                                      # and three arguments:
+#                                      # 1) The whole number (integer) 1
+#                                      # 2) The fractional number (float) 3.89
+#                                      # 3) The string "baz"
 #
 # @example
 #   # OSC messages honour the timing system
@@ -3020,26 +2994,26 @@ end
 #   # Send a incrementing OSC counter
 #   
 #   live_loop :foo do             # Start a live loop called :foo
-#   osc "/counter", tick      # Send an OSC message with the path /counter
-#   # with successive whole numbers (0, 1, 2, 3.. etc.)
-#   # each time round the live loop
-#   sleep 1                     # Repeat the live loop every 1 beat
+#     osc "/counter", tick      # Send an OSC message with the path /counter
+#                                 # with successive whole numbers (0, 1, 2, 3.. etc.)
+#                                 # each time round the live loop
+#     sleep 1                     # Repeat the live loop every 1 beat
 #   end
 #
 # @example
 #   # OSC messages can be sent from within time_warp
 #   
 #   time_warp 0.5 do
-#   osc "/foo/bar"       # Send an OSC message with path /foo/bar at 0.5 beats
+#     osc "/foo/bar"       # Send an OSC message with path /foo/bar at 0.5 beats
 #   end
 #   
 #   sleep 1                  # Wait for 1 beat
 #   
 #   time_warp -0.1 do
-#   osc "/baz/quux"      # Send an OSC message with path /baz/quux at 0.9 beats
+#     osc "/baz/quux"      # Send an OSC message with path /baz/quux at 0.9 beats
 #   end
 #
-def osc(_path)
+def osc(_path = nil)
   #This is a stub, used for indexing
 end
 
@@ -3061,9 +3035,9 @@ end
 #   osc "/foo/baz"                            # Send an OSC message to port 7010
 #   
 #   osc_send "localhost", 7000, "/foo/baz"  # Send an OSC message to port 7000
-#   # (ignores use_osc settings)
+#                                               # (ignores use_osc settings)
 #
-def osc_send(_hostname, _port, _path, _args)
+def osc_send(_hostname = nil, _port = nil, _path = nil, _args = nil)
   #This is a stub, used for indexing
 end
 
@@ -3077,7 +3051,7 @@ end
 # Always returns a list-like thing (either an array or ring)
 # @param _list [array]
 # @param _n [number_or_nil]
-# @option opts :skip Number of rands to skip over with each successive pick
+# @param skip Number of rands to skip over with each successive pick
 # @accepts_block false
 # @introduced 2.10.0
 # @example
@@ -3095,11 +3069,11 @@ end
 # @example
 #   # Using pick for random sample onsets
 #   live_loop :foo do
-#   sample :loop_amen, onset: pick   # pick a random onset value each time
-#   sleep 0.125
+#     sample :loop_amen, onset: pick   # pick a random onset value each time
+#     sleep 0.125
 #   end
 #
-def pick(_list, _n, skip: nil)
+def pick(_list = nil, _n = nil, skip: nil)
   #This is a stub, used for indexing
 end
 
@@ -3123,11 +3097,11 @@ end
 # @example
 #   # Play a chromatic scale of semitones
 #   (range 0, 16).each do |n|                  # For each note in the range 0->16
-#   sample :ambi_choir, rate: pitch_to_ratio(n) # play :ambi_choir at the relative pitch
-#   sleep 0.5                                # and wait between notes
+#     sample :ambi_choir, rate: pitch_to_ratio(n) # play :ambi_choir at the relative pitch
+#     sleep 0.5                                # and wait between notes
 #   end
 #
-def pitch_to_ratio(_pitch)
+def pitch_to_ratio(_pitch = nil)
   #This is a stub, used for indexing
 end
 
@@ -3143,21 +3117,21 @@ end
 # Note that the default opts listed are only a guide to the most common opts across all the synths. Not all synths support all the default opts and each synth typically supports many more opts specific to that synth. For example, the `:tb303` synth supports 45 unique opts. For a full list of a synth's opts see its documentation in the Help system.
 #     
 # @param _note [symbol_or_number]
-# @option opts :amp The amplitude of the note
-# @option opts :amp_slide The duration in beats for amplitude changes to take place
-# @option opts :pan The stereo position of the sound. -1 is left, 0 is in the middle and 1 is on the right. You may use a value in between -1 and 1 such as 0.25
-# @option opts :pan_slide The duration in beats for the pan value to change
-# @option opts :attack Amount of time (in beats) for sound to reach full amplitude (attack_level). A short attack (i.e. 0.01) makes the initial part of the sound very percussive like a sharp tap. A longer attack (i.e 1) fades the sound in gently.
-# @option opts :decay Amount of time (in beats) for the sound to move from full amplitude (attack_level) to the sustain amplitude (sustain_level).
-# @option opts :sustain Amount of time (in beats) for sound to remain at sustain level amplitude. Longer sustain values result in longer sounds. Full length of sound is attack + decay + sustain + release.
-# @option opts :release Amount of time (in beats) for sound to move from sustain level amplitude to silent. A short release (i.e. 0.01) makes the final part of the sound very percussive (potentially resulting in a click). A longer release (i.e 1) fades the sound out gently.
-# @option opts :attack_level Amplitude level reached after attack phase and immediately before decay phase
-# @option opts :decay_level Amplitude level reached after decay phase and immediately before sustain phase. Defaults to sustain_level unless explicitly set
-# @option opts :sustain_level Amplitude level reached after decay phase and immediately before release phase.
-# @option opts :env_curve Select the shape of the curve between levels in the envelope. 1=linear, 2=exponential, 3=sine, 4=welch, 6=squared, 7=cubed
-# @option opts :slide Default slide time in beats for all slide opts. Individually specified slide opts will override this value
-# @option opts :pitch Pitch adjustment in semitones. 1 is up a semitone, 12 is up an octave, -12 is down an octave etc.  Decimal numbers can be used for fine tuning.
-# @option opts :on If specified and false/nil/0 will stop the synth from being played. Ensures all opts are evaluated.
+# @param amp The amplitude of the note
+# @param amp_slide The duration in beats for amplitude changes to take place
+# @param pan The stereo position of the sound. -1 is left, 0 is in the middle and 1 is on the right. You may use a value in between -1 and 1 such as 0.25
+# @param pan_slide The duration in beats for the pan value to change
+# @param attack Amount of time (in beats) for sound to reach full amplitude (attack_level). A short attack (i.e. 0.01) makes the initial part of the sound very percussive like a sharp tap. A longer attack (i.e 1) fades the sound in gently.
+# @param decay Amount of time (in beats) for the sound to move from full amplitude (attack_level) to the sustain amplitude (sustain_level).
+# @param sustain Amount of time (in beats) for sound to remain at sustain level amplitude. Longer sustain values result in longer sounds. Full length of sound is attack + decay + sustain + release.
+# @param release Amount of time (in beats) for sound to move from sustain level amplitude to silent. A short release (i.e. 0.01) makes the final part of the sound very percussive (potentially resulting in a click). A longer release (i.e 1) fades the sound out gently.
+# @param attack_level Amplitude level reached after attack phase and immediately before decay phase
+# @param decay_level Amplitude level reached after decay phase and immediately before sustain phase. Defaults to sustain_level unless explicitly set
+# @param sustain_level Amplitude level reached after decay phase and immediately before release phase.
+# @param env_curve Select the shape of the curve between levels in the envelope. 1=linear, 2=exponential, 3=sine, 4=welch, 6=squared, 7=cubed
+# @param slide Default slide time in beats for all slide opts. Individually specified slide opts will override this value
+# @param pitch Pitch adjustment in semitones. 1 is up a semitone, 12 is up an octave, -12 is down an octave etc.  Decimal numbers can be used for fine tuning.
+# @param on If specified and false/nil/0 will stop the synth from being played. Ensures all opts are evaluated.
 # @accepts_block true
 # @introduced 2.0.0
 # @example
@@ -3181,15 +3155,15 @@ end
 # @example
 #   # Controlling a synth asynchronously
 #   play :e3, release: 4 do |s|
-#   sleep 1                                               # This block is run in an implicit in_thread
-#   control s, note: :e5                                  # and therefore is asynchronous
+#     sleep 1                                               # This block is run in an implicit in_thread
+#     control s, note: :e5                                  # and therefore is asynchronous
 #   end
 #   
 #   sleep 0.5
 #   use_synth :dsaw
 #   play :e3 # This is triggered after 0.5s from start
 #
-def play(_note, amp: nil, amp_slide: nil, pan: nil, pan_slide: nil, attack: nil, decay: nil, sustain: nil, release: nil, attack_level: nil, decay_level: nil, sustain_level: nil, env_curve: nil, slide: nil, pitch: nil, on: nil)
+def play(_note = nil, amp: nil, amp_slide: nil, pan: nil, pan_slide: nil, attack: nil, decay: nil, sustain: nil, release: nil, attack_level: nil, decay_level: nil, sustain_level: nil, env_curve: nil, slide: nil, pitch: nil, on: nil)
   #This is a stub, used for indexing
 end
 
@@ -3198,21 +3172,21 @@ end
 # 
 # Accepts optional args for modification of the synth being played. See each synth's documentation for synth-specific opts. See `use_synth` and `with_synth` for changing the current synth.
 # @param _notes [list]
-# @option opts :amp The amplitude of the note
-# @option opts :amp_slide The duration in beats for amplitude changes to take place
-# @option opts :pan The stereo position of the sound. -1 is left, 0 is in the middle and 1 is on the right. You may use a value in between -1 and 1 such as 0.25
-# @option opts :pan_slide The duration in beats for the pan value to change
-# @option opts :attack Amount of time (in beats) for sound to reach full amplitude (attack_level). A short attack (i.e. 0.01) makes the initial part of the sound very percussive like a sharp tap. A longer attack (i.e 1) fades the sound in gently.
-# @option opts :decay Amount of time (in beats) for the sound to move from full amplitude (attack_level) to the sustain amplitude (sustain_level).
-# @option opts :sustain Amount of time (in beats) for sound to remain at sustain level amplitude. Longer sustain values result in longer sounds. Full length of sound is attack + decay + sustain + release.
-# @option opts :release Amount of time (in beats) for sound to move from sustain level amplitude to silent. A short release (i.e. 0.01) makes the final part of the sound very percussive (potentially resulting in a click). A longer release (i.e 1) fades the sound out gently.
-# @option opts :attack_level Amplitude level reached after attack phase and immediately before decay phase
-# @option opts :decay_level Amplitude level reached after decay phase and immediately before sustain phase. Defaults to sustain_level unless explicitly set
-# @option opts :sustain_level Amplitude level reached after decay phase and immediately before release phase.
-# @option opts :env_curve Select the shape of the curve between levels in the envelope. 1=linear, 2=exponential, 3=sine, 4=welch, 6=squared, 7=cubed
-# @option opts :slide Default slide time in beats for all slide opts. Individually specified slide opts will override this value
-# @option opts :pitch Pitch adjustment in semitones. 1 is up a semitone, 12 is up an octave, -12 is down an octave etc.  Decimal numbers can be used for fine tuning.
-# @option opts :on If specified and false/nil/0 will stop the synth from being played. Ensures all opts are evaluated.
+# @param amp The amplitude of the note
+# @param amp_slide The duration in beats for amplitude changes to take place
+# @param pan The stereo position of the sound. -1 is left, 0 is in the middle and 1 is on the right. You may use a value in between -1 and 1 such as 0.25
+# @param pan_slide The duration in beats for the pan value to change
+# @param attack Amount of time (in beats) for sound to reach full amplitude (attack_level). A short attack (i.e. 0.01) makes the initial part of the sound very percussive like a sharp tap. A longer attack (i.e 1) fades the sound in gently.
+# @param decay Amount of time (in beats) for the sound to move from full amplitude (attack_level) to the sustain amplitude (sustain_level).
+# @param sustain Amount of time (in beats) for sound to remain at sustain level amplitude. Longer sustain values result in longer sounds. Full length of sound is attack + decay + sustain + release.
+# @param release Amount of time (in beats) for sound to move from sustain level amplitude to silent. A short release (i.e. 0.01) makes the final part of the sound very percussive (potentially resulting in a click). A longer release (i.e 1) fades the sound out gently.
+# @param attack_level Amplitude level reached after attack phase and immediately before decay phase
+# @param decay_level Amplitude level reached after decay phase and immediately before sustain phase. Defaults to sustain_level unless explicitly set
+# @param sustain_level Amplitude level reached after decay phase and immediately before release phase.
+# @param env_curve Select the shape of the curve between levels in the envelope. 1=linear, 2=exponential, 3=sine, 4=welch, 6=squared, 7=cubed
+# @param slide Default slide time in beats for all slide opts. Individually specified slide opts will override this value
+# @param pitch Pitch adjustment in semitones. 1 is up a semitone, 12 is up an octave, -12 is down an octave etc.  Decimal numbers can be used for fine tuning.
+# @param on If specified and false/nil/0 will stop the synth from being played. Ensures all opts are evaluated.
 # @accepts_block false
 # @introduced 2.0.0
 # @example
@@ -3236,7 +3210,7 @@ end
 # @example
 #   play_chord chord(:e3, :minor)
 #
-def play_chord(_notes, amp: nil, amp_slide: nil, pan: nil, pan_slide: nil, attack: nil, decay: nil, sustain: nil, release: nil, attack_level: nil, decay_level: nil, sustain_level: nil, env_curve: nil, slide: nil, pitch: nil, on: nil)
+def play_chord(_notes = nil, amp: nil, amp_slide: nil, pan: nil, pan_slide: nil, attack: nil, decay: nil, sustain: nil, release: nil, attack_level: nil, decay_level: nil, sustain_level: nil, env_curve: nil, slide: nil, pitch: nil, on: nil)
   #This is a stub, used for indexing
 end
 
@@ -3251,84 +3225,84 @@ end
 # 
 #   If you want to use a triplet rhythm you can use a special notation to spread across multiple beats e.g. `[:d5, :cs5, {over: 2, val: [:c5,:c5,:c5]}, :b4, :bb4, :a4]`. This spaces the three `:c5` notes over the space of two normal notes which gives you a quaver triplet rhythm. You might recognize this from Bizet's opera Carmen.
 # @param _pattern []
-# @option opts :beat_length Length of a single (top level) beat - defaults to 1
-# @option opts :mode One of `:notes`, `:samples` or `:lambdas` depending on what is in your nested pattern. See examples below.
+# @param beat_length Length of a single (top level) beat - defaults to 1
+# @param mode One of `:notes`, `:samples` or `:lambdas` depending on what is in your nested pattern. See examples below.
 # @accepts_block false
 # @introduced 2.8.0
 # @example
 #   play_nested_pattern [:c, [:d, :f], :e, :c]
-#   # Same as:
-#   #   play :c
-#   #   sleep 1
-#   #   play :d
-#   #   sleep 0.5
-#   #   play :f
-#   #   sleep 0.5
-#   #   play :e
-#   #   sleep 1
-#   #   play :c
-#   #   sleep 1
+#                                   # Same as:
+#                                   #   play :c
+#                                   #   sleep 1
+#                                   #   play :d
+#                                   #   sleep 0.5
+#                                   #   play :f
+#                                   #   sleep 0.5
+#                                   #   play :e
+#                                   #   sleep 1
+#                                   #   play :c
+#                                   #   sleep 1
 #
 # @example
 #   # We can also use sample names with `:samples` as the mode option
-#   rock_you_pattern =
-#   [:bd_haus, :elec_snare, [:bd_haus, :bd_haus], :elec_snare]
+#         rock_you_pattern =
+#           [:bd_haus, :elec_snare, [:bd_haus, :bd_haus], :elec_snare]
 #   
-#   play_nested_pattern(rock_you_pattern, mode: :samples) # Same as:
-#   #   sample :bd_haus
-#   #   sleep 1
-#   #   sample :elec_snare
-#   #   sleep 1
-#   #   sample :bd_haus
-#   #   sleep 0.5
-#   #   sample :bd_haus
-#   #   sleep 0.5
-#   #   sample :elec_snare
-#   #   sleep 1
+#         play_nested_pattern(rock_you_pattern, mode: :samples) # Same as:
+#                                   #   sample :bd_haus
+#                                   #   sleep 1
+#                                   #   sample :elec_snare
+#                                   #   sleep 1
+#                                   #   sample :bd_haus
+#                                   #   sleep 0.5
+#                                   #   sample :bd_haus
+#                                   #   sleep 0.5
+#                                   #   sample :elec_snare
+#                                   #   sleep 1
 #
 # @example
 #   # We can also use lambdas with `:lambdas` as the mode option
-#   rand_notes = lambda {
-#   notes = scale(:c3, :minor_pentatonic, num_octaves: 3)
-#   play_pattern_timed(notes.shuffle.take(3), 0.33)
-#   }
-#   random_pattern = [rand_notes, rand_notes, [rand_notes, rand_notes], rand_notes]
-#   loop do
-#   # because we already sleep inside play_pattern_timed,
-#   # we set the :beat_length to zero
-#   play_nested_pattern(random_pattern, mode: :lambdas, beat_length: 0)
-#   end
+#         rand_notes = lambda {
+#           notes = scale(:c3, :minor_pentatonic, num_octaves: 3)
+#           play_pattern_timed(notes.shuffle.take(3), 0.33)
+#         }
+#         random_pattern = [rand_notes, rand_notes, [rand_notes, rand_notes], rand_notes]
+#         loop do
+#           # because we already sleep inside play_pattern_timed,
+#           # we set the :beat_length to zero
+#           play_nested_pattern(random_pattern, mode: :lambdas, beat_length: 0)
+#         end
 #
 # @example
 #   # Triplets and cross rhythms
-#   # By using a hash with :over and :val keys, we can spread, for example, three notes over the space of two
-#   # This creates the equivalent of triplets in music
-#   carmen_pattern = [:d5, :cs5, {over: 2, val: [:c5,:c5,:c5]}, :b4, :bb4, :a4]
-#   # This spaces the three `:c5` notes (our `:val`) over the space of two (our `:over`) normal notes which gives you a quaver triplet rhythm.
-#   # You might recognize this from Bizet's opera Carmen.
-#   play_nested_pattern(carmen_pattern, beat_length: 0.5)
+#         # By using a hash with :over and :val keys, we can spread, for example, three notes over the space of two
+#         # This creates the equivalent of triplets in music
+#         carmen_pattern = [:d5, :cs5, {over: 2, val: [:c5,:c5,:c5]}, :b4, :bb4, :a4]
+#         # This spaces the three `:c5` notes (our `:val`) over the space of two (our `:over`) normal notes which gives you a quaver triplet rhythm.
+#         # You might recognize this from Bizet's opera Carmen.
+#         play_nested_pattern(carmen_pattern, beat_length: 0.5)
 #
 # @example
 #   # Advanced version - a randomised drum beat
-#   live_loop :beatz do
-#   use_bpm 120
+#         live_loop :beatz do
+#           use_bpm 120
 #   
-#   bd = lambda { sample :bd_haus, rate: 2}
-#   sn = lambda { sample :drum_snare_hard, rate: 4 }
-#   hh = lambda { sample :drum_cymbal_closed, rate: rrand(3,4)}
-#   rest = lambda { nil }
+#           bd = lambda { sample :bd_haus, rate: 2}
+#           sn = lambda { sample :drum_snare_hard, rate: 4 }
+#           hh = lambda { sample :drum_cymbal_closed, rate: rrand(3,4)}
+#           rest = lambda { nil }
 #   
-#   drumbeat = [bd, sn, [bd, [bd,bd]], [sn, hh]]
-#   drumbreak = [[bd,bd,bd,bd], {over: 2, val: [sn,sn,sn]}, [rest,hh,rest,hh]]
+#           drumbeat = [bd, sn, [bd, [bd,bd]], [sn, hh]]
+#           drumbreak = [[bd,bd,bd,bd], {over: 2, val: [sn,sn,sn]}, [rest,hh,rest,hh]]
 #   
-#   3.times do
-#   play_nested_pattern(drumbeat, mode: :lambdas)
-#   end
-#   # We use .shuffle to get a different break each time
-#   play_nested_pattern(drumbreak.shuffle, mode: :lambdas)
-#   end
+#           3.times do
+#             play_nested_pattern(drumbeat, mode: :lambdas)
+#           end
+#           # We use .shuffle to get a different break each time
+#           play_nested_pattern(drumbreak.shuffle, mode: :lambdas)
+#         end
 #
-def play_nested_pattern(_pattern, beat_length: nil, mode: nil)
+def play_nested_pattern(_pattern = nil, beat_length: nil, mode: nil)
   #This is a stub, used for indexing
 end
 
@@ -3341,11 +3315,11 @@ end
 # @introduced 2.0.0
 # @example
 #   play_pattern [40, 41, 42] # Same as:
-#   #   play 40
-#   #   sleep 1
-#   #   play 41
-#   #   sleep 1
-#   #   play 42
+#                             #   play 40
+#                             #   sleep 1
+#                             #   play 41
+#                             #   sleep 1
+#                             #   play 42
 #
 # @example
 #   play_pattern [:d3, :c1, :Eb5] # You can use keyword notes
@@ -3353,7 +3327,7 @@ end
 # @example
 #   play_pattern [:d3, :c1, :Eb5], amp: 0.5, cutoff: 90 # Supports the same arguments as play:
 #
-def play_pattern(_notes)
+def play_pattern(_notes = nil)
   #This is a stub, used for indexing
 end
 
@@ -3365,21 +3339,21 @@ end
 # Accepts optional args for modification of the synth being played. See each synth's documentation for synth-specific opts. See `use_synth` and `with_synth` for changing the current synth.
 # @param _notes [list]
 # @param _times [list_or_number]
-# @option opts :amp The amplitude of the note
-# @option opts :amp_slide The duration in beats for amplitude changes to take place
-# @option opts :pan The stereo position of the sound. -1 is left, 0 is in the middle and 1 is on the right. You may use a value in between -1 and 1 such as 0.25
-# @option opts :pan_slide The duration in beats for the pan value to change
-# @option opts :attack Amount of time (in beats) for sound to reach full amplitude (attack_level). A short attack (i.e. 0.01) makes the initial part of the sound very percussive like a sharp tap. A longer attack (i.e 1) fades the sound in gently.
-# @option opts :decay Amount of time (in beats) for the sound to move from full amplitude (attack_level) to the sustain amplitude (sustain_level).
-# @option opts :sustain Amount of time (in beats) for sound to remain at sustain level amplitude. Longer sustain values result in longer sounds. Full length of sound is attack + decay + sustain + release.
-# @option opts :release Amount of time (in beats) for sound to move from sustain level amplitude to silent. A short release (i.e. 0.01) makes the final part of the sound very percussive (potentially resulting in a click). A longer release (i.e 1) fades the sound out gently.
-# @option opts :attack_level Amplitude level reached after attack phase and immediately before decay phase
-# @option opts :decay_level Amplitude level reached after decay phase and immediately before sustain phase. Defaults to sustain_level unless explicitly set
-# @option opts :sustain_level Amplitude level reached after decay phase and immediately before release phase.
-# @option opts :env_curve Select the shape of the curve between levels in the envelope. 1=linear, 2=exponential, 3=sine, 4=welch, 6=squared, 7=cubed
-# @option opts :slide Default slide time in beats for all slide opts. Individually specified slide opts will override this value
-# @option opts :pitch Pitch adjustment in semitones. 1 is up a semitone, 12 is up an octave, -12 is down an octave etc.  Decimal numbers can be used for fine tuning.
-# @option opts :on If specified and false/nil/0 will stop the synth from being played. Ensures all opts are evaluated.
+# @param amp The amplitude of the note
+# @param amp_slide The duration in beats for amplitude changes to take place
+# @param pan The stereo position of the sound. -1 is left, 0 is in the middle and 1 is on the right. You may use a value in between -1 and 1 such as 0.25
+# @param pan_slide The duration in beats for the pan value to change
+# @param attack Amount of time (in beats) for sound to reach full amplitude (attack_level). A short attack (i.e. 0.01) makes the initial part of the sound very percussive like a sharp tap. A longer attack (i.e 1) fades the sound in gently.
+# @param decay Amount of time (in beats) for the sound to move from full amplitude (attack_level) to the sustain amplitude (sustain_level).
+# @param sustain Amount of time (in beats) for sound to remain at sustain level amplitude. Longer sustain values result in longer sounds. Full length of sound is attack + decay + sustain + release.
+# @param release Amount of time (in beats) for sound to move from sustain level amplitude to silent. A short release (i.e. 0.01) makes the final part of the sound very percussive (potentially resulting in a click). A longer release (i.e 1) fades the sound out gently.
+# @param attack_level Amplitude level reached after attack phase and immediately before decay phase
+# @param decay_level Amplitude level reached after decay phase and immediately before sustain phase. Defaults to sustain_level unless explicitly set
+# @param sustain_level Amplitude level reached after decay phase and immediately before release phase.
+# @param env_curve Select the shape of the curve between levels in the envelope. 1=linear, 2=exponential, 3=sine, 4=welch, 6=squared, 7=cubed
+# @param slide Default slide time in beats for all slide opts. Individually specified slide opts will override this value
+# @param pitch Pitch adjustment in semitones. 1 is up a semitone, 12 is up an octave, -12 is down an octave etc.  Decimal numbers can be used for fine tuning.
+# @param on If specified and false/nil/0 will stop the synth from being played. Ensures all opts are evaluated.
 # @accepts_block false
 # @introduced 2.0.0
 # @example
@@ -3434,7 +3408,7 @@ end
 #   sleep 2
 #   play 44
 #
-def play_pattern_timed(_notes, _times, amp: nil, amp_slide: nil, pan: nil, pan_slide: nil, attack: nil, decay: nil, sustain: nil, release: nil, attack_level: nil, decay_level: nil, sustain_level: nil, env_curve: nil, slide: nil, pitch: nil, on: nil)
+def play_pattern_timed(_notes = nil, _times = nil, amp: nil, amp_slide: nil, pan: nil, pan_slide: nil, attack: nil, decay: nil, sustain: nil, release: nil, attack_level: nil, decay_level: nil, sustain_level: nil, env_curve: nil, slide: nil, pitch: nil, on: nil)
   #This is a stub, used for indexing
 end
 
@@ -3452,7 +3426,7 @@ end
 # @example
 #   print foo             #=> will print the contents of foo to the output pane
 #
-def print(_output)
+def print(_output = nil)
   #This is a stub, used for indexing
 end
 
@@ -3470,7 +3444,7 @@ end
 # @example
 #   print foo             #=> will print the contents of foo to the output pane
 #
-def puts(_output)
+def puts(_output = nil)
   #This is a stub, used for indexing
 end
 
@@ -3498,7 +3472,7 @@ end
 # @example
 #   quantise(13.3212, 0.5) # 13.5
 #
-def quantise(_n, _step)
+def quantise(_n = nil, _step = nil)
   #This is a stub, used for indexing
 end
 
@@ -3528,7 +3502,7 @@ end
 # @example
 #   (ramp 1, 2, 3)[-1000] #=> 1
 #
-def ramp(_list)
+def ramp(_list = nil)
   #This is a stub, used for indexing
 end
 
@@ -3540,7 +3514,7 @@ end
 # @example
 #   print rand(0.5) #=> will print a number like 0.375030517578125 to the output pane
 #
-def rand(_max)
+def rand(_max = nil)
   #This is a stub, used for indexing
 end
 
@@ -3552,32 +3526,32 @@ end
 # @example
 #   # Basic rand stream rollback
 #   
-#   puts rand # prints 0.75006103515625
+#     puts rand # prints 0.75006103515625
 #   
-#   rand_back # roll random stream back one
-#   # the result of the next call to rand will be
-#   # exactly the same as the previous call
+#     rand_back # roll random stream back one
+#               # the result of the next call to rand will be
+#               # exactly the same as the previous call
 #   
-#   puts rand # prints 0.75006103515625 again!
-#   puts rand # prints 0.733917236328125
+#     puts rand # prints 0.75006103515625 again!
+#     puts rand # prints 0.733917236328125
 #
 # @example
 #   # Jumping back multiple places in the rand stream
 #   
-#   puts rand # prints 0.75006103515625
-#   puts rand # prints 0.733917236328125
-#   puts rand # prints 0.464202880859375
-#   puts rand # prints 0.24249267578125
+#     puts rand # prints 0.75006103515625
+#     puts rand # prints 0.733917236328125
+#     puts rand # prints 0.464202880859375
+#     puts rand # prints 0.24249267578125
 #   
-#   rand_back(3) # roll random stream back three places
-#   # the result of the next call to rand will be
-#   # exactly the same as the result 3 calls to
-#   # rand ago.
+#     rand_back(3) # roll random stream back three places
+#                  # the result of the next call to rand will be
+#                  # exactly the same as the result 3 calls to
+#                  # rand ago.
 #   
-#   puts rand # prints  0.733917236328125 again!
-#   puts rand # prints  0.464202880859375
+#     puts rand # prints  0.733917236328125 again!
+#     puts rand # prints  0.464202880859375
 #
-def rand_back(_amount)
+def rand_back(_amount = nil)
   #This is a stub, used for indexing
 end
 
@@ -3589,7 +3563,7 @@ end
 # @example
 #   print rand_i(5) #=> will print either 0, 1, 2, 3, or 4 to the output pane
 #
-def rand_i(_max)
+def rand_i(_max = nil)
   #This is a stub, used for indexing
 end
 
@@ -3610,7 +3584,7 @@ end
 #   print rand_i(5) #=> will print either 0, 1, 2, 3, or 4 to the output pane
 #   print rand_i_look(5) #=> will print the same number as the previous statement
 #
-def rand_i_look(_max)
+def rand_i_look(_max = nil)
   #This is a stub, used for indexing
 end
 
@@ -3626,29 +3600,28 @@ end
 #
 # @example
 #   print rand_look(0.5) #=> will print a number like 0.375030517578125 to the output pane
-#   print rand_look(0.5) #=> will print the same number again
-#   print rand_look(0.5) #=> will print the same number again
-#   print rand(0.5) #=> will print a different random number
-#   print rand_look(0.5) #=> will print the same number as the previous line again.
+#     print rand_look(0.5) #=> will print the same number again
+#     print rand_look(0.5) #=> will print the same number again
+#     print rand_(0.5) #=> will print a different random number
+#     print rand_look(0.5) #=> will print the same number as the prevoius line again.
 #
-def rand_look(_max)
+def rand_look(_max = nil)
   #This is a stub, used for indexing
 end
 
 # Reset rand generator to last seed
 # Resets the random stream to the last specified seed. See `use_random_seed` for changing the seed.
-# @param _ []
 # @accepts_block false
 # @introduced 2.7.0
 # @example
 #   puts rand # prints 0.75006103515625
-#   puts rand # prints 0.733917236328125
-#   puts rand # prints 0.464202880859375
-#   puts rand # prints 0.24249267578125
-#   rand_reset  # reset the random stream
-#   puts rand # prints 0.75006103515625
+#     puts rand # prints 0.733917236328125
+#     puts rand # prints 0.464202880859375
+#     puts rand # prints 0.24249267578125
+#     rand_reset  # reset the random stream
+#     puts rand # prints 0.75006103515625
 #
-def rand_reset(_)
+def rand_reset
   #This is a stub, used for indexing
 end
 
@@ -3660,33 +3633,33 @@ end
 # @example
 #   # Basic rand stream skip
 #   
-#   puts rand # prints 0.75006103515625
+#     puts rand # prints 0.75006103515625
 #   
-#   rand_skip # jump random stream forward one
-#   # typically the next rand is 0.733917236328125
+#     rand_skip # jump random stream forward one
+#               # typically the next rand is 0.733917236328125
 #   
-#   puts rand # prints 0.464202880859375
+#     puts rand # prints 0.464202880859375
 #
 # @example
 #   # Jumping forward multiple places in the rand stream
 #   
-#   puts rand # prints 0.75006103515625
-#   puts rand # prints 0.733917236328125
-#   puts rand # prints 0.464202880859375
-#   puts rand # prints 0.24249267578125
+#     puts rand # prints 0.75006103515625
+#     puts rand # prints 0.733917236328125
+#     puts rand # prints 0.464202880859375
+#     puts rand # prints 0.24249267578125
 #   
-#   rand_reset  # reset the random stream
+#     rand_reset  # reset the random stream
 #   
-#   puts rand # prints 0.75006103515625
+#     puts rand # prints 0.75006103515625
 #   
-#   rand_skip(2) # jump random stream forward three places
-#   # the result of the next call to rand will be
-#   # exactly the same as if rand had been called
-#   # three times
+#     rand_skip(2) # jump random stream forward three places
+#                  # the result of the next call to rand will be
+#                  # exactly the same as if rand had been called
+#                  # three times
 #   
-#   puts rand 0.24249267578125
+#     puts rand 0.24249267578125
 #
-def rand_skip(_amount)
+def rand_skip(_amount = nil)
   #This is a stub, used for indexing
 end
 
@@ -3695,8 +3668,8 @@ end
 # @param _start [number]
 # @param _finish [number]
 # @param _step_size [number]
-# @option opts :step Size of increment between steps; step size.
-# @option opts :inclusive If set to true, range is inclusive of finish value
+# @param step Size of increment between steps; step size.
+# @param inclusive If set to true, range is inclusive of finish value
 # @accepts_block false
 # @introduced 2.2.0
 # @example
@@ -3714,7 +3687,7 @@ end
 # @example
 #   (range 1, -5, step: 2)[-1] #=> -3
 #
-def range(_start, _finish, _step_size, step: nil, inclusive: nil)
+def range(_start = nil, _finish = nil, _step_size = nil, step: nil, inclusive: nil)
   #This is a stub, used for indexing
 end
 
@@ -3729,7 +3702,7 @@ end
 # @example
 #   ratio_to_pitch 0.5 #=> -12.0
 #
-def ratio_to_pitch(_ratio)
+def ratio_to_pitch(_ratio = nil)
   #This is a stub, used for indexing
 end
 
@@ -3737,7 +3710,7 @@ end
 # Returns a random number within the range with width around centre. If optional arg `step:` is used, the result is quantised by step.
 # @param _width [number]
 # @param _centre [number]
-# @option opts :step Step size of value to quantise to.
+# @param step Step size of value to quantise to.
 # @accepts_block false
 # @introduced 2.3.0
 # @example
@@ -3748,11 +3721,11 @@ end
 #
 # @example
 #   loop do
-#   play :c3, pan: rdist(1) #=> Will play :c3 with random L/R panning
-#   sleep 0.125
-#   end
+#       play :c3, pan: rdist(1) #=> Will play :c3 with random L/R panning
+#       sleep 0.125
+#     end
 #
-def rdist(_width, _centre, step: nil)
+def rdist(_width = nil, _centre = nil, step: nil)
   #This is a stub, used for indexing
 end
 
@@ -3760,7 +3733,7 @@ end
 # After using `recording_start` and `recording_stop`, a temporary file is created until you decide to use `recording_save`. If you've decided you don't want to save it you can use this method to delete the temporary file straight away, otherwise the operating system will take care of deleting it later.
 # @accepts_block false
 # @introduced 
-def recording_delete()
+def recording_delete
   #This is a stub, used for indexing
 end
 
@@ -3769,7 +3742,7 @@ end
 # @param _path [string]
 # @accepts_block false
 # @introduced 2.0.0
-def recording_save(_path)
+def recording_save(_path = nil)
   #This is a stub, used for indexing
 end
 
@@ -3777,7 +3750,7 @@ end
 # Start recording all sound to a `.wav` file stored in a temporary directory.
 # @accepts_block false
 # @introduced 2.0.0
-def recording_start()
+def recording_start
   #This is a stub, used for indexing
 end
 
@@ -3785,13 +3758,12 @@ end
 # Stop current recording.
 # @accepts_block false
 # @introduced 2.0.0
-def recording_stop()
+def recording_stop
   #This is a stub, used for indexing
 end
 
 # Reset all thread locals
 # All settings such as the current synth, BPM, random stream and tick values will be reset to the values inherited from the parent thread. Consider using `clear` to reset all these values to their defaults.
-# @param _ []
 # @accepts_block false
 # @introduced 2.11.0
 # @example
@@ -3825,29 +3797,29 @@ end
 #   puts tick               #=> 0
 #   
 #   at do
-#   use_synth :tb303
-#   puts rand               #=> 0.9287109375
-#   reset
-#   puts "thread"          #=> "thread"
+#     use_synth :tb303
+#     puts rand               #=> 0.9287109375
+#     reset
+#     puts "thread"          #=> "thread"
 #   
 #   
-#   # The call to reset ensured that the current
-#   # synth was returned to the the state at the
-#   # time this thread was started. Thus any calls
-#   # to use_synth between this line and the start
-#   # of the thread are ignored
-#   puts current_synth      #=> :blade
-#   puts current_octave     #=> 3
+#                             # The call to reset ensured that the current
+#                             # synth was returned to the the state at the
+#                             # time this thread was started. Thus any calls
+#                             # to use_synth between this line and the start
+#                             # of the thread are ignored
+#     puts current_synth      #=> :blade
+#     puts current_octave     #=> 3
 #   
-#   # The call to reset ensured
-#   # that the random stream was reset
-#   # to the same state as it was when
-#   # the current thread was started
-#   puts rand               #=> 0.9287109375
-#   puts tick               #=> 0
+#                             # The call to reset ensured
+#                             # that the random stream was reset
+#                             # to the same state as it was when
+#                             # the current thread was started
+#     puts rand               #=> 0.9287109375
+#     puts tick               #=> 0
 #   end
 #
-def reset(_)
+def reset
   #This is a stub, used for indexing
 end
 
@@ -3862,7 +3834,7 @@ end
 #   reset_mixer!               # mixer is now reset to default values
 #   sample :loop_amen          # :loop_amen sample is played with normal cutoff
 #
-def reset_mixer!()
+def reset_mixer!
   #This is a stub, used for indexing
 end
 
@@ -3895,7 +3867,7 @@ end
 # @example
 #   puts rest? {note: 50} # false
 #
-def rest?(_note_or_args)
+def rest?(_note_or_args = nil)
   #This is a stub, used for indexing
 end
 
@@ -3916,7 +3888,7 @@ end
 # @example
 #   (ring 1, 2, 3)[-1] #=> 3
 #
-def ring(_list)
+def ring(_list = nil)
   #This is a stub, used for indexing
 end
 
@@ -3924,7 +3896,7 @@ end
 # Given two numbers, this produces a float between the supplied min and max values exclusively. Both min and max need to be supplied. For random integers, see `rrand_i`. If optional arg `step:` is used, the result is quantised by step.
 # @param _min [number]
 # @param _max [number]
-# @option opts :step Step size of value to quantise to.
+# @param step Step size of value to quantise to.
 # @accepts_block false
 # @introduced 2.0.0
 # @example
@@ -3932,11 +3904,11 @@ end
 #
 # @example
 #   loop do
-#   play rrand(60, 72) #=> Will play a random non-integer midi note between C4 (60) and C5 (72) such as 67.3453 or 71.2393
-#   sleep 0.125
-#   end
+#       play rrand(60, 72) #=> Will play a random non-integer midi note between C4 (60) and C5 (72) such as 67.3453 or 71.2393
+#       sleep 0.125
+#     end
 #
-def rrand(_min, _max, step: nil)
+def rrand(_min = nil, _max = nil, step: nil)
   #This is a stub, used for indexing
 end
 
@@ -3951,11 +3923,11 @@ end
 #
 # @example
 #   loop do
-#   play rrand_i(60, 72) #=> Will play a random midi note between C4 (60) and C5 (72)
-#   sleep 0.125
-#   end
+#       play rrand_i(60, 72) #=> Will play a random midi note between C4 (60) and C5 (72)
+#       sleep 0.125
+#     end
 #
-def rrand_i(_min, _max)
+def rrand_i(_min = nil, _max = nil)
   #This is a stub, used for indexing
 end
 
@@ -3966,13 +3938,13 @@ end
 # @introduced 2.0.0
 # @example
 #   use_bpm 120  # modifies all time to be half
-#   play 50
-#   sleep 1      # actually sleeps for half of a second
-#   play 62
-#   sleep rt(1)  # bypasses bpm scaling and sleeps for a second
-#   play 72
+#     play 50
+#     sleep 1      # actually sleeps for half of a second
+#     play 62
+#     sleep rt(1)  # bypasses bpm scaling and sleeps for a second
+#     play 72
 #
-def rt(_seconds)
+def rt(_seconds = nil)
   #This is a stub, used for indexing
 end
 
@@ -3991,7 +3963,7 @@ end
 #   sleep 1
 #   end # will play 60 8 times
 #
-def run_code(_code)
+def run_code(_code = nil)
   #This is a stub, used for indexing
 end
 
@@ -4003,7 +3975,7 @@ end
 # @example
 #   run_file "~/path/to/sonic-pi-code.rb" #=> will run the contents of this file
 #
-def run_file(_filename)
+def run_file(_filename = nil)
   #This is a stub, used for indexing
 end
 
@@ -4032,58 +4004,58 @@ end
 # 
 # By combining commands which add to the candidates and then filtering those candidates it is possible to work with folders full of samples in very powerful ways. Note that the specific ordering of filter parameters is irrelevant with the exception of the numbers - in which case the last number is the index. All the candidates will be gathered first before the filters are applied.
 # @param _name_or_path [symbol_or_string]
-# @option opts :rate Rate with which to play back the sample. Higher rates mean an increase in pitch and a decrease in duration. Default is 1.
-# @option opts :beat_stretch Stretch (or shrink) the sample to last for exactly the specified number of beats. Please note - this does *not* keep the pitch constant and is essentially the same as modifying the rate directly.
-# @option opts :pitch_stretch Stretch (or shrink) the sample to last for exactly the specified number of beats. This attempts to keep the pitch constant using the `pitch:` opt. Note, it's very likely you'll need to experiment with the `window_size:`, `pitch_dis:` and `time_dis:` opts depending on the sample and the amount you'd like to stretch/shrink from original size.
-# @option opts :attack Time to reach full volume. Default is 0.
-# @option opts :sustain Time to stay at full volume. Default is to stretch to length of sample (minus attack and release times).
-# @option opts :release Time (from the end of the sample) to go from full amplitude to 0. Default is 0.
-# @option opts :start Position in sample as a fraction between 0 and 1 to start playback. Default is 0.
-# @option opts :finish Position in sample as a fraction between 0 and 1 to end playback. Default is 1.
-# @option opts :pan Stereo position of audio. -1 is left ear only, 1 is right ear only, and values in between position the sound accordingly. Default is 0.
-# @option opts :amp Amplitude of playback.
-# @option opts :pre_amp Amplitude multiplier which takes place immediately before any internal FX such as the low pass filter, compressor or pitch modification. Use this opt if you want to overload the compressor.
-# @option opts :onset Analyse the sample with an onset detection algorithm and set the `start:` and `finish:` opts to play the nth onset only. Allows you to treat a rhythm sample as a palette of individual drum/synth hits. Floats are rounded to the nearest whole number.
-# @option opts :slice Divides the sample duration evenly into `num_slices` sections (defaults to 16) and set the `start:` and `finish:` opts to play the nth slice only. Use the envelope opts to remove any clicks introduced if the slice boundary is in the middle of a sound. Also consider `onset:`. Floats are rounded to the nearest whole number.
-# @option opts :num_slices Number of slices to divide the sample into when using the `slice:` opt. Defaults to 16. Floats are rounded to the nearest whole number.
-# @option opts :norm Normalise the audio (make quieter parts of the sample louder and louder parts quieter) - this is similar to the normaliser FX. This may emphasise any clicks caused by clipping.
-# @option opts :lpf Cutoff value of the built-in low pass filter (lpf) in MIDI notes. Unless specified, the lpf is *not* added to the signal chain.
-# @option opts :lpf_init_level The initial low pass filter envelope value as a MIDI note. This envelope is bypassed if no lpf env opts are specified. Default value is to match the `lpf_min:` opt.
-# @option opts :lpf_attack_level The peak lpf cutoff (value of cutoff at peak of attack) as a MIDI note. Default value is to match the `lpf_decay_level:` opt.
-# @option opts :lpf_decay_level The level of lpf cutoff after the decay phase as a MIDI note. Default value is to match the `lpf_sustain_level:` opt.
-# @option opts :lpf_sustain_level The sustain cutoff (value of lpf cutoff at sustain time) as a MIDI note. Default value is to match the `lpf_release_level:` opt.
-# @option opts :lpf_release_level The final value of the low pass filter envelope as a MIDI note. This envelope is bypassed if no lpf env opts are specified. Default value is to match the `lpf:` opt.
-# @option opts :lpf_attack Attack time for lpf cutoff filter. Amount of time (in beats) for sound to reach full cutoff value. Default value is set to match amp envelope's attack value.
-# @option opts :lpf_decay Decay time for lpf cutoff filter. Amount of time (in beats) for sound to move from full cutoff value (cutoff attack level) to the cutoff sustain level. Default value is set to match amp envelope's decay value.
-# @option opts :lpf_sustain Amount of time for lpf cutoff value to remain at sustain level in beats. When -1 (the default) will auto-stretch.
-# @option opts :lpf_release Amount of time (in beats) for sound to move from lpf cutoff sustain value to lpf cutoff min value. Default value is set to match amp envelope's release value.
-# @option opts :lpf_min Starting value of the lpf cutoff envelope. Default is 30.
-# @option opts :lpf_env_curve Select the shape of the curve between levels in the lpf cutoff envelope. 1=linear, 2=exponential, 3=sine, 4=welch, 6=squared, 7=cubed.
-# @option opts :hpf Cutoff value of the built-in high pass filter (hpf) in MIDI notes. Unless specified, the hpf is *not* added to the signal chain.
-# @option opts :hpf_init_level The initial high pass filter envelope value as a MIDI note. This envelope is bypassed if no hpf env opts are specified. Default value is set to 130.
-# @option opts :hpf_attack_level The peak hpf cutoff (value of cutoff at peak of attack) as a MIDI note. Default value is to match the `hpf_decay_level:` opt.
-# @option opts :hpf_decay_level The level of hpf cutoff after the decay phase as a MIDI note. Default value is to match the `hpf_sustain_level:` opt.
-# @option opts :hpf_sustain_level The sustain cutoff (value of hpf cutoff at sustain time) as a MIDI note. Default value is to match the `hpf_release_level:` opt.
-# @option opts :hpf_release_level The sustain hpf cutoff (value of hpf cutoff at sustain time) as a MIDI note. Default value is to match the `hpf:` opt.
-# @option opts :hpf_attack Attack time for hpf cutoff filter. Amount of time (in beats) for sound to reach full cutoff value. Default value is set to match amp envelope's attack value.
-# @option opts :hpf_decay Decay time for hpf cutoff filter. Amount of time (in beats) for sound to move from full cutoff value (cutoff attack level) to the cutoff sustain level. Default value is set to match amp envelope's decay value.
-# @option opts :hpf_sustain Amount of time for hpf cutoff value to remain at sustain level in beats. When -1 (the default) will auto-stretch.
-# @option opts :hpf_release Amount of time (in beats) for sound to move from hpf cutoff sustain value to hpf cutoff min value. Default value is set to match amp envelope's release value.
-# @option opts :hpf_env_curve Select the shape of the curve between levels in the hpf cutoff envelope. 1=linear, 2=exponential, 3=sine, 4=welch, 6=squared, 7=cubed.
-# @option opts :hpf_max Maximum value of the high pass filter envelope. Default is 200.
-# @option opts :rpitch Rate modified pitch. Multiplies the rate by the appropriate ratio to shift up or down the specified amount in MIDI notes. Please note - this does *not* keep the duration and rhythmical rate constant and is essentially the same as modifying the rate directly.
-# @option opts :pitch Pitch adjustment in semitones. 1 is up a semitone, 12 is up an octave, -12 is down an octave etc. Maximum upper limit of 24 (up 2 octaves). Lower limit of -72 (down 6 octaves). Decimal numbers can be used for fine tuning.
-# @option opts :window_size Pitch shift-specific opt - only honoured if the `pitch:` opt is used. Pitch shift works by chopping the input into tiny slices, then playing these slices at a higher or lower rate. If we make the slices small enough and overlap them, it sounds like the original sound with the pitch changed. The window_size is the length of the slices and is measured in seconds. It needs to be around 0.2 (200ms) or greater for pitched sounds like guitar or bass, and needs to be around 0.02 (20ms) or lower for percussive sounds like drum loops. You can experiment with this to get the best sound for your input.
-# @option opts :pitch_dis Pitch shift-specific opt - only honoured if the `pitch:` opt is used. Pitch dispersion - how much random variation in pitch to add. Using a low value like 0.001 can help to "soften up" the metallic sounds, especially on drum loops. To be really technical, pitch_dispersion is the maximum random deviation of the pitch from the pitch ratio (which is set by the `pitch:` opt).
-# @option opts :time_dis Pitch shift-specific opt - only honoured if the `pitch:` opt is used. Time dispersion - how much random delay before playing each grain (measured in seconds). Again, low values here like 0.001 can help to soften up metallic sounds introduced by the effect. Large values are also fun as they can make soundscapes and textures from the input, although you will most likely lose the rhythm of the original. NB - This won't have an effect if it's larger than window_size.
-# @option opts :compress Enable the compressor. This sits at the end of the internal FX chain immediately before the `amp:` opt. Therefore to drive the compressor use the `pre_amp:` opt which will amplify the signal before it hits any internal FX. The compressor compresses the dynamic range of the incoming signal. Equivalent to automatically turning the amp down when the signal gets too loud and then back up again when it's quiet. Useful for ensuring the containing signal doesn't overwhelm other aspects of the sound. Also a general purpose hard-knee dynamic range processor which can be tuned via the opts to both expand and compress the signal.
-# @option opts :threshold Threshold value determining the break point between slope_below and slope_above. Only valid if the compressor is enabled by turning on the `compress:` opt.
-# @option opts :slope_below Slope of the amplitude curve below the threshold. A value of 1 means that the output of signals with amplitude below the threshold will be unaffected. Greater values will magnify and smaller values will attenuate the signal. Only valid if the compressor is enabled by turning on the `compress:` opt.
-# @option opts :slope_above Slope of the amplitude curve above the threshold. A value of 1 means that the output of signals with amplitude above the threshold will be unaffected. Greater values will magnify and smaller values will attenuate the signal. Only valid if the compressor is enabled by turning on the `compress:` opt.
-# @option opts :clamp_time Time taken for the amplitude adjustments to kick in fully (in seconds). This is usually pretty small (not much more than 10 milliseconds). Also known as the time of the attack phase. Only valid if the compressor is enabled by turning on the `compress:` opt.
-# @option opts :relax_time Time taken for the amplitude adjustments to be released. Usually a little longer than clamp_time. If both times are too short, you can get some (possibly unwanted) artefacts. Also known as the time of the release phase. Only valid if the compressor is enabled by turning on the `compress:` opt.
-# @option opts :slide Default slide time in beats for all slide opts. Individually specified slide opts will override this value.
-# @option opts :path Path of the sample to play. Typically this opt is rarely used instead of the more powerful source/filter system. However it can be useful when working with pre-made opt maps.
+# @param rate Rate with which to play back the sample. Higher rates mean an increase in pitch and a decrease in duration. Default is 1.
+# @param beat_stretch Stretch (or shrink) the sample to last for exactly the specified number of beats. Please note - this does *not* keep the pitch constant and is essentially the same as modifying the rate directly.
+# @param pitch_stretch Stretch (or shrink) the sample to last for exactly the specified number of beats. This attempts to keep the pitch constant using the `pitch:` opt. Note, it's very likely you'll need to experiment with the `window_size:`, `pitch_dis:` and `time_dis:` opts depending on the sample and the amount you'd like to stretch/shrink from original size.
+# @param attack Time to reach full volume. Default is 0.
+# @param sustain Time to stay at full volume. Default is to stretch to length of sample (minus attack and release times).
+# @param release Time (from the end of the sample) to go from full amplitude to 0. Default is 0.
+# @param start Position in sample as a fraction between 0 and 1 to start playback. Default is 0.
+# @param finish Position in sample as a fraction between 0 and 1 to end playback. Default is 1.
+# @param pan Stereo position of audio. -1 is left ear only, 1 is right ear only, and values in between position the sound accordingly. Default is 0.
+# @param amp Amplitude of playback.
+# @param pre_amp Amplitude multiplier which takes place immediately before any internal FX such as the low pass filter, compressor or pitch modification. Use this opt if you want to overload the compressor.
+# @param onset Analyse the sample with an onset detection algorithm and set the `start:` and `finish:` opts to play the nth onset only. Allows you to treat a rhythm sample as a palette of individual drum/synth hits. Floats are rounded to the nearest whole number.
+# @param slice Divides the sample duration evenly into `num_slices` sections (defaults to 16) and set the `start:` and `finish:` opts to play the nth slice only. Use the envelope opts to remove any clicks introduced if the slice boundary is in the middle of a sound. Also consider `onset:`. Floats are rounded to the nearest whole number.
+# @param num_slices Number of slices to divide the sample into when using the `slice:` opt. Defaults to 16. Floats are rounded to the nearest whole number.
+# @param norm Normalise the audio (make quieter parts of the sample louder and louder parts quieter) - this is similar to the normaliser FX. This may emphasise any clicks caused by clipping.
+# @param lpf Cutoff value of the built-in low pass filter (lpf) in MIDI notes. Unless specified, the lpf is *not* added to the signal chain.
+# @param lpf_init_level The initial low pass filter envelope value as a MIDI note. This envelope is bypassed if no lpf env opts are specified. Default value is to match the `lpf_min:` opt.
+# @param lpf_attack_level The peak lpf cutoff (value of cutoff at peak of attack) as a MIDI note. Default value is to match the `lpf_decay_level:` opt.
+# @param lpf_decay_level The level of lpf cutoff after the decay phase as a MIDI note. Default value is to match the `lpf_sustain_level:` opt.
+# @param lpf_sustain_level The sustain cutoff (value of lpf cutoff at sustain time) as a MIDI note. Default value is to match the `lpf_release_level:` opt.
+# @param lpf_release_level The final value of the low pass filter envelope as a MIDI note. This envelope is bypassed if no lpf env opts are specified. Default value is to match the `lpf:` opt.
+# @param lpf_attack Attack time for lpf cutoff filter. Amount of time (in beats) for sound to reach full cutoff value. Default value is set to match amp envelope's attack value.
+# @param lpf_decay Decay time for lpf cutoff filter. Amount of time (in beats) for sound to move from full cutoff value (cutoff attack level) to the cutoff sustain level. Default value is set to match amp envelope's decay value.
+# @param lpf_sustain Amount of time for lpf cutoff value to remain at sustain level in beats. When -1 (the default) will auto-stretch.
+# @param lpf_release Amount of time (in beats) for sound to move from lpf cutoff sustain value to lpf cutoff min value. Default value is set to match amp envelope's release value.
+# @param lpf_min Starting value of the lpf cutoff envelope. Default is 30.
+# @param lpf_env_curve Select the shape of the curve between levels in the lpf cutoff envelope. 1=linear, 2=exponential, 3=sine, 4=welch, 6=squared, 7=cubed.
+# @param hpf Cutoff value of the built-in high pass filter (hpf) in MIDI notes. Unless specified, the hpf is *not* added to the signal chain.
+# @param hpf_init_level The initial high pass filter envelope value as a MIDI note. This envelope is bypassed if no hpf env opts are specified. Default value is set to 130.
+# @param hpf_attack_level The peak hpf cutoff (value of cutoff at peak of attack) as a MIDI note. Default value is to match the `hpf_decay_level:` opt.
+# @param hpf_decay_level The level of hpf cutoff after the decay phase as a MIDI note. Default value is to match the `hpf_sustain_level:` opt.
+# @param hpf_sustain_level The sustain cutoff (value of hpf cutoff at sustain time) as a MIDI note. Default value is to match the `hpf_release_level:` opt.
+# @param hpf_release_level The sustain hpf cutoff (value of hpf cutoff at sustain time) as a MIDI note. Default value is to match the `hpf:` opt.
+# @param hpf_attack Attack time for hpf cutoff filter. Amount of time (in beats) for sound to reach full cutoff value. Default value is set to match amp envelope's attack value.
+# @param hpf_decay Decay time for hpf cutoff filter. Amount of time (in beats) for sound to move from full cutoff value (cutoff attack level) to the cutoff sustain level. Default value is set to match amp envelope's decay value.
+# @param hpf_sustain Amount of time for hpf cutoff value to remain at sustain level in beats. When -1 (the default) will auto-stretch.
+# @param hpf_release Amount of time (in beats) for sound to move from hpf cutoff sustain value to hpf cutoff min value. Default value is set to match amp envelope's release value.
+# @param hpf_env_curve Select the shape of the curve between levels in the hpf cutoff envelope. 1=linear, 2=exponential, 3=sine, 4=welch, 6=squared, 7=cubed.
+# @param hpf_max Maximum value of the high pass filter envelope. Default is 200.
+# @param rpitch Rate modified pitch. Multiplies the rate by the appropriate ratio to shift up or down the specified amount in MIDI notes. Please note - this does *not* keep the duration and rhythmical rate constant and is essentially the same as modifying the rate directly.
+# @param pitch Pitch adjustment in semitones. 1 is up a semitone, 12 is up an octave, -12 is down an octave etc. Maximum upper limit of 24 (up 2 octaves). Lower limit of -72 (down 6 octaves). Decimal numbers can be used for fine tuning.
+# @param window_size Pitch shift-specific opt - only honoured if the `pitch:` opt is used. Pitch shift works by chopping the input into tiny slices, then playing these slices at a higher or lower rate. If we make the slices small enough and overlap them, it sounds like the original sound with the pitch changed. The window_size is the length of the slices and is measured in seconds. It needs to be around 0.2 (200ms) or greater for pitched sounds like guitar or bass, and needs to be around 0.02 (20ms) or lower for percussive sounds like drum loops. You can experiment with this to get the best sound for your input.
+# @param pitch_dis Pitch shift-specific opt - only honoured if the `pitch:` opt is used. Pitch dispersion - how much random variation in pitch to add. Using a low value like 0.001 can help to "soften up" the metallic sounds, especially on drum loops. To be really technical, pitch_dispersion is the maximum random deviation of the pitch from the pitch ratio (which is set by the `pitch:` opt).
+# @param time_dis Pitch shift-specific opt - only honoured if the `pitch:` opt is used. Time dispersion - how much random delay before playing each grain (measured in seconds). Again, low values here like 0.001 can help to soften up metallic sounds introduced by the effect. Large values are also fun as they can make soundscapes and textures from the input, although you will most likely lose the rhythm of the original. NB - This won't have an effect if it's larger than window_size.
+# @param compress Enable the compressor. This sits at the end of the internal FX chain immediately before the `amp:` opt. Therefore to drive the compressor use the `pre_amp:` opt which will amplify the signal before it hits any internal FX. The compressor compresses the dynamic range of the incoming signal. Equivalent to automatically turning the amp down when the signal gets too loud and then back up again when it's quiet. Useful for ensuring the containing signal doesn't overwhelm other aspects of the sound. Also a general purpose hard-knee dynamic range processor which can be tuned via the opts to both expand and compress the signal.
+# @param threshold Threshold value determining the break point between slope_below and slope_above. Only valid if the compressor is enabled by turning on the `compress:` opt.
+# @param slope_below Slope of the amplitude curve below the threshold. A value of 1 means that the output of signals with amplitude below the threshold will be unaffected. Greater values will magnify and smaller values will attenuate the signal. Only valid if the compressor is enabled by turning on the `compress:` opt.
+# @param slope_above Slope of the amplitude curve above the threshold. A value of 1 means that the output of signals with amplitude above the threshold will be unaffected. Greater values will magnify and smaller values will attenuate the signal. Only valid if the compressor is enabled by turning on the `compress:` opt.
+# @param clamp_time Time taken for the amplitude adjustments to kick in fully (in seconds). This is usually pretty small (not much more than 10 milliseconds). Also known as the time of the attack phase. Only valid if the compressor is enabled by turning on the `compress:` opt.
+# @param relax_time Time taken for the amplitude adjustments to be released. Usually a little longer than clamp_time. If both times are too short, you can get some (possibly unwanted) artefacts. Also known as the time of the release phase. Only valid if the compressor is enabled by turning on the `compress:` opt.
+# @param slide Default slide time in beats for all slide opts. Individually specified slide opts will override this value.
+# @param path Path of the sample to play. Typically this opt is rarely used instead of the more powerful source/filter system. However it can be useful when working with pre-made opt maps.
 # @accepts_block true
 # @introduced 2.0.0
 # @example
@@ -4095,35 +4067,35 @@ end
 #   # with incredible timing accuracy
 #   sample :loop_amen
 #   sample :ambi_lunar_land # Note, for timing guarantees select the pref:
-#   #   Studio -> Synths and FX -> Enforce timing guarantees
+#                           #   Studio -> Synths and FX -> Enforce timing guarantees
 #
 # @example
 #   # Create a simple repeating bass drum
 #   live_loop :bass do
-#   sample :bd_haus
-#   sleep 0.5
+#     sample :bd_haus
+#     sleep 0.5
 #   end
 #
 # @example
 #   # Create a more complex rhythm with multiple live loops:
 #   live_loop :rhythm do
-#   sample :tabla_ghe3 if (spread 5, 7).tick
-#   sleep 0.125
+#     sample :tabla_ghe3 if (spread 5, 7).tick
+#     sleep 0.125
 #   end
 #   live_loop :bd, sync: :rhythm do
-#   sample :bd_haus, lpf: 90, amp: 2
-#   sleep 0.5
+#     sample :bd_haus, lpf: 90, amp: 2
+#     sleep 0.5
 #   end
 #
 # @example
 #   # Change the playback speed of the sample using rate:
 #   sample :loop_amen, rate: 0.5 # Play the Amen break at half speed
-#   # for old school hip-hop
+#                                # for old school hip-hop
 #
 # @example
 #   # Speed things up
 #   sample :loop_amen, rate: 1.5 # Play the Amen break at 1.5x speed
-#   # for a jungle/gabba sound
+#                                # for a jungle/gabba sound
 #
 # @example
 #   # Go backwards
@@ -4152,8 +4124,8 @@ end
 # @example
 #   # Play a section of a sample at quarter speed backwards
 #   sample :loop_amen, start: 0.125, finish: 0.25, rate: -0.25 # Play the second eighth of the
-#   # amen break backwards at a
-#   # quarter speed
+#                                                              # amen break backwards at a
+#                                                              # quarter speed
 #
 # @example
 #   # Control a sample synchronously
@@ -4166,8 +4138,8 @@ end
 # @example
 #   # Controlling a sample asynchronously
 #   sample :loop_amen, lpf: 70 do |s|
-#   sleep 1                                # This block is run in an implicit in_thread
-#   control s, lpf: 130                    # and therefore is asynchronous
+#     sleep 1                                # This block is run in an implicit in_thread
+#     control s, lpf: 130                    # and therefore is asynchronous
 #   end
 #   sleep 0.5
 #   synth :dsaw, note: :e3 # This is triggered 0.5s from start
@@ -4177,8 +4149,8 @@ end
 #   sample :loop_garzul, slice: 0      # => play the first 16th of the sample
 #   sleep 0.5
 #   4.times do
-#   sample :loop_garzul, slice: 1    # => play the second 16th of the sample 4 times
-#   sleep 0.125
+#     sample :loop_garzul, slice: 1    # => play the second 16th of the sample 4 times
+#     sleep 0.125
 #   end
 #   sample :loop_garzul, slice: 4, num_slices: 4, rate: -1      # => play the final quarter backwards
 #
@@ -4186,11 +4158,11 @@ end
 #   # Build a simple beat slicer
 #   use_sample_bpm :loop_amen                    # Set the BPM to match the amen break sample
 #   live_loop :beat_slicer do
-#   n = 8                                      # Specify number of slices
-#   # (try changing to 2, 4, 6, 16 or 32)
-#   s = rand_i n                               # Choose a random slice within range
-#   sample :loop_amen, slice: s, num_slices: n # Play the specific part of the sample
-#   sleep 1.0/n                                # Sleep for the duration of the slice
+#     n = 8                                      # Specify number of slices
+#                                                # (try changing to 2, 4, 6, 16 or 32)
+#     s = rand_i n                               # Choose a random slice within range
+#     sample :loop_amen, slice: s, num_slices: n # Play the specific part of the sample
+#     sleep 1.0/n                                # Sleep for the duration of the slice
 #   end
 #
 # @example
@@ -4208,10 +4180,10 @@ end
 #   puts sample_duration :loop_industrial                   # => 0.88347
 #   puts sample_duration :loop_industrial, beat_stretch: 1  # => 1
 #   live_loop :industrial do
-#   sample :loop_industrial, beat_stretch: 1              # Stretch the sample to make it 1 beat long
-#   sleep 1                                               # This now loops perfectly.
-#   # However, note that stretching/shrinking
-#   # also modifies the pitch.
+#     sample :loop_industrial, beat_stretch: 1              # Stretch the sample to make it 1 beat long
+#     sleep 1                                               # This now loops perfectly.
+#                                                           # However, note that stretching/shrinking
+#                                                           # also modifies the pitch.
 #   end
 #
 # @example
@@ -4219,10 +4191,10 @@ end
 #   puts sample_duration :loop_garzul                       # => 8
 #   puts sample_duration :loop_garzul, beat_stretch: 6      # => 6
 #   live_loop :garzul do
-#   sample :loop_garzul, beat_stretch: 6                  # As :loop_garzul is longer than 6 beats
-#   # it is shrunk to fit. This increases the
-#   # pitch.
-#   sleep 6
+#     sample :loop_garzul, beat_stretch: 6                  # As :loop_garzul is longer than 6 beats
+#                                                           # it is shrunk to fit. This increases the
+#                                                           # pitch.
+#     sleep 6
 #   end
 #
 # @example
@@ -4231,60 +4203,60 @@ end
 #   puts sample_duration :loop_garzul                       # => 4.0 (at 30 BPM the sample lasts for 4 beats)
 #   puts sample_duration :loop_garzul, beat_stretch: 6      # => 6.0
 #   live_loop :garzul do
-#   sample :loop_garzul, beat_stretch: 6                  # The sample is stretched to match 6 beats at 30 BPM
-#   sleep 6
+#     sample :loop_garzul, beat_stretch: 6                  # The sample is stretched to match 6 beats at 30 BPM
+#     sleep 6
 #   end
 #
 # @example
 #   # External samples
-#   sample "/path/to/sample.wav"                          # Play any Wav, Aif, Ogg, Oga, or FLAC sample on your computer
-#   # by simply passing a string representing the full
-#   # path
+#   sample "/path/to/sample.wav"                          # Play any Wav, Aif or FLAC sample on your computer
+#                                                           # by simply passing a string representing the full
+#                                                           # path
 #
 # @example
 #   # Sample pack filtering
 #   dir = "/path/to/dir/of/samples"                       # You can easily work with a directory of samples
 #   sample dir                                              # Play the first sample in the directory
-#   # (it is sorted alphabetically)
+#                                                           # (it is sorted alphabetically)
 #   sample dir, 1                                           # Play the second sample in the directory
 #   sample dir, 99                                          # Play the 100th sample in the directory, or if there
-#   # are fewer, treat the directory like a ring and keep
-#   # wrapping the index round until a sample is found.
-#   # For example, if there are 90 samples, the 10th sample
-#   # is played (index 9).
+#                                                           # are fewer, treat the directory like a ring and keep
+#                                                           # wrapping the index round until a sample is found.
+#                                                           # For example, if there are 90 samples, the 10th sample
+#                                                           # is played (index 9).
 #   sample dir, "120"                                     # Play the first sample in the directory that contains
-#   # the substring "120".
-#   # For example, this may be "beat1_120_rave.wav"
+#                                                           # the substring "120".
+#                                                           # For example, this may be "beat1_120_rave.wav"
 #   sample dir, "120", 1                                  # Play the second sample in the directory that contains
-#   # the substring "120".
-#   # For example, this may be "beat2_120_rave.wav"
+#                                                           # the substring "120".
+#                                                           # For example, this may be "beat2_120_rave.wav"
 #   sample dir, /beat[0-9]/                                 # Play the first sample in the directory that matches
-#   # the regular expression /beat[0-9]/.
-#   # For example, this may be "beat0_100_trance.wav"
-#   # You may use the full power of Ruby's regular expression
-#   # system here: http://ruby-doc.org/core-2.1.1/Regexp.html
+#                                                           # the regular expression /beat[0-9]/.
+#                                                           # For example, this may be "beat0_100_trance.wav"
+#                                                           # You may use the full power of Ruby's regular expression
+#                                                           # system here: http://ruby-doc.org/core-2.1.1/Regexp.html
 #   sample dir, /beat[0-9]0/, "100"                       # Play the first sample in the directory that both matches
-#   # the regular expression /beat[0-9]0/ and contains the
-#   # the substring "100".
-#   # For example, this may be "beat10_100_rave.wav"
+#                                                           # the regular expression /beat[0-9]0/ and contains the
+#                                                           # the substring "100".
+#                                                           # For example, this may be "beat10_100_rave.wav"
 #
 # @example
 #   # Filtering built-in samples
-#   # If you don't pass a directory source, you can filter over
-#   # the built-in samples.
+#                                                           # If you don't pass a directory source, you can filter over
+#                                                           # the built-in samples.
 #   sample "tabla_"                                       # Play the first built-in sample that contains the substring
-#   # "tabla"
+#                                                           # "tabla"
 #   sample "tabla_", 2                                    # Play the third built-in sample that contains the substring
-#   # "tabla"
+#                                                           # "tabla"
 #
 # @example
 #   # Play with whole directories of samples
 #   load_samples "tabla_"                                 # You may pass any of the source/filter options to load_samples
-#   # to load all matching samples. This will load all the built-in
-#   # samples containing the substring "tabla_"
+#                                                           # to load all matching samples. This will load all the built-in
+#                                                           # samples containing the substring "tabla_"
 #   live_loop :tabla do
-#   sample "tabla_", tick                               # Treat the matching samples as a ring and tick through them
-#   sleep 0.125
+#     sample "tabla_", tick                               # Treat the matching samples as a ring and tick through them
+#     sleep 0.125
 #   end
 #
 # @example
@@ -4292,123 +4264,123 @@ end
 #   dir1 = "/path/to/sample/directory"
 #   dir2 = "/path/to/other/sample/directory"
 #   sample dir1, dir2, "foo"                              # Match the first sample that contains the string "foo" out of
-#   # all the samples in dir1 and dir2 combined.
-#   # Note that the sources must be listed before any filters.
+#                                                           # all the samples in dir1 and dir2 combined.
+#                                                           # Note that the sources must be listed before any filters.
 #
 # @example
 #   # List contents recursively
 #   dir = "/path/to/sample/directory"                     # By default the list of all top-level samples within the directory
-#   # is considered.
+#                                                           # is considered.
 #   dir_recursive = "/path/to/sample/directory/**"        # However, if you finish your directory string with ** then if that
-#   # directory contains other directories then the samples within the
-#   # subdirectories and their subsubdirectories in turn are considered.
+#                                                           # directory contains other directories then the samples within the
+#                                                           # subdirectories and their subsubdirectories in turn are considered.
 #   sample dir, 0                                           # Play the first top-level sample in the directory
 #   sample dir_recursive, 0                                 # Play the first sample found after combining all samples found in
-#   # the directory and all directories within it recursively.
-#   # Note that if there are many sub directories this may take some time
-#   # to execute. However, the result is cached so subsequent calls will
-#   # be fast.
+#                                                           # the directory and all directories within it recursively.
+#                                                           # Note that if there are many sub directories this may take some time
+#                                                           # to execute. However, the result is cached so subsequent calls will
+#                                                           # be fast.
 #
 # @example
 #   # Bespoke filters
 #   filter = lambda do |candidates|                         # If the built-in String, Regexp and index filters are not sufficient
-#   [candidates.choose]                                   # you may write your own. They need to be a function which takes a list
+#     [candidates.choose]                                   # you may write your own. They need to be a function which takes a list
 #   end                                                     # of paths to samples and return a list of samples. This one returns a
-#   # list of a single randomly selected sample.
+#                                                           # list of a single randomly selected sample.
 #   8.times do
-#   sample "drum_", filter                              # Play 8 randomly selected samples from the built-in sample set that also
-#   sleep 0.25                                            # contain the substring "drum_"
+#     sample "drum_", filter                              # Play 8 randomly selected samples from the built-in sample set that also
+#     sleep 0.25                                            # contain the substring "drum_"
 #   end
 #
 # @example
 #   # Basic Onset Detection
 #   
 #   sample :loop_tabla, start: 0, finish: 0.00763           # If you know the right start: and finish: values, you can extract a
-#   # single drum hit from a longer sample. However, finding these values
-#   # can be very time consuming.
+#                                                           # single drum hit from a longer sample. However, finding these values
+#                                                           # can be very time consuming.
 #   sleep 1
-#   # Instead of specifying the start: and finish: values manually you can
-#   # use the onset: option to find them for you using an integer index.
+#                                                           # Instead of specifying the start: and finish: values manually you can
+#                                                           # use the onset: option to find them for you using an integer index.
 #   sample :loop_tabla, onset: 0                            # onset: 0 will set the start: and finish: values so that the first
-#   # percussive sound (something that shifts from quiet to loud quickly)
-#   # is picked out.
+#                                                           # percussive sound (something that shifts from quiet to loud quickly)
+#                                                           # is picked out.
 #   sleep 1
 #   
 #   sample :loop_tabla, onset: 1                            # We can easily find the second percussive sound in the sample with
-#   # onset: 1
+#                                                           # onset: 1
 #
 # @example
 #   # Ticking through onsets
 #   
-#   # The onsets are actually a ring so the index will wrap around. This
-#   # means that if there are only 8 onsets in a sample, specifying an
-#   # onset of 100 will still return one of the 8 onsets. This means we
-#   # can use tick to work through each onset in sequence. This allows us
-#   # to redefine the rhythm and tempo of a sample
+#                                                           # The onsets are actually a ring so the index will wrap around. This
+#                                                           # means that if there are only 8 onsets in a sample, specifying an
+#                                                           # onset of 100 will still return one of the 8 onsets. This means we
+#                                                           # can use tick to work through each onset in sequence. This allows us
+#                                                           # to redefine the rhythm and tempo of a sample
 #   
 #   
 #   live_loop :tabla do
-#   use_bpm 50                                            # We can choose our own BPM here - it doesn't need to match the sample
-#   sample :loop_tabla, onset: tick                       # tick through each onset in sequence
-#   sleep [0.125, 0.25].choose                            # randomly choose a delay between onset triggers
+#     use_bpm 50                                            # We can choose our own BPM here - it doesn't need to match the sample
+#     sample :loop_tabla, onset: tick                       # tick through each onset in sequence
+#     sleep [0.125, 0.25].choose                            # randomly choose a delay between onset triggers
 #   end
 #
 # @example
 #   # Random Onset Triggering
-#   # We can easily pick a random onset using the pick fn
+#                                                           # We can easily pick a random onset using the pick fn
 #   use_bpm 50
 #   live_loop :tabla do
-#   sample :loop_tabla, onset: pick                       # Each time round the live loop we now trigger a random onset
-#   sleep [0.125, 0.25].choose                            # creating an infinite stream of randomly selected drums
+#     sample :loop_tabla, onset: pick                       # Each time round the live loop we now trigger a random onset
+#     sleep [0.125, 0.25].choose                            # creating an infinite stream of randomly selected drums
 #   end
 #
 # @example
 #   # Repeatable Random Onsets
-#   # Instead of an infinite stream of choices, we can combine iteration
-#   # and use_random_seed to create repeatable riffs:
+#                                                           # Instead of an infinite stream of choices, we can combine iteration
+#                                                           # and use_random_seed to create repeatable riffs:
 #   live_loop :tabla do
-#   use_random_seed 30000                                 # every 8 times, reset the random seed, this resets the riff
-#   8.times do
-#   sample :loop_tabla, onset: pick
-#   sleep [0.125, 0.25].choose
-#   end
+#     use_random_seed 30000                                 # every 8 times, reset the random seed, this resets the riff
+#     8.times do
+#       sample :loop_tabla, onset: pick
+#       sleep [0.125, 0.25].choose
+#     end
 #   end
 #
 # @example
 #   #  Random Onset Duration
-#   # Each onset has a variable length (determined by the sample contents).
-#   # Therefore, if you wish to ensure each onset has a specific length it
-#   # is necessary to use the sample's amplitude envelope.
-#   # As the sample's envelope automatically changes the sustain: value to
-#   # match the duration - you also need to override this with a value of 0.
+#                                                               # Each onset has a variable length (determined by the sample contents).
+#                                                               # Therefore, if you wish to ensure each onset has a specific length it
+#                                                               # is necessary to use the sample's amplitude envelope.
+#                                                               # As the sample's envelope automatically changes the sustain: value to
+#                                                               # match the duration - you also need to override this with a value of 0.
 #   live_loop :tabla do
-#   sample :loop_tabla, onset: pick, sustain: 0, release: 0.1 # Each drum onset will now be no longer than 0.1. Note that the envelope
-#   # for a sample only determines the maximum duration of a sample trigger.
-#   # If the actual audible duration of the onset is smaller than 0.1 then
-#   # it will *not* be extended.
-#   sleep [0.125, 0.25].choose
+#     sample :loop_tabla, onset: pick, sustain: 0, release: 0.1 # Each drum onset will now be no longer than 0.1. Note that the envelope
+#                                                               # for a sample only determines the maximum duration of a sample trigger.
+#                                                               # If the actual audible duration of the onset is smaller than 0.1 then
+#                                                               # it will *not* be extended.
+#     sleep [0.125, 0.25].choose
 #   end
 #
 # @example
 #   # Onset lambdas
 #   
-#   # The onset index can be a lambda as well as an integer. If a lambda is
-#   # given, it will be passed a ring of all of the onsets as an argument.
-#   # This will be a ring of maps:
+#                                                           # The onset index can be a lambda as well as an integer. If a lambda is
+#                                                           # given, it will be passed a ring of all of the onsets as an argument.
+#                                                           # This will be a ring of maps:
 #   
 #   l = lambda {|c| puts c ; c[0]}                          # define a lambda which accepts a single argument, prints it and
-#   # returns the first value. This particular example is essentially
-#   # the same as using onset: 0 with the side effect of also printing out
-#   # the full ring of onsets:
+#                                                           # returns the first value. This particular example is essentially
+#                                                           # the same as using onset: 0 with the side effect of also printing out
+#                                                           # the full ring of onsets:
 #   
 #   sample :loop_tabla, onset: l                            # (ring {:start=>0.0, :finish=>0.0076}, {:start=>0.0076, :finish 0.015}...)
 #   
-#   # We are therefore free to define this lambda to do anything we want.
-#   # This gives us very powerful control over the choice of onset. It is
-#   # unlikely you will use this frequently, but it is a powerful tool
-#   # that's there when you need it.
+#                                                           # We are therefore free to define this lambda to do anything we want.
+#                                                           # This gives us very powerful control over the choice of onset. It is
+#                                                           # unlikely you will use this frequently, but it is a powerful tool
+#                                                           # that's there when you need it.
 #
-def sample(_name_or_path, rate: nil, beat_stretch: nil, pitch_stretch: nil, attack: nil, sustain: nil, release: nil, start: nil, finish: nil, pan: nil, amp: nil, pre_amp: nil, onset: nil, slice: nil, num_slices: nil, norm: nil, lpf: nil, lpf_init_level: nil, lpf_attack_level: nil, lpf_decay_level: nil, lpf_sustain_level: nil, lpf_release_level: nil, lpf_attack: nil, lpf_decay: nil, lpf_sustain: nil, lpf_release: nil, lpf_min: nil, lpf_env_curve: nil, hpf: nil, hpf_init_level: nil, hpf_attack_level: nil, hpf_decay_level: nil, hpf_sustain_level: nil, hpf_release_level: nil, hpf_attack: nil, hpf_decay: nil, hpf_sustain: nil, hpf_release: nil, hpf_env_curve: nil, hpf_max: nil, rpitch: nil, pitch: nil, window_size: nil, pitch_dis: nil, time_dis: nil, compress: nil, threshold: nil, slope_below: nil, slope_above: nil, clamp_time: nil, relax_time: nil, slide: nil, path: nil)
+def sample(_name_or_path = nil, rate: nil, beat_stretch: nil, pitch_stretch: nil, attack: nil, sustain: nil, release: nil, start: nil, finish: nil, pan: nil, amp: nil, pre_amp: nil, onset: nil, slice: nil, num_slices: nil, norm: nil, lpf: nil, lpf_init_level: nil, lpf_attack_level: nil, lpf_decay_level: nil, lpf_sustain_level: nil, lpf_release_level: nil, lpf_attack: nil, lpf_decay: nil, lpf_sustain: nil, lpf_release: nil, lpf_min: nil, lpf_env_curve: nil, hpf: nil, hpf_init_level: nil, hpf_attack_level: nil, hpf_decay_level: nil, hpf_sustain_level: nil, hpf_release_level: nil, hpf_attack: nil, hpf_decay: nil, hpf_sustain: nil, hpf_release: nil, hpf_env_curve: nil, hpf_max: nil, rpitch: nil, pitch: nil, window_size: nil, pitch_dis: nil, time_dis: nil, compress: nil, threshold: nil, slope_below: nil, slope_above: nil, clamp_time: nil, relax_time: nil, slide: nil, path: nil)
   #This is a stub, used for indexing
 end
 
@@ -4420,7 +4392,7 @@ end
 # @example
 #   see load_sample
 #
-def sample_buffer(_path)
+def sample_buffer(_path = nil)
   #This is a stub, used for indexing
 end
 
@@ -4429,16 +4401,16 @@ end
 # 
 # *Note:* avoid using `sample_duration` to set the sleep time in `live_loop`s, prefer stretching the sample with the `beat_stretch:` opt or changing the BPM instead. See the examples below for details.
 # @param _path [string]
-# @option opts :rate Rate modifier. For example, doubling the rate will halve the duration.
-# @option opts :start Start position of sample playback as a value from 0 to 1
-# @option opts :finish Finish position of sample playback as a value from 0 to 1
-# @option opts :attack Duration of the attack phase of the envelope.
-# @option opts :decay Duration of the decay phase of the envelope.
-# @option opts :sustain Duration of the sustain phase of the envelope.
-# @option opts :release Duration of the release phase of the envelope.
-# @option opts :beat_stretch Change the rate of the sample so that its new duration matches the specified number of beats.
-# @option opts :pitch_stretch Change the rate of the sample so that its new duration matches the specified number of beats but attempt to preserve pitch.
-# @option opts :rpitch Change the rate to shift the pitch up or down the specified number of MIDI notes.
+# @param rate Rate modifier. For example, doubling the rate will halve the duration.
+# @param start Start position of sample playback as a value from 0 to 1
+# @param finish Finish position of sample playback as a value from 0 to 1
+# @param attack Duration of the attack phase of the envelope.
+# @param decay Duration of the decay phase of the envelope.
+# @param sustain Duration of the sustain phase of the envelope.
+# @param release Duration of the release phase of the envelope.
+# @param beat_stretch Change the rate of the sample so that its new duration matches the specified number of beats.
+# @param pitch_stretch Change the rate of the sample so that its new duration matches the specified number of beats but attempt to preserve pitch.
+# @param rpitch Change the rate to shift the pitch up or down the specified number of MIDI notes.
 # @accepts_block false
 # @introduced 2.0.0
 # @example
@@ -4458,95 +4430,95 @@ end
 #   # Avoid using sample_duration to set the sleep time in live_loops
 #   
 #   live_loop :avoid_this do               # It is possible to use sample_duration to drive the frequency of a live loop.
-#   with_fx :slicer do                   # However, if you're using a rhythmical sample such as a drum beat and it isn't
-#   sample :loop_amen                  # in the same BPM as the current BPM, then the FX such as this slicer will be
-#   sleep sample_duration(:loop_amen)  # badly out of sync. This is because the slicer slices at the current BPM and
-#   end                                  # this live_loop is looping at a different BPM (that of the sample)
+#     with_fx :slicer do                   # However, if you're using a rhythmical sample such as a drum beat and it isn't
+#       sample :loop_amen                  # in the same BPM as the current BPM, then the FX such as this slicer will be
+#       sleep sample_duration(:loop_amen)  # badly out of sync. This is because the slicer slices at the current BPM and
+#     end                                  # this live_loop is looping at a different BPM (that of the sample)
 #   end
 #   
 #   live_loop :prefer_this do              # Instead prefer to set the BPM of the live_loop to match the sample. It has
-#   use_sample_bpm :loop_amen            # two benefits. Now our sleep is a nice and simple 1 (as it's one beat).
-#   with_fx :slicer do                   # Also, our slicer now works with the beat and sounds much better.
-#   sample :loop_amen
-#   sleep 1
-#   end
+#     use_sample_bpm :loop_amen            # two benefits. Now our sleep is a nice and simple 1 (as it's one beat).
+#     with_fx :slicer do                   # Also, our slicer now works with the beat and sounds much better.
+#       sample :loop_amen
+#       sleep 1
+#     end
 #   end
 #   
 #   live_loop :or_this do                  # Alternatively we can beat_stretch the sample to match the current BPM. This has the
-#   with_fx :slicer do                   # side effect of changing the rate of the sample (and hence the pitch). However, the
-#   sample :loop_amen, beat_stretch: 1 # FX works nicely in time and the sleep time is also a simple 1.
-#   sleep 1
-#   end
+#     with_fx :slicer do                   # side effect of changing the rate of the sample (and hence the pitch). However, the
+#       sample :loop_amen, beat_stretch: 1 # FX works nicely in time and the sleep time is also a simple 1.
+#       sleep 1
+#     end
 #   end
 #
 # @example
 #   # The standard sample opts are also honoured
 #   
-#   # Playing a sample at standard speed will return standard length
+#                                                                     # Playing a sample at standard speed will return standard length
 #   sample_duration :loop_garzul, rate: 1                             # => 8.0
 #   
-#   # Playing a sample at half speed will double duration
+#                                                                     # Playing a sample at half speed will double duration
 #   sample_duration :loop_garzul, rate: 0.5                           # => 16.0
 #   
-#   # Playing a sample at double speed will halve duration
+#                                                                     # Playing a sample at double speed will halve duration
 #   sample_duration :loop_garzul, rate: 2                             # => 4.0
 #   
-#   # Playing a sample backwards at double speed will halve duration
+#                                                                     # Playing a sample backwards at double speed will halve duration
 #   sample_duration :loop_garzul, rate: -2                            # => 4.0
 #   
-#   # Without an explicit sustain: opt attack: just affects amplitude not duration
+#                                                                     # Without an explicit sustain: opt attack: just affects amplitude not duration
 #   sample_duration :loop_garzul, attack: 1                           # => 8.0
 #   sample_duration :loop_garzul, attack: 100                         # => 8.0
 #   sample_duration :loop_garzul, attack: 0                           # => 8.0
 #   
-#   # Without an explicit sustain: opt release: just affects amplitude not duration
+#                                                                     # Without an explicit sustain: opt release: just affects amplitude not duration
 #   sample_duration :loop_garzul, release: 1                          # => 8.0
 #   sample_duration :loop_garzul, release: 100                        # => 8.0
 #   sample_duration :loop_garzul, release: 0                          # => 8.0
 #   
-#   # Without an explicit sustain: opt decay: just affects amplitude not duration
+#                                                                     # Without an explicit sustain: opt decay: just affects amplitude not duration
 #   sample_duration :loop_garzul, decay: 1                            # => 8.0
 #   sample_duration :loop_garzul, decay: 100                          # => 8.0
 #   sample_duration :loop_garzul, decay: 0                            # => 8.0
 #   
-#   # With an explicit sustain: opt, if the attack + decay + sustain + release envelope
-#   # duration is less than the sample duration time, the envelope will shorten the
-#   # sample time.
+#                                                                     # With an explicit sustain: opt, if the attack + decay + sustain + release envelope
+#                                                                     # duration is less than the sample duration time, the envelope will shorten the
+#                                                                     # sample time.
 #   sample_duration :loop_garzul, sustain: 0, attack: 0.5             # => 0.5
 #   sample_duration :loop_garzul, sustain: 0, decay: 0.1              # => 0.1
 #   sample_duration :loop_garzul, sustain: 0, release: 1              # => 1.0
 #   sample_duration :loop_garzul, sustain: 2, attack: 0.5, release: 1 # => 3.5
 #   
-#   # If the envelope duration is longer than the sample it will not affect the
-#   # sample duration
+#                                                                     # If the envelope duration is longer than the sample it will not affect the
+#                                                                     # sample duration
 #   sample_duration :loop_garzul, sustain: 0, attack: 8, release: 3   # => 8
 #   
 #   
-#   # All other opts are taken into account before the comparison with the envelope opts.
+#                                                                     # All other opts are taken into account before the comparison with the envelope opts.
 #   sample_duration :loop_garzul, rate: 10                            # => 0.8
 #   sample_duration :loop_garzul, sustain: 0, attack: 0.9, rate: 10   # => 0.8 (The duration of the sample is less than the envelope length so wins)
 #   
 #   
-#   # The rpitch: opt will modify the rate to shift the pitch of the sample up and down
-#   # and therefore affects duration.
+#                                                                     # The rpitch: opt will modify the rate to shift the pitch of the sample up and down
+#                                                                     # and therefore affects duration.
 #   sample_duration :loop_garzul, rpitch: 12                          # => 4.0
 #   sample_duration :loop_garzul, rpitch: -12                         # => 16
 #   
-#   # The rpitch: and rate: opts combine together.
+#                                                                     # The rpitch: and rate: opts combine together.
 #   sample_duration :loop_garzul, rpitch: 12, rate: 2                 # => 2.0
 #   
-#   # The beat_stretch: opt stretches the sample so that its duration matches the value.
-#   # It also combines with rate:
+#                                                                     # The beat_stretch: opt stretches the sample so that its duration matches the value.
+#                                                                     # It also combines with rate:
 #   sample_duration :loop_garzul, beat_stretch: 3                     # => 3.0
 #   sample_duration :loop_garzul, beat_stretch: 3, rate: 0.5          # => 6.0
 #   
-#   # The pitch_stretch: opt acts identically to beat_stretch when just considering sample
-#   # duration.
+#                                                                     # The pitch_stretch: opt acts identically to beat_stretch when just considering sample
+#                                                                     # duration.
 #   sample_duration :loop_garzul, pitch_stretch: 3                    # => 3.0
 #   sample_duration :loop_garzul, pitch_stretch: 3, rate: 0.5         # => 6.0
 #   
-#   # The start: and finish: opts can also shorten the sample duration and also combine
-#   # with other opts such as rate:
+#                                                                     # The start: and finish: opts can also shorten the sample duration and also combine
+#                                                                     # with other opts such as rate:
 #   sample_duration :loop_garzul, start: 0.5                          # => 4.0
 #   sample_duration :loop_garzul, start: 0.5, finish: 0.75            # => 2.0
 #   sample_duration :loop_garzul, finish: 0.5, start: 0.75            # => 2.0
@@ -4559,7 +4531,7 @@ end
 #   sleep sample_duration(:loop_amen)    # wait for the duration of :loop_amen before
 #   sample :loop_amen                    # starting it again
 #
-def sample_duration(_path, rate: nil, start: nil, finish: nil, attack: nil, decay: nil, sustain: nil, release: nil, beat_stretch: nil, pitch_stretch: nil, rpitch: nil)
+def sample_duration(_path = nil, rate: nil, start: nil, finish: nil, attack: nil, decay: nil, sustain: nil, release: nil, beat_stretch: nil, pitch_stretch: nil, rpitch: nil)
   #This is a stub, used for indexing
 end
 
@@ -4581,7 +4553,7 @@ end
 # @example
 #   puts sample_info(:loop_amen).to_i # This returns the buffer id of the sample i.e. 1
 #   puts sample_info(:loop_amen).to_i # The buffer id remains constant whilst the sample
-#   # is loaded in memory
+#                                     # is loaded in memory
 #   sample_free :loop_amen
 #   puts sample_info(:loop_amen).to_i # The Amen break is re-loaded and gets a *new* id.
 #
@@ -4601,13 +4573,12 @@ end
 #   sample_free dir, :foo # frees sample with name "foo" in "/path/to/sample/dir"
 #   sample_free dir, /[Bb]ar/ # frees sample which matches regex /[Bb]ar/ in "/path/to/sample/dir"
 #
-def sample_free(_path)
+def sample_free(_path = nil)
   #This is a stub, used for indexing
 end
 
 # Free all loaded samples on the synth server
 # Unloads all samples therefore freeing the memory and resources consumed. Subsequent calls to `sample` and friends will re-load the sample on the server.
-# @param _ []
 # @accepts_block false
 # @introduced 2.9.0
 # @example
@@ -4617,7 +4588,7 @@ end
 #   sample_free_all
 #   sample :loop_amen        # re-loads and plays amen
 #
-def sample_free_all(_)
+def sample_free_all
   #This is a stub, used for indexing
 end
 
@@ -4625,7 +4596,7 @@ end
 # Return a list of all the sample groups available
 # @accepts_block false
 # @introduced 2.0.0
-def sample_groups()
+def sample_groups
   #This is a stub, used for indexing
 end
 
@@ -4637,7 +4608,7 @@ end
 # @example
 #   see load_sample
 #
-def sample_info(_path)
+def sample_info(_path = nil)
   #This is a stub, used for indexing
 end
 
@@ -4651,7 +4622,7 @@ end
 #   puts sample_loaded? :elec_blip # prints true because it has been pre-loaded
 #   puts sample_loaded? :misc_burp # prints false because it has not been loaded
 #
-def sample_loaded?(_path)
+def sample_loaded?(_path = nil)
   #This is a stub, used for indexing
 end
 
@@ -4660,7 +4631,7 @@ end
 # @param _group [symbol]
 # @accepts_block false
 # @introduced 2.0.0
-def sample_names(_group)
+def sample_names(_group = nil)
   #This is a stub, used for indexing
 end
 
@@ -4677,9 +4648,9 @@ end
 #
 # @example
 #   sample_paths "/path/to/samples/", "foo" #=> ring of all samples in /path/to/samples
-#   containing the string "foo" in their filename.
+#                                                   containing the string "foo" in their filename.
 #
-def sample_paths(_pre_args)
+def sample_paths(_pre_args = nil)
   #This is a stub, used for indexing
 end
 
@@ -4687,7 +4658,7 @@ end
 # Creates a ring of MIDI note numbers when given a tonic note and a scale name. Also takes an optional `num_octaves:` parameter (octave `1` is the default). If only passed the scale name, the tonic defaults to 0. See examples.
 # @param _tonic [symbol]
 # @param _name [symbol]
-# @option opts :num_octaves The number of octaves you'd like the scale to consist of. More octaves means a larger scale. Default is 1.
+# @param num_octaves The number of octaves you'd like the scale to consist of. More octaves means a larger scale. Default is 1.
 # @accepts_block false
 # @introduced 2.0.0
 # @example
@@ -4710,15 +4681,15 @@ end
 # @example
 #   # scales are also rings
 #   live_loop :scale_player do
-#   play (scale :Eb3, :super_locrian).tick, release: 0.1
-#   sleep 0.125
+#     play (scale :Eb3, :super_locrian).tick, release: 0.1
+#     sleep 0.125
 #   end
 #
 # @example
 #   # scales starting with 0 are useful in combination with sample's rpitch:
 #   live_loop :scaled_sample do
-#   sample :bass_trance_c, rpitch: (scale 0, :minor).tick
-#   sleep 1
+#     sample :bass_trance_c, rpitch: (scale 0, :minor).tick
+#     sleep 1
 #   end
 #
 # @example
@@ -4798,7 +4769,7 @@ end
 #   (scale :C, :blues_major)
 #   (scale :C, :blues_minor)
 #
-def scale(_tonic, _name, num_octaves: nil)
+def scale(_tonic = nil, _name = nil, num_octaves: nil)
   #This is a stub, used for indexing
 end
 
@@ -4809,29 +4780,28 @@ end
 # @example
 #   puts scale_names #=>  prints a list of all the scales
 #
-def scale_names()
+def scale_names
   #This is a stub, used for indexing
 end
 
 # Return information about the internal SuperCollider sound server
 # Create a map of information about the running audio synthesiser SuperCollider. 
-# @param _ []
 # @accepts_block false
 # @introduced 2.11.0
 # @example
 #   puts scsynth_info  #=>  (map sample_rate: 44100.0,
-#   #         sample_dur: 2.2675736545352265e-05,
-#   #         radians_per_sample: 0.00014247585204429924,
-#   #         control_rate: 689.0625,
-#   #         control_dur: 0.001451247138902545,
-#   #         subsample_offset: 0.0,
-#   #         num_output_busses: 16.0,
-#   #         num_input_busses: 16.0,
-#   #         num_audio_busses: 1024.0,
-#   #         num_control_busses: 4096.0,
-#   #         num_buffers: 4096.0)
+#                               #         sample_dur: 2.2675736545352265e-05,
+#                               #         radians_per_sample: 0.00014247585204429924,
+#                               #         control_rate: 689.0625,
+#                               #         control_dur: 0.001451247138902545,
+#                               #         subsample_offset: 0.0,
+#                               #         num_output_busses: 16.0,
+#                               #         num_input_busses: 16.0,
+#                               #         num_audio_busses: 1024.0,
+#                               #         num_control_busses: 4096.0,
+#                               #         num_buffers: 4096.0)
 #
-def scsynth_info(_)
+def scsynth_info
   #This is a stub, used for indexing
 end
 
@@ -4844,13 +4814,13 @@ end
 # @introduced 3.1.0
 # @example
 #   set_audio_latency! 100 # Audio events will now be scheduled 100ms
-#   # after the schedule ahead time
+#                                                     # after the schedule ahead time
 #
 # @example
 #   set_audio_latency! -200 # Audio events will now be scheduled 200ms
-#   # before the schedule ahead time
+#                                                     # before the schedule ahead time
 #
-def set_audio_latency!(_milliseconds)
+def set_audio_latency!(_milliseconds = nil)
   #This is a stub, used for indexing
 end
 
@@ -4870,7 +4840,7 @@ end
 #   set_cent_tuning! 1
 #   play 50 # Plays note 50.01
 #
-def set_cent_tuning!(_cent_shift)
+def set_cent_tuning!(_cent_shift = nil)
   #This is a stub, used for indexing
 end
 
@@ -4884,26 +4854,26 @@ end
 #   
 #   s = play 70, release: 8, note_slide: 8 # Play a note and set the slide time
 #   control s, note: 82                    # immediately start sliding note.
-#   # This control message might not be
-#   # correctly handled as it is sent at the
-#   # same virtual time as the trigger.
-#   # If you don't hear a slide, try increasing the
-#   # control delta until you do.
+#                                          # This control message might not be
+#                                          # correctly handled as it is sent at the
+#                                          # same virtual time as the trigger.
+#                                          # If you don't hear a slide, try increasing the
+#                                          # control delta until you do.
 #
-def set_control_delta!(_time)
+def set_control_delta!(_time = nil)
   #This is a stub, used for indexing
 end
 
 # Control master mixer
 # The master mixer is the final mixer that all sound passes through. This fn gives you control over the master mixer allowing you to manipulate all the sound playing through Sonic Pi at once. For example, you can sweep a lpf or hpf over the entire sound. You can reset the controls back to their defaults with `reset_mixer!`.
-# @option opts :pre_amp Controls the amplitude of the signal prior to the FX stage of the mixer (prior to lpf/hpf stages). Has slide opts. Default 1.
-# @option opts :amp Controls the amplitude of the signal after the FX stage. Has slide opts. Default 1.
-# @option opts :hpf Global hpf FX. Has slide opts. Default 0.
-# @option opts :lpf Global lpf FX. Has slide opts. Default 135.5.
-# @option opts :hpf_bypass Bypass the global hpf. 0=no bypass, 1=bypass. Default 0.
-# @option opts :lpf_bypass Bypass the global lpf. 0=no bypass, 1=bypass. Default 0.
-# @option opts :limiter_bypass Bypass the final limiter. 0=no bypass, 1=bypass. Default 0.
-# @option opts :leak_dc_bypass Bypass the final DC leak correction FX. 0=no bypass, 1=bypass. Default 0.
+# @param pre_amp Controls the amplitude of the signal prior to the FX stage of the mixer (prior to lpf/hpf stages). Has slide opts. Default 1.
+# @param amp Controls the amplitude of the signal after the FX stage. Has slide opts. Default 1.
+# @param hpf Global hpf FX. Has slide opts. Default 0.
+# @param lpf Global lpf FX. Has slide opts. Default 135.5.
+# @param hpf_bypass Bypass the global hpf. 0=no bypass, 1=bypass. Default 0.
+# @param lpf_bypass Bypass the global lpf. 0=no bypass, 1=bypass. Default 0.
+# @param limiter_bypass Bypass the final limiter. 0=no bypass, 1=bypass. Default 0.
+# @param leak_dc_bypass Bypass the final DC leak correction FX. 0=no bypass, 1=bypass. Default 0.
 # @accepts_block false
 # @introduced 2.7.0
 # @example
@@ -4921,7 +4891,7 @@ end
 # @example
 #   set_recording_bit_depth! 24                 # Set recording bit depth to 24
 #
-def set_recording_bit_depth!(_bit_depth)
+def set_recording_bit_depth!(_bit_depth = nil)
   #This is a stub, used for indexing
 end
 
@@ -4933,7 +4903,7 @@ end
 # @example
 #   set_sched_ahead_time! 1 # Code will now run approximately 1 second ahead of audio.
 #
-def set_sched_ahead_time!(_time)
+def set_sched_ahead_time!(_time = nil)
   #This is a stub, used for indexing
 end
 
@@ -4951,7 +4921,7 @@ end
 # @example
 #   set_volume! 7 # Out of range, so sets main system volume to 5
 #
-def set_volume!(_vol)
+def set_volume!(_vol = nil)
   #This is a stub, used for indexing
 end
 
@@ -4966,7 +4936,7 @@ end
 # @example
 #   shuffle "foobar"  #=> Would return something like: "roobfa"
 #
-def shuffle(_list)
+def shuffle(_list = nil)
   #This is a stub, used for indexing
 end
 
@@ -4978,38 +4948,38 @@ end
 # @example
 #   # Without calls to sleep, all sounds would happen at once:
 #   
-#   play 50  # This is actually a chord with all notes played simultaneously
-#   play 55
-#   play 62
+#     play 50  # This is actually a chord with all notes played simultaneously
+#     play 55
+#     play 62
 #   
-#   sleep 1  # Create a gap, to allow a moment's pause for reflection...
+#     sleep 1  # Create a gap, to allow a moment's pause for reflection...
 #   
-#   play 50  # Let's try the chord again, but this time with sleeps:
-#   sleep 0.5 # With the sleeps, we turn a chord into an arpeggio
-#   play 55
-#   sleep 0.5
-#   play 62
+#     play 50  # Let's try the chord again, but this time with sleeps:
+#     sleep 0.5 # With the sleeps, we turn a chord into an arpeggio
+#     play 55
+#     sleep 0.5
+#     play 62
 #
 # @example
 #   # The amount of time sleep pauses for is scaled to match the current bpm. The default bpm is 60. Let's double it:
 #   
-#   use_bpm 120
-#   play 50
-#   sleep 1 # This actually sleeps for 0.5 seconds as we're now at double speed
-#   play 55
-#   sleep 1
-#   play 62
+#     use_bpm 120
+#     play 50
+#     sleep 1 # This actually sleeps for 0.5 seconds as we're now at double speed
+#     play 55
+#     sleep 1
+#     play 62
 #   
-#   # Let's go down to half speed:
+#     # Let's go down to half speed:
 #   
-#   use_bpm 30
-#   play 50
-#   sleep 1 # This now sleeps for 2 seconds as we're now at half speed.
-#   play 55
-#   sleep 1
-#   play 62
+#     use_bpm 30
+#     play 50
+#     sleep 1 # This now sleeps for 2 seconds as we're now at half speed.
+#     play 55
+#     sleep 1
+#     play 62
 #
-def sleep(_beats)
+def sleep(_beats = nil)
   #This is a stub, used for indexing
 end
 
@@ -5023,7 +4993,7 @@ end
 # @example
 #   spark (range 1, 5).shuffle #=> ▃█▅▁
 #
-def spark()
+def spark
   #This is a stub, used for indexing
 end
 
@@ -5037,7 +5007,7 @@ end
 # @example
 #   puts (spark_graph (range 1, 5).shuffle) #=> ▃█▅▁
 #
-def spark_graph()
+def spark_graph
   #This is a stub, used for indexing
 end
 
@@ -5045,7 +5015,7 @@ end
 # Creates a new ring of boolean values which space a given number of accents as evenly as possible throughout a bar. This is an implementation of the process described in 'The Euclidean Algorithm Generates Traditional Musical Rhythms' (Toussaint 2005).
 # @param _num_accents [number]
 # @param _size [number]
-# @option opts :rotate rotate to the next strong beat allowing for easy permutations of the original rhythmic grouping (see example)
+# @param rotate rotate to the next strong beat allowing for easy permutations of the original rhythmic grouping (see example)
 # @accepts_block false
 # @introduced 2.4.0
 # @example
@@ -5056,66 +5026,66 @@ end
 #
 # @example
 #   # Easily create interesting polyrhythmic beats
-#   live_loop :euclid_beat do
-#   sample :elec_bong, amp: 1.5 if (spread 3, 8).tick # Spread 3 bongs over 8
-#   sample :perc_snap, amp: 0.8 if (spread 7, 11).look # Spread 7 snaps over 11
-#   sample :bd_haus, amp: 2 if (spread 1, 4).look # Spread 1 bd over 4
-#   sleep 0.125
-#   end
+#     live_loop :euclid_beat do
+#       sample :elec_bong, amp: 1.5 if (spread 3, 8).tick # Spread 3 bongs over 8
+#       sample :perc_snap, amp: 0.8 if (spread 7, 11).look # Spread 7 snaps over 11
+#       sample :bd_haus, amp: 2 if (spread 1, 4).look # Spread 1 bd over 4
+#       sleep 0.125
+#     end
 #
 # @example
 #   # Spread descriptions from
-#   # 'The Euclidean Algorithm Generates Traditional Musical Rhythms' (Toussaint 2005).
-#   (spread 2, 5)  # A thirteenth century Persian rhythm called Khafif-e-ramal.
+#     # 'The Euclidean Algorithm Generates Traditional Musical Rhythms' (Toussaint 2005).
+#     (spread 2, 5)  # A thirteenth century Persian rhythm called Khafif-e-ramal.
 #   
-#   (spread 3, 4)  # The archetypal pattern of the Cumbria from Columbia, as well
-#   # as a Calypso rhythm from Trinidad
+#     (spread 3, 4)  # The archetypal pattern of the Cumbria from Columbia, as well
+#                    # as a Calypso rhythm from Trinidad
 #   
-#   (spread 3, 5)  # When started on the second onset, is another thirteenth
-#   # century Persian rhythm by the name of Khafif-e-ramal, as well
-#   # as a Romanian folk-dance rhythm.
+#     (spread 3, 5)  # When started on the second onset, is another thirteenth
+#                    # century Persian rhythm by the name of Khafif-e-ramal, as well
+#                    # as a Romanian folk-dance rhythm.
 #   
-#   (spread 3, 7)  # A ruchenitza rhythm used in a Bulgarian folk-dance.
+#     (spread 3, 7)  # A ruchenitza rhythm used in a Bulgarian folk-dance.
 #   
-#   (spread 3, 8)  # The Cuban tresillo pattern
+#     (spread 3, 8)  # The Cuban tresillo pattern
 #   
-#   (spread 4, 7)  # Another Ruchenitza Bulgarian folk-dance rhythm
+#     (spread 4, 7)  # Another Ruchenitza Bulgarian folk-dance rhythm
 #   
-#   (spread 4, 9)  # The Aksak rhythm of Turkey.
+#     (spread 4, 9)  # The Aksak rhythm of Turkey.
 #   
-#   (spread 4, 11) # The metric pattern used by Frank Zappa in his piece Outside Now
+#     (spread 4, 11) # The metric pattern used by Frank Zappa in his piece Outside Now
 #   
-#   (spread 5, 6)  # Yields the York-Samai pattern, a popular Arab rhythm, when
-#   # started on the second onset.
+#     (spread 5, 6)  # Yields the York-Samai pattern, a popular Arab rhythm, when
+#                    # started on the second onset.
 #   
-#   (spread 5, 7)  # The Nawakhat pattern, another popular Arab rhythm.
+#     (spread 5, 7)  # The Nawakhat pattern, another popular Arab rhythm.
 #   
-#   (spread 5, 8)  # The Cuban cinquillo pattern.
+#     (spread 5, 8)  # The Cuban cinquillo pattern.
 #   
-#   (spread 5, 9)  # A popular Arab rhythm called Agsag-Samai.
+#     (spread 5, 9)  # A popular Arab rhythm called Agsag-Samai.
 #   
-#   (spread 5, 11) # The metric pattern used by Moussorgsky in Pictures at an
-#   # Exhibition
+#     (spread 5, 11) # The metric pattern used by Moussorgsky in Pictures at an
+#                    # Exhibition
 #   
-#   (spread 5, 12) # The Venda clapping pattern of a South African children's
-#   # song.
+#     (spread 5, 12) # The Venda clapping pattern of a South African children's
+#                    # song.
 #   
-#   (spread 5, 16) # The Bossa-Nova rhythm necklace of Brazil.
+#     (spread 5, 16) # The Bossa-Nova rhythm necklace of Brazil.
 #   
-#   (spread 7, 8)  # A typical rhythm played on the Bendir (frame drum)
+#     (spread 7, 8)  # A typical rhythm played on the Bendir (frame drum)
 #   
-#   (spread 7, 12) # A common West African bell pattern.
+#     (spread 7, 12) # A common West African bell pattern.
 #   
-#   (spread 7, 16) # A Samba rhythm necklace from Brazil.
+#     (spread 7, 16) # A Samba rhythm necklace from Brazil.
 #   
-#   (spread 9, 16) # A rhythm necklace used in the Central African Republic.
+#     (spread 9, 16) # A rhythm necklace used in the Central African Republic.
 #   
-#   (spread 11, 24) # A rhythm necklace of the Aka Pygmies of Central Africa.
+#     (spread 11, 24) # A rhythm necklace of the Aka Pygmies of Central Africa.
 #   
-#   (spread 13, 24) # Another rhythm necklace of the Aka Pygmies of the upper
-#   # Sangha.
+#     (spread 13, 24) # Another rhythm necklace of the Aka Pygmies of the upper
+#                     # Sangha.
 #
-def spread(_num_accents, _size, rotate: nil)
+def spread(_num_accents = nil, _size = nil, rotate: nil)
   #This is a stub, used for indexing
 end
 
@@ -5125,20 +5095,20 @@ end
 # @introduced 2.0.0
 # @example
 #   puts status # Returns something similar to:
-#   # {
-#   #   :ugens=>10,
-#   #   :synths=>1,
-#   #   :groups=>7,
-#   #   :sdefs=>61,
-#   #   :avg_cpu=>0.20156468451023102,
-#   #   :peak_cpu=>0.36655542254447937,
-#   #   :nom_samp_rate=>44100.0,
-#   #   :act_samp_rate=>44099.9998411752,
-#   #   :audio_busses=>2,
-#   #   :control_busses=>0
-#   # }
+#               # {
+#               #   :ugens=>10,
+#               #   :synths=>1,
+#               #   :groups=>7,
+#               #   :sdefs=>61,
+#               #   :avg_cpu=>0.20156468451023102,
+#               #   :peak_cpu=>0.36655542254447937,
+#               #   :nom_samp_rate=>44100.0,
+#               #   :act_samp_rate=>44099.9998411752,
+#               #   :audio_busses=>2,
+#               #   :control_busses=>0
+#               # }
 #
-def status()
+def status
   #This is a stub, used for indexing
 end
 
@@ -5148,34 +5118,34 @@ end
 # @introduced 2.5.0
 # @example
 #   sample :loop_amen #=> this sample is played until completion
-#   sleep 0.5
-#   stop                #=> signal to stop executing this run
-#   sample :loop_garzul #=> this never executes
+#     sleep 0.5
+#     stop                #=> signal to stop executing this run
+#     sample :loop_garzul #=> this never executes
 #
 # @example
 #   in_thread do
-#   play 60      #=> this note plays
-#   stop
-#   sleep 0.5    #=> this sleep never happens
-#   play 72      #=> this play never happens
-#   end
+#       play 60      #=> this note plays
+#       stop
+#       sleep 0.5    #=> this sleep never happens
+#       play 72      #=> this play never happens
+#     end
 #   
-#   play 80  #=> this plays as the stop only affected the above thread
+#     play 80  #=> this plays as the stop only affected the above thread
 #
 # @example
 #   # Stopping live loops
-#   live_loop :foo
-#   sample :bd_haus
-#   sleep 1
-#   stop               # live loop :foo will now stop and no longer loop
-#   end
+#     live_loop :foo
+#       sample :bd_haus
+#       sleep 1
+#       stop               # live loop :foo will now stop and no longer loop
+#     end
 #   
-#   live_loop :bar       # live loop :bar will continue looping
-#   sample :elec_blip
-#   sleep 0.25
-#   end
+#     live_loop :bar       # live loop :bar will continue looping
+#       sample :elec_blip
+#       sleep 0.25
+#     end
 #
-def stop()
+def stop
   #This is a stub, used for indexing
 end
 
@@ -5191,76 +5161,76 @@ end
 # @example
 #   (stretch [:e2, :c3], 1, [:c2, :d3], 2) #=> (ring :e2, :c3, :c2, :c2, :d3, :d3)
 #
-def stretch(_list, _count)
+def stretch(_list = nil, _count = nil)
   #This is a stub, used for indexing
 end
 
 # Sync with other threads
 # Pause/block the current thread until a `cue` heartbeat with a matching `cue_id` is received. When a matching `cue` message is received, unblock the current thread, and continue execution with the virtual time set to match the thread that sent the `cue` heartbeat. The current thread is therefore synced to the `cue` thread. If multiple cue ids are passed as arguments, it will `sync` on the first matching `cue_id`. The BPM of the cueing thread can optionally be inherited by using the bpm_sync: opt.
 # @param _cue_id [symbol]
-# @option opts :bpm_sync Inherit the BPM of the cueing thread. Default is false
+# @param bpm_sync Inherit the BPM of the cueing thread. Default is false
 # @accepts_block false
 # @introduced 2.0.0
 # @example
 #   in_thread do
-#   sync :foo # this parks the current thread waiting for a foo sync message to be received.
-#   sample :ambi_lunar_land
-#   end
+#       sync :foo # this parks the current thread waiting for a foo sync message to be received.
+#       sample :ambi_lunar_land
+#     end
 #   
-#   sleep 5
+#     sleep 5
 #   
-#   cue :foo # We send a sync message from the main thread.
-#   # This then unblocks the thread above and we then hear the sample
+#     cue :foo # We send a sync message from the main thread.
+#               # This then unblocks the thread above and we then hear the sample
 #
 # @example
 #   in_thread do   # Start a metronome thread
-#   loop do      # Loop forever:
-#   cue :tick # sending tick heartbeat messages
-#   sleep 0.5  # and sleeping for 0.5 beats between ticks
-#   end
-#   end
+#       loop do      # Loop forever:
+#         cue :tick # sending tick heartbeat messages
+#         sleep 0.5  # and sleeping for 0.5 beats between ticks
+#       end
+#     end
 #   
-#   # We can now play sounds using the metronome.
-#   loop do                    # In the main thread, just loop
-#   sync :tick               # waiting for :tick sync messages
-#   sample :drum_heavy_kick  # after which play the drum kick sample
-#   end
+#     # We can now play sounds using the metronome.
+#     loop do                    # In the main thread, just loop
+#       sync :tick               # waiting for :tick sync messages
+#       sample :drum_heavy_kick  # after which play the drum kick sample
+#     end
 #
 # @example
 #   sync :foo, :bar # Wait for either a :foo or :bar cue
 #
 # @example
 #   in_thread do   # Start a metronome thread
-#   loop do      # Loop forever:
-#   cue [:foo, :bar, :baz].choose # sending one of three tick heartbeat messages randomly
-#   sleep 0.5  # and sleeping for 0.5 beats between ticks
-#   end
-#   end
+#       loop do      # Loop forever:
+#         cue [:foo, :bar, :baz].choose # sending one of three tick heartbeat messages randomly
+#         sleep 0.5  # and sleeping for 0.5 beats between ticks
+#       end
+#     end
 #   
-#   # We can now play sounds using the metronome:
+#     # We can now play sounds using the metronome:
 #   
-#   in_thread do
-#   loop do                    # In the main thread, just loop
-#   sync :foo               # waiting for :foo sync messages
-#   sample :elec_beep  # after which play the elec beep sample
-#   end
-#   end
+#     in_thread do
+#       loop do                    # In the main thread, just loop
+#         sync :foo               # waiting for :foo sync messages
+#         sample :elec_beep  # after which play the elec beep sample
+#       end
+#     end
 #   
-#   in_thread do
-#   loop do                    # In the main thread, just loop
-#   sync :bar               # waiting for :bar sync messages
-#   sample :elec_flip  # after which play the elec flip sample
-#   end
-#   end
+#     in_thread do
+#       loop do                    # In the main thread, just loop
+#         sync :bar               # waiting for :bar sync messages
+#         sample :elec_flip  # after which play the elec flip sample
+#       end
+#     end
 #   
-#   in_thread do
-#   loop do                    # In the main thread, just loop
-#   sync :baz               # waiting for :baz sync messages
-#   sample :elec_blup  # after which play the elec blup sample
-#   end
-#   end
+#     in_thread do
+#       loop do                    # In the main thread, just loop
+#         sync :baz               # waiting for :baz sync messages
+#         sample :elec_blup  # after which play the elec blup sample
+#       end
+#     end
 #
-def sync(_cue_id, bpm_sync: nil)
+def sync(_cue_id = nil, bpm_sync: nil)
   #This is a stub, used for indexing
 end
 
@@ -5272,7 +5242,7 @@ end
 # @example
 #   See examples for sync
 #
-def sync_bpm(_cue_id)
+def sync_bpm(_cue_id = nil)
   #This is a stub, used for indexing
 end
 
@@ -5287,21 +5257,21 @@ end
 # 
 # Note that the default opts listed are only a guide to the most common opts across all the synths. Not all synths support all the default opts and each synth typically supports many more opts specific to that synth. For example, the `:tb303` synth supports 45 unique opts. For a full list of a synth's opts see its documentation in the Help system. This can be accessed directly by clicking on the name of the synth and using the shortcut `C-i`
 # @param _synth_name [symbol]
-# @option opts :amp The amplitude of the note
-# @option opts :amp_slide The duration in beats for amplitude changes to take place
-# @option opts :pan The stereo position of the sound. -1 is left, 0 is in the middle and 1 is on the right. You may use a value in between -1 and 1 such as 0.25
-# @option opts :pan_slide The duration in beats for the pan value to change
-# @option opts :attack Amount of time (in beats) for sound to reach full amplitude (attack_level). A short attack (i.e. 0.01) makes the initial part of the sound very percussive like a sharp tap. A longer attack (i.e 1) fades the sound in gently.
-# @option opts :decay Amount of time (in beats) for the sound to move from full amplitude (attack_level) to the sustain amplitude (sustain_level).
-# @option opts :sustain Amount of time (in beats) for sound to remain at sustain level amplitude. Longer sustain values result in longer sounds. Full length of sound is attack + decay + sustain + release.
-# @option opts :release Amount of time (in beats) for sound to move from sustain level amplitude to silent. A short release (i.e. 0.01) makes the final part of the sound very percussive (potentially resulting in a click). A longer release (i.e 1) fades the sound out gently.
-# @option opts :attack_level Amplitude level reached after attack phase and immediately before decay phase
-# @option opts :decay_level Amplitude level reached after decay phase and immediately before sustain phase. Defaults to sustain_level unless explicitly set
-# @option opts :sustain_level Amplitude level reached after decay phase and immediately before release phase.
-# @option opts :env_curve Select the shape of the curve between levels in the envelope. 1=linear, 2=exponential, 3=sine, 4=welch, 6=squared, 7=cubed
-# @option opts :slide Default slide time in beats for all slide opts. Individually specified slide opts will override this value
-# @option opts :pitch Pitch adjustment in semitones. 1 is up a semitone, 12 is up an octave, -12 is down an octave etc.  Decimal numbers can be used for fine tuning.
-# @option opts :on If specified and false/nil/0 will stop the synth from being played. Ensures all opts are evaluated.
+# @param amp The amplitude of the note
+# @param amp_slide The duration in beats for amplitude changes to take place
+# @param pan The stereo position of the sound. -1 is left, 0 is in the middle and 1 is on the right. You may use a value in between -1 and 1 such as 0.25
+# @param pan_slide The duration in beats for the pan value to change
+# @param attack Amount of time (in beats) for sound to reach full amplitude (attack_level). A short attack (i.e. 0.01) makes the initial part of the sound very percussive like a sharp tap. A longer attack (i.e 1) fades the sound in gently.
+# @param decay Amount of time (in beats) for the sound to move from full amplitude (attack_level) to the sustain amplitude (sustain_level).
+# @param sustain Amount of time (in beats) for sound to remain at sustain level amplitude. Longer sustain values result in longer sounds. Full length of sound is attack + decay + sustain + release.
+# @param release Amount of time (in beats) for sound to move from sustain level amplitude to silent. A short release (i.e. 0.01) makes the final part of the sound very percussive (potentially resulting in a click). A longer release (i.e 1) fades the sound out gently.
+# @param attack_level Amplitude level reached after attack phase and immediately before decay phase
+# @param decay_level Amplitude level reached after decay phase and immediately before sustain phase. Defaults to sustain_level unless explicitly set
+# @param sustain_level Amplitude level reached after decay phase and immediately before release phase.
+# @param env_curve Select the shape of the curve between levels in the envelope. 1=linear, 2=exponential, 3=sine, 4=welch, 6=squared, 7=cubed
+# @param slide Default slide time in beats for all slide opts. Individually specified slide opts will override this value
+# @param pitch Pitch adjustment in semitones. 1 is up a semitone, 12 is up an octave, -12 is down an octave etc.  Decimal numbers can be used for fine tuning.
+# @param on If specified and false/nil/0 will stop the synth from being played. Ensures all opts are evaluated.
 # @accepts_block true
 # @introduced 2.0.0
 # @example
@@ -5309,7 +5279,7 @@ end
 #   play 60                    # Play note 60 with opt defaults
 #   
 #   synth :dsaw, note: 60    # Bypass current synth and play :dsaw
-#   # with note 60 and opt defaults
+#                            # with note 60 and opt defaults
 #
 # @example
 #   synth :fm, note: 60, amp: 0.5 # Play note 60 of the :fm synth with an amplitude of 0.5
@@ -5327,24 +5297,24 @@ end
 #   notes = (scale :e3, :minor_pentatonic, num_octaves: 2)
 #   
 #   live_loop :rhyth do
-#   8.times do
-#   trig = (spread 3, 7).tick(:rhyth)
-#   synth :tri, on: trig, note: notes.tick, release: 0.1  # Here, we're calling notes.tick
-#   # every time we attempt to play the synth
-#   # so the notes rise faster than rhyth2
-#   sleep 0.125
-#   end
+#     8.times do
+#       trig = (spread 3, 7).tick(:rhyth)
+#       synth :tri, on: trig, note: notes.tick, release: 0.1  # Here, we're calling notes.tick
+#                                                             # every time we attempt to play the synth
+#                                                             # so the notes rise faster than rhyth2
+#       sleep 0.125
+#     end
 #   end
 #   
 #   
 #   live_loop :rhyth2 do
-#   8.times do
-#   trig = (spread 3, 7).tick(:rhyth)
-#   synth :saw, note: notes.tick, release: 0.1 if trig  # Here, we're calling notes.tick
-#   # only when the spread says to play
-#   # so the notes rise slower than rhyth
-#   sleep 0.125
-#   end
+#     8.times do
+#       trig = (spread 3, 7).tick(:rhyth)
+#       synth :saw, note: notes.tick, release: 0.1 if trig  # Here, we're calling notes.tick
+#                                                           # only when the spread says to play
+#                                                           # so the notes rise slower than rhyth
+#       sleep 0.125
+#     end
 #   end
 #
 # @example
@@ -5358,14 +5328,14 @@ end
 # @example
 #   # Controlling a synth asynchronously
 #   synth :beep, note: :e3, release: 4 do |s|
-#   sleep 1                                               # This block is run in an implicit in_thread
-#   control s, note: :e5                                  # and therefore is asynchronous
+#     sleep 1                                               # This block is run in an implicit in_thread
+#     control s, note: :e5                                  # and therefore is asynchronous
 #   end
 #   
 #   sleep 0.5
 #   synth :dsaw, note: :e3 # This is triggered after 0.5s from start
 #
-def synth(_synth_name, amp: nil, amp_slide: nil, pan: nil, pan_slide: nil, attack: nil, decay: nil, sustain: nil, release: nil, attack_level: nil, decay_level: nil, sustain_level: nil, env_curve: nil, slide: nil, pitch: nil, on: nil)
+def synth(_synth_name = nil, amp: nil, amp_slide: nil, pan: nil, pan_slide: nil, attack: nil, decay: nil, sustain: nil, release: nil, attack_level: nil, decay_level: nil, sustain_level: nil, env_curve: nil, slide: nil, pitch: nil, on: nil)
   #This is a stub, used for indexing
 end
 
@@ -5373,107 +5343,95 @@ end
 # Return a list of all the synths available
 # @accepts_block false
 # @introduced 2.9.0
-def synth_names()
+def synth_names
   #This is a stub, used for indexing
 end
 
 # Increment a tick and return value
 # Increment the default tick by 1 and return value. Successive calls to `tick` will continue to increment the default tick. If a `key` is specified, increment that specific tick. If an increment `value` is specified, increment key by that value rather than 1. Ticks are `in_thread` and `live_loop` local, so incrementing a tick only affects the current thread's version of that tick. See `tick_reset` and `tick_set` for directly manipulating the tick vals.
 # @param _key [symbol]
-# @option opts :step The amount to tick up by. Default is 1.
-# @option opts :offset Offset to add to index returned. Useful when calling tick on lists, rings and vectors to offset the returned value. Default is 0.
+# @param step The amount to tick up by. Default is 1.
+# @param offset Offset to add to index returned. Useful when calling tick on lists, rings and vectors to offset the returned value. Default is 0.
 # @accepts_block false
 # @introduced 2.6.0
 # @example
 #   puts tick #=> 0
-#   puts tick #=> 1
-#   puts tick #=> 2
-#   puts tick #=> 3
+#     puts tick #=> 1
+#     puts tick #=> 2
+#     puts tick #=> 3
 #
 # @example
 #   puts tick(:foo) #=> 0 # named ticks have their own counts
-#   puts tick(:foo) #=> 1
-#   puts tick(:foo) #=> 2
-#   puts tick(:bar) #=> 0 # tick :bar is independent of tick :foo
-#
-# @example
-#   # You can tick by more than increments of 1
-#   # using the step: opt
-#   
-#   puts tick             #=> 0
-#   puts tick             #=> 1
-#   puts tick             #=> 2
-#   puts tick(step: 2)    #=> 4
-#   puts tick(step: 2)    #=> 6
-#   puts tick(step: 10)   #=> 16
-#   puts tick             #=> 17
+#     puts tick(:foo) #=> 1
+#     puts tick(:foo) #=> 2
+#     puts tick(:bar) #=> 0 # tick :bar is independent of tick :foo
 #
 # @example
 #   # Each_live loop has its own separate ticks
-#   live_loop :fast_tick do
-#   puts tick   # the fast_tick live_loop's tick will
-#   sleep 2     # be updated every 2 seconds
-#   end
+#     live_loop :fast_tick do
+#       puts tick   # the fast_tick live_loop's tick will
+#       sleep 2     # be updated every 2 seconds
+#     end
 #   
-#   live_loop :slow_tick do
-#   puts tick   # the slow_tick live_loop's tick is
-#   sleep 4     # totally independent from the fast_tick
-#   # live loop and will be updated every 4
-#   # seconds
-#   end
+#     live_loop :slow_tick do
+#       puts tick   # the slow_tick live_loop's tick is
+#       sleep 4     # totally independent from the fast_tick
+#                   # live loop and will be updated every 4
+#                   # seconds
+#     end
 #
 # @example
 #   live_loop :regular_tick do
-#   puts tick   # the regular_tick live_loop's tick will
-#   sleep 1     # be updated every second
-#   end
+#       puts tick   # the regular_tick live_loop's tick will
+#       sleep 1     # be updated every second
+#     end
 #   
-#   live_loop :random_reset_tick do
-#   if one_in 3 # randomly reset tick
-#   tick_reset
-#   puts "reset tick!"
-#   end
-#   puts tick   # this live_loop's tick is totally
-#   sleep 1     # independent and the reset only affects
-#   # this tick.
-#   end
+#     live_loop :random_reset_tick do
+#       if one_in 3 # randomly reset tick
+#         tick_reset
+#         puts "reset tick!"
+#       end
+#       puts tick   # this live_loop's tick is totally
+#       sleep 1     # independent and the reset only affects
+#                   # this tick.
+#     end
 #
 # @example
 #   # Ticks work directly on lists, and will tick through each element
-#   # However, once they get to the end, they'll return nil
-#   live_loop :scale do
-#   play [:c, :d, :e, :f, :g].tick   # play all notes just once, then rests
-#   sleep 1
-#   end
+#     # However, once they get to the end, they'll return nil
+#     live_loop :scale do
+#       play [:c, :d, :e, :f, :g].tick   # play all notes just once, then rests
+#       sleep 1
+#     end
 #
 # @example
 #   # Normal ticks interact directly with list ticks
-#   live_loop :odd_scale do
-#   tick  # Increment the default tick
-#   play [:c, :d, :e, :f, :g, :a].tick   # this now play every *other* note just once,
-#   # then rests
-#   sleep 1
-#   end
+#     live_loop :odd_scale do
+#       tick  # Increment the default tick
+#       play [:c, :d, :e, :f, :g, :a].tick   # this now play every *other* note just once,
+#                                            # then rests
+#       sleep 1
+#     end
 #
 # @example
 #   # Ticks work wonderfully with rings
-#   # as the ring ensures the tick wraps
-#   # round internally always returning a
-#   # value
-#   live_loop :looped_scale do
-#   play (ring :c, :d, :e, :f, :g).tick   # play all notes just once, then repeats
-#   sleep 1
-#   end
+#     # as the ring ensures the tick wraps
+#     # round internally always returning a
+#     # value
+#     live_loop :looped_scale do
+#       play (ring :c, :d, :e, :f, :g).tick   # play all notes just once, then repeats
+#       sleep 1
+#     end
 #
 # @example
 #   # Ticks work wonderfully with scales
-#   # which are also rings
-#   live_loop :looped_scale do
-#   play (scale :e3, :minor_pentatonic).tick   # play all notes just once, then repeats
-#   sleep 0.25
-#   end
+#     # which are also rings
+#     live_loop :looped_scale do
+#       play (scale :e3, :minor_pentatonic).tick   # play all notes just once, then repeats
+#       sleep 0.25
+#     end
 #
-def tick(_key, step: nil, offset: nil)
+def tick(_key = nil, step: nil, offset: nil)
   #This is a stub, used for indexing
 end
 
@@ -5483,25 +5441,25 @@ end
 # @introduced 2.6.0
 # @example
 #   # increment default tick a few times
-#   tick
-#   tick
-#   tick
-#   puts look #=> 2 (default tick is now 2)
-#   tick_set 0 # default tick is now 0
-#   puts look #=> 0 (default tick is now 0
+#     tick
+#     tick
+#     tick
+#     puts look #=> 2 (default tick is now 2)
+#     tick_set 0 # default tick is now 0
+#     puts look #=> 0 (default tick is now 0
 #
 # @example
 #   # increment tick :foo a few times
-#   tick :foo
-#   tick :foo
-#   tick :foo
-#   puts look(:foo) #=> 2 (tick :foo is now 2)
-#   tick_set 0 # default tick is now 0
-#   puts look(:foo) #=> 2 (tick :foo is still 2)
-#   tick_set :foo, 0 #  reset tick :foo
-#   puts look(:foo) #=> 0 (tick :foo is now 0)
+#     tick :foo
+#     tick :foo
+#     tick :foo
+#     puts look(:foo) #=> 2 (tick :foo is now 2)
+#     tick_set 0 # default tick is now 0
+#     puts look(:foo) #=> 2 (tick :foo is still 2)
+#     tick_set :foo, 0 #  reset tick :foo
+#     puts look(:foo) #=> 0 (tick :foo is now 0)
 #
-def tick_reset()
+def tick_reset
   #This is a stub, used for indexing
 end
 
@@ -5511,17 +5469,17 @@ end
 # @introduced 2.6.0
 # @example
 #   tick      # increment default tick and tick :foo
-#   tick
-#   tick :foo
-#   tick :foo
-#   tick :foo
-#   puts look #=> 1
-#   puts look(:foo) #=> 2
-#   tick_reset_all
-#   puts look #=> 0
-#   puts look(:foo) #=> 0
+#     tick
+#     tick :foo
+#     tick :foo
+#     tick :foo
+#     puts look #=> 1
+#     puts look(:foo) #=> 2
+#     tick_reset_all
+#     puts look #=> 0
+#     puts look(:foo) #=> 0
 #
-def tick_reset_all()
+def tick_reset_all
   #This is a stub, used for indexing
 end
 
@@ -5532,14 +5490,14 @@ end
 # @introduced 2.6.0
 # @example
 #   tick_set 40 # set default tick to 40
-#   puts look   #=> 40
+#     puts look   #=> 40
 #
 # @example
 #   tick_set :foo, 40 # set tick :foo to 40
-#   puts look(:foo)   #=> 40 (tick :foo is now 40)
-#   puts look         #=> 0 (default tick is unaffected)
+#     puts look(:foo)   #=> 40 (tick :foo is now 40)
+#     puts look         #=> 0 (default tick is unaffected)
 #
-def tick_set(_value)
+def tick_set(_value = nil)
   #This is a stub, used for indexing
 end
 
@@ -5565,18 +5523,17 @@ end
 #   play 75            #=> plays at time 1
 #   
 #   time_warp 0.1 do
-#   # time shifts forward by 0.1 beats
-#   play 80          #=> plays at 1.1
-#   sleep 0.5
-#   play 80          #=> plays at 1.6
-#   
-#   end                # time shifts back by 0.6 beats
-#   
-#   # we now honour the original sleep 1 and the
-#   # sleep 0.5 within the time_warp block is
-#   # ignored including the 0.1 shift offset
-#   
-#   play 70            #=> plays at 1
+#                      # time shifts forward by 0.1 beats
+#     play 80          #=> plays at 1.1
+#     sleep 0.5
+#     play 80          #=> plays at 1.6
+#                      # time shifts back by 0.1 beats
+#                      # however, the sleep 0.5 is still accounted for
+#   end
+#                      # we now honour the original sleep 1 and the
+#                      # sleep 0.5 within the time_warp block, but
+#                      # any time shift delta has been removed
+#   play 70            #=> plays at 1.5
 #
 # @example
 #   # shift backwards in time
@@ -5586,16 +5543,17 @@ end
 #   play 75            #=> plays at time 1
 #   
 #   time_warp -0.1 do
-#   # time shifts backwards by 0.1 beats
-#   play 80          #=> plays at 0.9
-#   sleep 0.5
-#   play 80          #=> plays at 1.4
-#   # time shifts forward by 0.1 beats
+#                      # time shifts backwards by 0.1 beats
+#     play 80          #=> plays at 0.9
+#     sleep 0.5
+#     play 80          #=> plays at 1.4
+#                      # time shifts forward by 0.1 beats
+#                      # however, the sleep 0.5 is still accounted for
 #   end
-#   # we now honour the original sleep 1 and the
-#   # sleep 0.5 within the time_warp block is
-#   # ignored, including the -0.1 offset
-#   play 70            #=> plays at 1
+#                      # we now honour the original sleep 1 and the
+#                      # sleep 0.5 within the time_warp block, but
+#                      # any time shift delta has been removed
+#   play 70            #=> plays at 1.5
 #
 # @example
 #   # Ticks count linearly through time_warp
@@ -5605,7 +5563,7 @@ end
 #   sleep 1
 #   
 #   time_warp 2 do
-#   puts tick        #=> prints 1 (at time 3)
+#     puts tick        #=> prints 1 (at time 3)
 #   end
 #   
 #   sleep 0.5
@@ -5620,15 +5578,15 @@ end
 #   puts tick          #=> prints 1 (at time 0.5)
 #   
 #   time_warp 2 do
-#   puts tick        #=> prints 2 (at time 2.5)
-#   sleep 0.5
-#   puts tick        #=> prints 3 (at time 3)
+#     puts tick        #=> prints 2 (at time 2.5)
+#     sleep 0.5
+#     puts tick        #=> prints 3 (at time 3)
 #   end
 #   
 #   at 3 do            # the at will reset all thread locals
-#   puts tick        #=> prints 0 (At time 3.5)
-#   sleep 0.5
-#   puts tick        #=> prints 1 (At time 4)
+#     puts tick        #=> prints 0 (At time 3.5)
+#     sleep 0.5
+#     puts tick        #=> prints 1 (At time 4)
 #   end
 #   
 #   sleep 0.5
@@ -5638,13 +5596,13 @@ end
 # @example
 #   # Time Warp within Density
 #   density 2 do                        # Typically this will double the BPM and affect all times
-#   # in addition to looping the internal block twice
-#   time_warp 0.5 do                  # However, this time is *not* affected and will remain 0.5
-#   with_fx :slicer, phase: 0.5 do  # This phase duration *is* affected and will be 0.25
-#   play 60
-#   sleep 1                       # This time *will* be affected by the density and be 0.5
-#   end
-#   end
+#                                       # in addition to looping the internal block twice
+#     time_warp 0.5 do                  # However, this time is *not* affected and will remain 0.5
+#       with_fx :slicer, phase: 0.5 do  # This phase duration *is* affected and will be 0.25
+#         play 60
+#         sleep 1                       # This time *will* be affected by the density and be 0.5
+#       end
+#     end
 #   
 #   end
 #
@@ -5652,61 +5610,61 @@ end
 #   # Time Warp with lists of times
 #   
 #   time_warp [0, 1, 2, 3] do
-#   puts "hello"                # Will print "hello" at 0, 1, 2, and 3 seconds
+#     puts "hello"                # Will print "hello" at 0, 1, 2, and 3 seconds
 #   end
-#   # Notice that the run completes before all the
-#   # messages have been delivered. This is because it
-#   # schedules all the messages at once so the program
-#   # can complete immediately. This is unlike at which
-#   # would appear to behave similarly, but would wait
-#   # for all messages to be delivered (on time) before
-#   # allowing the program to complete.
+#                                   # Notice that the run completes before all the
+#                                   # messages have been delivered. This is because it
+#                                   # schedules all the messages at once so the program
+#                                   # can complete immediately. This is unlike at which
+#                                   # would appear to behave similarly, but would wait
+#                                   # for all messages to be delivered (on time) before
+#                                   # allowing the program to complete.
 #
 # @example
 #   time_warp [1, 2, 4] do  # plays a note after waiting 1 beat,
-#   play 75                # then after 1 more beat,
-#   end                      # then after 2 more beats (4 beats total)
+#       play 75                # then after 1 more beat,
+#     end                      # then after 2 more beats (4 beats total)
 #
 # @example
 #   time_warp [1, 2, 3], [75, 76, 77] do |n|  # plays 3 different notes
-#   play n
-#   end
+#       play n
+#     end
 #
 # @example
 #   time_warp [1, 2, 3],
-#   [{:amp=>0.5}, {:amp=> 0.8}] do |p| # alternate soft and loud
-#   sample :drum_cymbal_open, p          # cymbal hits three times
-#   end
+#         [{:amp=>0.5}, {:amp=> 0.8}] do |p| # alternate soft and loud
+#       sample :drum_cymbal_open, p          # cymbal hits three times
+#     end
 #
 # @example
 #   time_warp [0, 1, 2] do |t| # when no params are given to at, the times are fed through to the block
-#   puts t #=> prints 0, 1, then 2
-#   end
+#       puts t #=> prints 0, 1, then 2
+#     end
 #
 # @example
 #   time_warp [0, 1, 2], [:a, :b] do |t, b|  # If you specify the block with 2 args, it will pass through both the time and the param
-#   puts [t, b] #=> prints out [0, :a], [1, :b], then [2, :a]
-#   end
+#       puts [t, b] #=> prints out [0, :a], [1, :b], then [2, :a]
+#     end
 #
 # @example
 #   time_warp [0, 0.5, 2] do |t, idx|  # If you specify the block with 2 args, and no param list to at, it will pass through both the time and the index
-#   puts [t, idx] #=> prints out [0, 0], [0.5, 1], then [2, 2]
-#   end
+#       puts [t, idx] #=> prints out [0, 0], [0.5, 1], then [2, 2]
+#     end
 #
 # @example
 #   time_warp [0, 0.5, 2], [:a, :b] do |t, b, idx|  # If you specify the block with 3 args, it will pass through the time, the param and the index
-#   puts [t, b, idx] #=> prints out [0, :a, 0], [0.5, :b, 1], then [2, :a, 2]
-#   end
+#       puts [t, b, idx] #=> prints out [0, :a, 0], [0.5, :b, 1], then [2, :a, 2]
+#     end
 #
 # @example
 #   # time_warp consumes & interferes with the outer random stream
 #   puts "main: ", rand  # 0.75006103515625
 #   rand_back
 #   time_warp 1 do         # the random stream inside the at block is the
-#   # same as the one in the outer block
-#   puts "time_warp:", rand # 0.75006103515625
-#   puts "time_warp:", rand # 0.733917236328125
-#   rand_back           # undo last call to rand
+#                          # same as the one in the outer block
+#     puts "time_warp:", rand # 0.75006103515625
+#     puts "time_warp:", rand # 0.733917236328125
+#     rand_back           # undo last call to rand
 #   end
 #   
 #   sleep 2
@@ -5714,18 +5672,18 @@ end
 #
 # @example
 #   # Each block run inherits the same thread locals from the previous one.
-#   # This means things like the thread local counters can flow through
-#   # time warp iterations:
+#               # This means things like the thread local counters can flow through
+#               # time warp iterations:
 #   time_warp [0, 2] do
-#   # first time round (after 1 beat) prints:
-#   puts tick # 0
-#   puts tick # 1
+#               # first time round (after 1 beat) prints:
+#     puts tick # 0
+#     puts tick # 1
 #   end
-#   # second time round (after 2 beats) prints:
-#   # 2
-#   # 3
+#               # second time round (after 2 beats) prints:
+#               # 2
+#               # 3
 #
-def time_warp(_delta_time)
+def time_warp(_delta_time = nil)
   #This is a stub, used for indexing
 end
 
@@ -5735,12 +5693,12 @@ end
 # @introduced 2.0.0
 # @example
 #   uncomment do # starting a block level comment:
-#   play 50 # played
-#   sleep 1 # sleep happens
-#   play 62 # played
-#   end
+#       play 50 # played
+#       sleep 1 # sleep happens
+#       play 62 # played
+#     end
 #
-def uncomment()
+def uncomment
   #This is a stub, used for indexing
 end
 
@@ -5766,7 +5724,7 @@ end
 #   play 50, release: rt(2) # ** Warning: release is NOT 2 seconds! **
 #   sleep rt(2)             # still sleeps for 2 seconds
 #
-def use_arg_bpm_scaling(_bool)
+def use_arg_bpm_scaling(_bool = nil)
   #This is a stub, used for indexing
 end
 
@@ -5780,7 +5738,7 @@ end
 #   use_arg_checks false
 #   play 50, release: 5 # Args are not checked
 #
-def use_arg_checks(_true_or_false)
+def use_arg_checks(_true_or_false = nil)
   #This is a stub, used for indexing
 end
 
@@ -5801,30 +5759,30 @@ end
 # @introduced 2.0.0
 # @example
 #   # default tempo is 60 bpm
-#   4.times do
-#   play 50, attack: 0.5, release: 0.25 # attack is 0.5s and release is 0.25s
-#   sleep 1 # sleep for 1 second
-#   end
+#     4.times do
+#       play 50, attack: 0.5, release: 0.25 # attack is 0.5s and release is 0.25s
+#       sleep 1 # sleep for 1 second
+#     end
 #   
-#   sleep 2  # sleep for 2 seconds
+#     sleep 2  # sleep for 2 seconds
 #   
-#   # Let's make it go faster...
-#   use_bpm 120  # double the bpm
-#   4.times do
-#   play 62, attack: 0.5, release: 0.25 # attack is scaled to 0.25s and release is now 0.125s
-#   sleep 1 # actually sleeps for 0.5 seconds
-#   end
+#     # Let's make it go faster...
+#     use_bpm 120  # double the bpm
+#     4.times do
+#       play 62, attack: 0.5, release: 0.25 # attack is scaled to 0.25s and release is now 0.125s
+#       sleep 1 # actually sleeps for 0.5 seconds
+#     end
 #   
-#   sleep 2 # sleep for 1 second
+#     sleep 2 # sleep for 1 second
 #   
-#   # Let's make it go even faster...
-#   use_bpm 240  #  bpm is 4x original speed!
-#   8.times do
-#   play 62, attack: 0.5, release: 0.25 # attack is scaled to 0.125s and release is now 0.0625s
-#   sleep 1 # actually sleeps for 0.25 seconds
-#   end
+#     # Let's make it go even faster...
+#     use_bpm 240  #  bpm is 4x original speed!
+#     8.times do
+#       play 62, attack: 0.5, release: 0.25 # attack is scaled to 0.125s and release is now 0.0625s
+#       sleep 1 # actually sleeps for 0.25 seconds
+#     end
 #
-def use_bpm(_bpm)
+def use_bpm(_bpm = nil)
   #This is a stub, used for indexing
 end
 
@@ -5835,16 +5793,16 @@ end
 # @introduced 2.3.0
 # @example
 #   use_bpm 60   # Set the BPM to 60
-#   play 50
-#   sleep 1      # Sleeps for 1 seconds
-#   play 62
-#   sleep 2      # Sleeps for 2 seconds
-#   use_bpm_mul 0.5 # BPM is now (60 * 0.5) == 30
-#   play 50
-#   sleep 1           # Sleeps for 2 seconds
-#   play 62
+#     play 50
+#     sleep 1      # Sleeps for 1 seconds
+#     play 62
+#     sleep 2      # Sleeps for 2 seconds
+#     use_bpm_mul 0.5 # BPM is now (60 * 0.5) == 30
+#     play 50
+#     sleep 1           # Sleeps for 2 seconds
+#     play 62
 #
-def use_bpm_mul(_mul)
+def use_bpm_mul(_mul = nil)
   #This is a stub, used for indexing
 end
 
@@ -5860,7 +5818,7 @@ end
 #   use_cent_tuning 1
 #   play 50 # Plays note 50.01
 #
-def use_cent_tuning(_cent_shift)
+def use_cent_tuning(_cent_shift = nil)
   #This is a stub, used for indexing
 end
 
@@ -5875,7 +5833,7 @@ end
 # @example
 #   use_cue_logging false # Disable cue messages
 #
-def use_cue_logging(_true_or_false)
+def use_cue_logging(_true_or_false = nil)
   #This is a stub, used for indexing
 end
 
@@ -5890,7 +5848,7 @@ end
 # @example
 #   use_debug false # Disable debug messages
 #
-def use_debug(_true_or_false)
+def use_debug(_true_or_false = nil)
   #This is a stub, used for indexing
 end
 
@@ -5908,10 +5866,10 @@ end
 #   use_merged_midi_defaults channel: 1
 #   
 #   midi_note_on :e2 # Sends MIDI :e2 note_on to channel 1 on port "foo".
-#   # This is because the call to use_merged_midi_defaults overrode the
-#   # channel but not the port which got merged in.
+#                    # This is because the call to use_merged_midi_defaults overrode the
+#                    # channel but not the port which got merged in.
 #
-def use_merged_midi_defaults()
+def use_merged_midi_defaults
   #This is a stub, used for indexing
 end
 
@@ -5930,7 +5888,7 @@ end
 #   
 #   sample :loop_amen  # plays amen break with a cutoff of 90 and and an amp of 0.5 with defaults for rest of args
 #
-def use_merged_sample_defaults()
+def use_merged_sample_defaults
   #This is a stub, used for indexing
 end
 
@@ -5955,7 +5913,7 @@ end
 #   use_merged_synth_defaults amp: 0.7
 #   play 50 #=> Plays note 50 with amp 0.7, cutoff 80 and pan -1
 #
-def use_merged_synth_defaults()
+def use_merged_synth_defaults
   #This is a stub, used for indexing
 end
 
@@ -5974,7 +5932,7 @@ end
 #   
 #   midi_note_on :e2 # Sends MIDI :e2 note_on to channel 1. Note that the port is back to the default and no longer "foo".
 #
-def use_midi_defaults()
+def use_midi_defaults
   #This is a stub, used for indexing
 end
 
@@ -5989,7 +5947,7 @@ end
 # @example
 #   use_midi_logging false # Disable MIDI logging
 #
-def use_midi_logging(_true_or_false)
+def use_midi_logging(_true_or_false = nil)
   #This is a stub, used for indexing
 end
 
@@ -6011,7 +5969,7 @@ end
 #   use_octave 2
 #   play 62 # Plays note 86
 #
-def use_octave(_octave_shift)
+def use_octave(_octave_shift = nil)
   #This is a stub, used for indexing
 end
 
@@ -6035,27 +5993,27 @@ end
 #   
 #   use_osc "localhost", 7000  # Specify port 7000 on this machine
 #   osc "/foo/bar"             # Send an OSC message with path "/foo/bar"
-#   # and no arguments
+#                                # and no arguments
 #
 # @example
 #   # Send an OSC messages with arguments to another program on the same machine
 #   
 #   use_osc "localhost", 7000        # Specify port 7000 on this machine
 #   osc "/foo/bar" 1, 3.89, "baz"  # Send an OSC message with path "/foo/bar"
-#   # and three arguments:
-#   # 1) The whole number (integer) 1
-#   # 2) The fractional number (float) 3,89
-#   # 3) The string "baz"
+#                                      # and three arguments:
+#                                      # 1) The whole number (integer) 1
+#                                      # 2) The fractional number (float) 3,89
+#                                      # 3) The string "baz"
 #
 # @example
 #   # Send an OSC messages with arguments to another program on a different machine
 #   
 #   use_osc "10.0.1.5", 7000         # Specify port 7000 on the machine with address 10.0.1.5
 #   osc "/foo/bar" 1, 3.89, "baz"  # Send an OSC message with path "/foo/bar"
-#   # and three arguments:
-#   # 1) The whole number (integer) 1
-#   # 2) The fractional number (float) 3,89
-#   # 3) The string "baz"
+#                                      # and three arguments:
+#                                      # 1) The whole number (integer) 1
+#                                      # 2) The fractional number (float) 3,89
+#                                      # 3) The string "baz"
 #
 # @example
 #   # use_osc only affects calls to osc until the next call to use_osc
@@ -6074,26 +6032,26 @@ end
 #   use_osc "localhost", 7000  # Specify port 7000 on this machine
 #   
 #   live_loop :foo do
-#   osc "/foo/bar"             # Thread inherits outside use_osc values
-#   sleep 1                      # and therefore sends OSC messages to port 7000
+#     osc "/foo/bar"             # Thread inherits outside use_osc values
+#     sleep 1                      # and therefore sends OSC messages to port 7000
 #   end
 #   
 #   live_loop :bar do
-#   use_osc "localhost", 7005  # Override OSC hostname and port for just this
-#   # thread (live loop :bar). Live loop :foo is
-#   # unaffected.
+#     use_osc "localhost", 7005  # Override OSC hostname and port for just this
+#                                  # thread (live loop :bar). Live loop :foo is
+#                                  # unaffected.
 #   
-#   osc "/foo/bar"             # Send OSC messages to port 7005
-#   sleep 1
+#     osc "/foo/bar"             # Send OSC messages to port 7005
+#     sleep 1
 #   end
 #   
 #   use_osc "localhost", 7010  # Specify port 7010
 #   osc "/foo/baz"             # Send another OSC message to port 7010
-#   # Note that neither live loops :foo or :bar
-#   # are affected (their use_osc values are
-#   # independent and isolated.
+#                                # Note that neither live loops :foo or :bar
+#                                # are affected (their use_osc values are
+#                                # independent and isolated.
 #
-def use_osc(_hostname, _port)
+def use_osc(_hostname = nil, _port = nil)
   #This is a stub, used for indexing
 end
 
@@ -6108,7 +6066,7 @@ end
 # @example
 #   use_osc_logging false # Disable OSC logging
 #
-def use_osc_logging(_true_or_false)
+def use_osc_logging(_true_or_false = nil)
   #This is a stub, used for indexing
 end
 
@@ -6120,39 +6078,39 @@ end
 # @example
 #   ## Basic usage
 #   
-#   use_random_seed 1 # reset random seed to 1
-#   puts rand # => 0.417022004702574
-#   use_random_seed 1 # reset random seed back to 1
-#   puts rand  #=> 0.417022004702574
+#     use_random_seed 1 # reset random seed to 1
+#     puts rand # => 0.417022004702574
+#     use_random_seed 1 # reset random seed back to 1
+#     puts rand  #=> 0.417022004702574
 #
 # @example
 #   ## Generating melodies
-#   notes = (scale :eb3, :minor_pentatonic)  # Create a set of notes to choose from.
-#   # Scales work well for this
+#     notes = (scale :eb3, :minor_pentatonic)  # Create a set of notes to choose from.
+#                                              # Scales work well for this
 #   
-#   with_fx :reverb do
-#   live_loop :repeating_melody do         # Create a live loop
+#     with_fx :reverb do
+#       live_loop :repeating_melody do         # Create a live loop
 #   
-#   use_random_seed 300                  # Set the random seed to a known value every
-#   # time around the loop. This seed is the key
-#   # to our melody. Try changing the number to
-#   # something else. Different numbers produce
-#   # different melodies
+#         use_random_seed 300                  # Set the random seed to a known value every
+#                                              # time around the loop. This seed is the key
+#                                              # to our melody. Try changing the number to
+#                                              # something else. Different numbers produce
+#                                              # different melodies
 #   
-#   8.times do                           # Now iterate a number of times. The size of
-#   # the iteration will be the length of the
-#   # repeating melody.
+#         8.times do                           # Now iterate a number of times. The size of
+#                                              # the iteration will be the length of the
+#                                              # repeating melody.
 #   
-#   play notes.choose, release: 0.1    # 'Randomly' choose a note from our ring of
-#   # notes. See how this isn't actually random
-#   # but uses a reproducible method! These notes
-#   # are therefore repeated over and over...
-#   sleep 0.125
-#   end
-#   end
-#   end
+#           play notes.choose, release: 0.1    # 'Randomly' choose a note from our ring of
+#                                              # notes. See how this isn't actually random
+#                                              # but uses a reproducible method! These notes
+#                                              # are therefore repeated over and over...
+#           sleep 0.125
+#         end
+#       end
+#     end
 #
-def use_random_seed(_seed)
+def use_random_seed(_seed = nil)
   #This is a stub, used for indexing
 end
 
@@ -6162,45 +6120,44 @@ end
 # 
 # See `use_sched_ahead_time` for a version of this function which allows you to set the schedule ahead time to any arbitrary value. Note, `use_real_time` will override any value set with `set_sched_ahead_time!` for the current thread.
 # 
-# @param _ []
 # @accepts_block false
 # @introduced 3.0.0
 # @example
 #   use_real_time 1 # Code will now run approximately 1 second ahead of audio.
 #
-def use_real_time(_)
+def use_real_time
   #This is a stub, used for indexing
 end
 
 # Sample-duration-based bpm modification
 # Modify bpm so that sleeping for 1 will sleep for the duration of the sample.
 # @param _string_or_number [sample_name_or_duration]
-# @option opts :num_beats The number of beats within the sample. By default this is 1.
+# @param num_beats The number of beats within the sample. By default this is 1.
 # @accepts_block false
 # @introduced 2.1.0
 # @example
 #   use_sample_bpm :loop_amen  #Set bpm based on :loop_amen duration
 #   
 #   live_loop :dnb do
-#   sample :bass_dnb_f
-#   sample :loop_amen
-#   sleep 1                  #`sleep`ing for 1 actually sleeps for duration of :loop_amen
+#     sample :bass_dnb_f
+#     sample :loop_amen
+#     sleep 1                  #`sleep`ing for 1 actually sleeps for duration of :loop_amen
 #   end
 #
 # @example
 #   use_sample_bpm :loop_amen, num_beats: 4  # Set bpm based on :loop_amen duration
-#   # but also specify that the sample duration
-#   # is actually 4 beats long.
+#                                            # but also specify that the sample duration
+#                                            # is actually 4 beats long.
 #   
 #   live_loop :dnb do
-#   sample :bass_dnb_f
-#   sample :loop_amen
-#   sleep 4                  #`sleep`ing for 4 actually sleeps for duration of :loop_amen
-#   # as we specified that the sample consisted of
-#   # 4 beats
+#     sample :bass_dnb_f
+#     sample :loop_amen
+#     sleep 4                  #`sleep`ing for 4 actually sleeps for duration of :loop_amen
+#                              # as we specified that the sample consisted of
+#                              # 4 beats
 #   end
 #
-def use_sample_bpm(_string_or_number, num_beats: nil)
+def use_sample_bpm(_string_or_number = nil, num_beats: nil)
   #This is a stub, used for indexing
 end
 
@@ -6219,7 +6176,7 @@ end
 #   
 #   sample :loop_amen  # plays amen break with a cutoff of 90 and defaults for rest of args - note that amp is no longer 0.5
 #
-def use_sample_defaults()
+def use_sample_defaults
   #This is a stub, used for indexing
 end
 
@@ -6238,18 +6195,18 @@ end
 # @example
 #   # Each thread can have its own sched ahead time
 #   live_loop :foo do
-#   use_sched_ahead_time 1
-#   play 70                 # Note 70 will be played with 1 second latency
-#   sleep 1
+#     use_sched_ahead_time 1
+#     play 70                 # Note 70 will be played with 1 second latency
+#     sleep 1
 #   end
 #   
 #   live_loop :foo do
-#   use_sched_ahead_time 0.5 # Note 70 will be played with 0.5 second latency
-#   play 82
-#   sleep 1
+#     use_sched_ahead_time 0.5 # Note 70 will be played with 0.5 second latency
+#     play 82
+#     sleep 1
 #   end
 #
-def use_sched_ahead_time(_time)
+def use_sched_ahead_time(_time = nil)
   #This is a stub, used for indexing
 end
 
@@ -6263,7 +6220,7 @@ end
 #   use_synth :mod_sine
 #   play 50 # Plays with mod_sine synth
 #
-def use_synth(_synth_name)
+def use_synth(_synth_name = nil)
   #This is a stub, used for indexing
 end
 
@@ -6282,7 +6239,7 @@ end
 #   
 #   play 50 # plays note 50 with a cutoff of 90 and defaults for rest of args - note that amp is no longer 0.5
 #
-def use_synth_defaults()
+def use_synth_defaults
   #This is a stub, used for indexing
 end
 
@@ -6301,7 +6258,7 @@ end
 #   
 #   sample :loop_amen  #=> unless time is too far behind, this will trigger even when late.
 #
-def use_timing_guarantees(_bool)
+def use_timing_guarantees(_bool = nil)
   #This is a stub, used for indexing
 end
 
@@ -6323,7 +6280,7 @@ end
 #   use_transpose 3
 #   play 62 # Plays note 65
 #
-def use_transpose(_note_shift)
+def use_transpose(_note_shift = nil)
   #This is a stub, used for indexing
 end
 
@@ -6348,7 +6305,7 @@ end
 #   use_tuning :equal
 #   play 64 # Plays note 64
 #
-def use_tuning(_tuning, _fundamental_note)
+def use_tuning(_tuning = nil, _fundamental_note = nil)
   #This is a stub, used for indexing
 end
 
@@ -6378,7 +6335,7 @@ end
 # @example
 #   (vector 1, 2, 3)[-1000] #=> nil
 #
-def vector(_list)
+def vector(_list = nil)
   #This is a stub, used for indexing
 end
 
@@ -6398,7 +6355,7 @@ end
 # @example
 #   puts version.patch # => Prints out the patch level for this version such as 0
 #
-def version()
+def version
   #This is a stub, used for indexing
 end
 
@@ -6408,10 +6365,10 @@ end
 # @introduced 2.1.0
 # @example
 #   puts vt # prints 0
-#   sleep 1
-#   puts vt # prints 1
+#      sleep 1
+#      puts vt # prints 1
 #
-def vt()
+def vt
   #This is a stub, used for indexing
 end
 
@@ -6420,7 +6377,7 @@ end
 # @param _beats [number]
 # @accepts_block false
 # @introduced 2.0.0
-def wait(_beats)
+def wait(_beats = nil)
   #This is a stub, used for indexing
 end
 
@@ -6432,7 +6389,7 @@ end
 #   use_bpm 120
 #   play 50, release: 2 # release is actually 1 due to bpm scaling
 #   with_arg_bpm_scaling false do
-#   play 50, release: 2 # release is now 2
+#     play 50, release: 2 # release is now 2
 #   end
 #
 # @example
@@ -6441,11 +6398,11 @@ end
 #   play 50, release: rt(2)   # release is 2 seconds
 #   sleep rt(2)               # sleeps for 2 seconds
 #   with_arg_bpm_scaling false do
-#   play 50, release: rt(2) # ** Warning: release is NOT 2 seconds! **
-#   sleep rt(2)             # still sleeps for 2 seconds
+#     play 50, release: rt(2) # ** Warning: release is NOT 2 seconds! **
+#     sleep rt(2)             # still sleeps for 2 seconds
 #   end
 #
-def with_arg_bpm_scaling()
+def with_arg_bpm_scaling
   #This is a stub, used for indexing
 end
 
@@ -6461,16 +6418,16 @@ end
 #   play 80, cutoff: 100 # Args are checked
 #   
 #   with_arg_checks false do
-#   #Arg checking is now disabled
-#   play 50, release: 3 # Args are not checked
-#   sleep 1
-#   play 72             # Arg is not checked
+#     #Arg checking is now disabled
+#     play 50, release: 3 # Args are not checked
+#     sleep 1
+#     play 72             # Arg is not checked
 #   end
 #   
 #   # Arg checking is re-enabled
 #   play 90 # Args are checked
 #
-def with_arg_checks(_true_or_false)
+def with_arg_checks(_true_or_false = nil)
   #This is a stub, used for indexing
 end
 
@@ -6492,31 +6449,31 @@ end
 # @introduced 2.0.0
 # @example
 #   # default tempo is 60 bpm
-#   4.times do
-#   sample :drum_bass_hard
-#   sleep 1 # sleeps for 1 second
-#   end
+#     4.times do
+#       sample :drum_bass_hard
+#       sleep 1 # sleeps for 1 second
+#     end
 #   
-#   sleep 5 # sleeps for 5 seconds
+#     sleep 5 # sleeps for 5 seconds
 #   
-#   # with_bpm sets a tempo for everything between do ... end (a block)
-#   # Hear how it gets faster?
-#   with_bpm 120 do  # set bpm to be twice as fast
-#   4.times do
-#   sample :drum_bass_hard
-#   sleep 1 # now sleeps for 0.5 seconds
-#   end
-#   end
+#     # with_bpm sets a tempo for everything between do ... end (a block)
+#     # Hear how it gets faster?
+#     with_bpm 120 do  # set bpm to be twice as fast
+#       4.times do
+#         sample :drum_bass_hard
+#         sleep 1 # now sleeps for 0.5 seconds
+#       end
+#     end
 #   
-#   sleep 5
+#     sleep 5
 #   
-#   # bpm goes back to normal
-#   4.times do
-#   sample :drum_bass_hard
-#   sleep 1 # sleeps for 1 second
-#   end
+#     # bpm goes back to normal
+#     4.times do
+#       sample :drum_bass_hard
+#       sleep 1 # sleeps for 1 second
+#     end
 #
-def with_bpm(_bpm)
+def with_bpm(_bpm = nil)
   #This is a stub, used for indexing
 end
 
@@ -6527,18 +6484,18 @@ end
 # @introduced 2.3.0
 # @example
 #   use_bpm 60   # Set the BPM to 60
-#   play 50
-#   sleep 1      # Sleeps for 1 second
-#   play 62
-#   sleep 2      # Sleeps for 2 seconds
-#   with_bpm_mul 0.5 do # BPM is now (60 * 0.5) == 30
-#   play 50
-#   sleep 1           # Sleeps for 2 seconds
-#   play 62
-#   end
-#   sleep 1            # BPM is now back to 60, therefore sleep is 1 second
+#     play 50
+#     sleep 1      # Sleeps for 1 second
+#     play 62
+#     sleep 2      # Sleeps for 2 seconds
+#     with_bpm_mul 0.5 do # BPM is now (60 * 0.5) == 30
+#       play 50
+#       sleep 1           # Sleeps for 2 seconds
+#       play 62
+#     end
+#     sleep 1            # BPM is now back to 60, therefore sleep is 1 second
 #
-def with_bpm_mul(_mul)
+def with_bpm_mul(_mul = nil)
   #This is a stub, used for indexing
 end
 
@@ -6552,13 +6509,13 @@ end
 #   play 50 # Plays note 50.01
 #   
 #   with_cent_tuning 2 do
-#   play 50 # Plays note 50.02
+#     play 50 # Plays note 50.02
 #   end
 #   
 #   # Original cent tuning value is restored
 #   play 50 # Plays note 50.01
 #
-def with_cent_tuning(_cent_shift)
+def with_cent_tuning(_cent_shift = nil)
   #This is a stub, used for indexing
 end
 
@@ -6569,19 +6526,19 @@ end
 # @introduced 2.6.0
 # @example
 #   # Turn on debugging:
-#   use_cue_logging true
+#     use_cue_logging true
 #   
-#   cue :foo # cue message is printed to log
+#     cue :foo # cue message is printed to log
 #   
-#   with_cue_logging false do
-#   #Cue logging is now disabled
-#   cue :bar # cue *is* sent but not displayed in log
-#   end
-#   sleep 1
-#   # Debug is re-enabled
-#   cue :quux # cue is displayed in log
+#     with_cue_logging false do
+#       #Cue logging is now disabled
+#       cue :bar # cue *is* sent but not displayed in log
+#     end
+#     sleep 1
+#     # Debug is re-enabled
+#     cue :quux # cue is displayed in log
 #
-def with_cue_logging(_true_or_false)
+def with_cue_logging(_true_or_false = nil)
   #This is a stub, used for indexing
 end
 
@@ -6597,16 +6554,16 @@ end
 #   play 80 # Debug message is sent
 #   
 #   with_debug false do
-#   #Debug is now disabled
-#   play 50 # Debug message is not sent
-#   sleep 1
-#   play 72 # Debug message is not sent
+#     #Debug is now disabled
+#     play 50 # Debug message is not sent
+#     sleep 1
+#     play 72 # Debug message is not sent
 #   end
 #   
 #   # Debug is re-enabled
 #   play 90 # Debug message is sent
 #
-def with_debug(_true_or_false)
+def with_debug(_true_or_false = nil)
   #This is a stub, used for indexing
 end
 
@@ -6615,60 +6572,60 @@ end
 # 
 # For advanced control, it is also possible to modify the parameters of an effect within the body of the block. If you define the block with a single argument, the argument becomes a reference to the current effect and can be used to control its parameters (see examples).
 # @param _fx_name [symbol]
-# @option opts :reps Number of times to repeat the block in an iteration.
-# @option opts :kill_delay Amount of time to wait after all synths triggered by the block have completed before stopping and freeing the effect synthesiser.
+# @param reps Number of times to repeat the block in an iteration.
+# @param kill_delay Amount of time to wait after all synths triggered by the block have completed before stopping and freeing the effect synthesiser.
 # @accepts_block true
 # @introduced 2.0.0
 # @example
 #   # Basic usage
 #   with_fx :distortion do # Use the distortion effect with default parameters
-#   play 50 # => plays note 50 with distortion
-#   sleep 1
-#   sample :loop_amen # => plays the loop_amen sample with distortion too
+#     play 50 # => plays note 50 with distortion
+#     sleep 1
+#     sample :loop_amen # => plays the loop_amen sample with distortion too
 #   end
 #
 # @example
 #   # Specify effect parameters
 #   with_fx :level, amp: 0.3 do # Use the level effect with the amp parameter set to 0.3
-#   play 50
-#   sleep 1
-#   sample :loop_amen
+#     play 50
+#     sleep 1
+#     sample :loop_amen
 #   end
 #
 # @example
 #   # Controlling the effect parameters within the block
 #   with_fx :reverb, mix: 0.1 do |fx|
-#   # here we set the reverb level quite low to start with (0.1)
-#   # and we can change it later by using the 'fx' reference we've set up
+#     # here we set the reverb level quite low to start with (0.1)
+#     # and we can change it later by using the 'fx' reference we've set up
 #   
-#   play 60 # plays note 60 with a little bit of reverb
-#   sleep 2
+#     play 60 # plays note 60 with a little bit of reverb
+#     sleep 2
 #   
-#   control fx, mix: 0.5 # change the parameters of the effect to add more reverb
-#   play 60 # again note 60 but with more reverb
-#   sleep 2
+#     control fx, mix: 0.5 # change the parameters of the effect to add more reverb
+#     play 60 # again note 60 but with more reverb
+#     sleep 2
 #   
-#   control fx, mix: 1 # change the parameters of the effect to add more reverb
-#   play 60 # plays note 60 with loads of reverb
-#   sleep 2
+#     control fx, mix: 1 # change the parameters of the effect to add more reverb
+#     play 60 # plays note 60 with loads of reverb
+#     sleep 2
 #   end
 #
 # @example
 #   # Repeat the block 16 times internally
 #   with_fx :reverb, reps: 16 do
-#   play (scale :e3, :minor_pentatonic), release: 0.1
-#   sleep 0.125
+#     play (scale :e3, :minor_pentatonic), release: 0.1
+#     sleep 0.125
 #   end
 #   
 #   # The above is a shorthand for this:
 #   with_fx :reverb do
-#   16.times do
-#   play (scale :e3, :minor_pentatonic), release: 0.1
-#   sleep 0.125
-#   end
+#     16.times do
+#       play (scale :e3, :minor_pentatonic), release: 0.1
+#       sleep 0.125
+#     end
 #   end
 #
-def with_fx(_fx_name, reps: nil, kill_delay: nil)
+def with_fx(_fx_name = nil, reps: nil, kill_delay: nil)
   #This is a stub, used for indexing
 end
 
@@ -6685,16 +6642,16 @@ end
 #   
 #   with_merged_midi_defaults channel: 1 do
 #   
-#   midi_note_on :e2 # Sends MIDI :e2 note_on to channel 1 on port "foo".
-#   # This is because the call to use_merged_midi_defaults overrode the
-#   # channel but not the port which got merged in.
+#     midi_note_on :e2 # Sends MIDI :e2 note_on to channel 1 on port "foo".
+#                      # This is because the call to use_merged_midi_defaults overrode the
+#                      # channel but not the port which got merged in.
 #   end
 #   
 #   midi_note_on :e2 # Sends MIDI :e2 note_on to channel 3 on port "foo".
-#   # This is because the previous defaults were restored after
-#   # the call to with_merged_midi_defaults.
+#                    # This is because the previous defaults were restored after
+#                    # the call to with_merged_midi_defaults.
 #
-def with_merged_midi_defaults()
+def with_merged_midi_defaults
   #This is a stub, used for indexing
 end
 
@@ -6710,12 +6667,12 @@ end
 #   sample :loop_amen # plays amen break with an amp of 0.5, cutoff of 70 and defaults for rest of args
 #   
 #   with_merged_sample_defaults cutoff: 90 do
-#   sample :loop_amen  # plays amen break with a cutoff of 90 and amp of 0.5
+#     sample :loop_amen  # plays amen break with a cutoff of 90 and amp of 0.5
 #   end
 #   
 #   sample :loop_amen  # plays amen break with a cutoff of 70 and amp is 0.5 again as the previous defaults are restored.
 #
-def with_merged_sample_defaults()
+def with_merged_sample_defaults
   #This is a stub, used for indexing
 end
 
@@ -6725,23 +6682,23 @@ end
 # @introduced 2.0.0
 # @example
 #   with_merged_synth_defaults amp: 0.5, pan: 1 do
-#   play 50 # => plays note 50 with amp 0.5 and pan 1
+#     play 50 # => plays note 50 with amp 0.5 and pan 1
 #   end
 #
 # @example
 #   play 50 #=> plays note 50
 #   with_merged_synth_defaults amp: 0.5 do
-#   play 50 #=> plays note 50 with amp 0.5
+#     play 50 #=> plays note 50 with amp 0.5
 #   
-#   with_merged_synth_defaults pan: -1 do
-#   with_merged_synth_defaults amp: 0.7 do
-#   play 50 #=> plays note 50 with amp 0.7 and pan -1
-#   end
-#   end
-#   play 50 #=> plays note 50 with amp 0.5
+#     with_merged_synth_defaults pan: -1 do
+#       with_merged_synth_defaults amp: 0.7 do
+#         play 50 #=> plays note 50 with amp 0.7 and pan -1
+#       end
+#     end
+#     play 50 #=> plays note 50 with amp 0.5
 #   end
 #
-def with_merged_synth_defaults()
+def with_merged_synth_defaults
   #This is a stub, used for indexing
 end
 
@@ -6753,20 +6710,20 @@ end
 #   midi_note_on :e1 # Sends MIDI :e1 note on with default opts
 #   
 #   with_midi_defaults channel: 3, port: "foo" do
-#   midi_note_on :e3 # Sends MIDI :e3 note on to channel 3 on port "foo"
+#     midi_note_on :e3 # Sends MIDI :e3 note on to channel 3 on port "foo"
 #   end
 #   
 #   use_midi_defaults channel: 1   # this will be overridden by the following
 #   
 #   with_midi_defaults channel: 5 do
-#   midi_note_on :e2 # Sends MIDI :e2 note on to channel 5.
-#   # Note that the port is back to the default
+#     midi_note_on :e2 # Sends MIDI :e2 note on to channel 5.
+#                      # Note that the port is back to the default
 #   end
 #   
-#   midi_note_on :e4 # Sends MIDI :e4 note on to channel 1
-#   # Note that the call to use_midi_defaults is now honoured.
+#     midi_note_on :e4 # Sends MIDI :e4 note on to channel 1
+#                      # Note that the call to use_midi_defaults is now honoured.
 #
-def with_midi_defaults()
+def with_midi_defaults
   #This is a stub, used for indexing
 end
 
@@ -6777,19 +6734,19 @@ end
 # @introduced 3.0.0
 # @example
 #   # Turn on MIDI logging:
-#   use_midi_logging true
+#     use_midi_logging true
 #   
-#   midi :e1 #  message is printed to log
+#     midi :e1 #  message is printed to log
 #   
-#   with_midi_logging false do
-#   #MIDI logging is now disabled
-#   midi :f2 # MIDI message *is* sent but not displayed in log
-#   end
-#   sleep 1
-#   # Debug is re-enabled
-#   midi :G3 # message is displayed in log
+#     with_midi_logging false do
+#       #MIDI logging is now disabled
+#       midi :f2 # MIDI message *is* sent but not displayed in log
+#     end
+#     sleep 1
+#     # Debug is re-enabled
+#     midi :G3 # message is displayed in log
 #
-def with_midi_logging(_true_or_false)
+def with_midi_logging(_true_or_false = nil)
   #This is a stub, used for indexing
 end
 
@@ -6802,12 +6759,12 @@ end
 #   play 50 # Plays note 50
 #   sleep 1
 #   with_octave 1 do
-#   play 50 # Plays note 62
+#    play 50 # Plays note 62
 #   end
 #   sleep 1
 #   play 50 # Plays note 50
 #
-def with_octave(_octave_shift)
+def with_octave(_octave_shift = nil)
   #This is a stub, used for indexing
 end
 
@@ -6822,15 +6779,15 @@ end
 #   osc "/foo/baz"             # Send an OSC message to port 7000
 #   
 #   with_osc "localhost", 7010 do # set hostname and port for the duration
-#   # of this do/end block
-#   osc "/foo/baz"             # Send an OSC message to port 7010
+#                                   # of this do/end block
+#      osc "/foo/baz"             # Send an OSC message to port 7010
 #   end
 #   
 #   osc "/foo/baz"             # Send an OSC message to port 7000
-#   # as old setting is restored outside
-#   # do/end block
+#                                # as old setting is restored outside
+#                                # do/end block
 #
-def with_osc(_hostname, _port)
+def with_osc(_hostname = nil, _port = nil)
   #This is a stub, used for indexing
 end
 
@@ -6841,19 +6798,19 @@ end
 # @introduced 3.0.0
 # @example
 #   # Turn on OSC logging:
-#   use_osc_logging true
+#     use_osc_logging true
 #   
-#   osc "/foo" #  message is printed to log
+#     osc "/foo" #  message is printed to log
 #   
-#   with_osc_logging false do
-#   #OSC logging is now disabled
-#   osc "/foo" # OSC message *is* sent but not displayed in log
-#   end
-#   sleep 1
-#   # Debug is re-enabled
-#   osc "/foo" # message is displayed in log
+#     with_osc_logging false do
+#       #OSC logging is now disabled
+#       osc "/foo" # OSC message *is* sent but not displayed in log
+#     end
+#     sleep 1
+#     # Debug is re-enabled
+#     osc "/foo" # message is displayed in log
 #
-def with_osc_logging(_true_or_false)
+def with_osc_logging(_true_or_false = nil)
   #This is a stub, used for indexing
 end
 
@@ -6864,51 +6821,51 @@ end
 # @introduced 2.0.0
 # @example
 #   use_random_seed 1 # reset random seed to 1
-#   puts rand # => 0.417022004702574
-#   puts rand  #=> 0.7203244934421581
-#   use_random_seed 1 # reset it back to 1
-#   puts rand # => 0.417022004702574
-#   with_random_seed 1 do # reset seed back to 1 just for this block
-#   puts rand # => 0.417022004702574
-#   puts rand #=> 0.7203244934421581
-#   end
-#   puts rand # => 0.7203244934421581
-#   # notice how the original generator is restored
+#     puts rand # => 0.417022004702574
+#     puts rand  #=> 0.7203244934421581
+#     use_random_seed 1 # reset it back to 1
+#     puts rand # => 0.417022004702574
+#     with_random_seed 1 do # reset seed back to 1 just for this block
+#       puts rand # => 0.417022004702574
+#       puts rand #=> 0.7203244934421581
+#     end
+#     puts rand # => 0.7203244934421581
+#               # notice how the original generator is restored
 #
 # @example
 #   ## Generating melodies
-#   notes = (scale :eb3, :minor_pentatonic, num_octaves: 2)  # Create a set of notes to choose from.
-#   # Scales work well for this
+#     notes = (scale :eb3, :minor_pentatonic, num_octaves: 2)  # Create a set of notes to choose from.
+#                                              # Scales work well for this
 #   
-#   with_fx :reverb do
-#   live_loop :repeating_melody do         # Create a live loop
+#     with_fx :reverb do
+#       live_loop :repeating_melody do         # Create a live loop
 #   
-#   with_random_seed 300 do              # Set the random seed to a known value every
-#   # time around the loop. This seed is the key
-#   # to our melody. Try changing the number to
-#   # something else. Different numbers produce
-#   # different melodies
+#         with_random_seed 300 do              # Set the random seed to a known value every
+#                                              # time around the loop. This seed is the key
+#                                              # to our melody. Try changing the number to
+#                                              # something else. Different numbers produce
+#                                              # different melodies
 #   
-#   8.times do                         # Now iterate a number of times. The size of
-#   # the iteration will be the length of the
-#   # repeating melody.
+#           8.times do                         # Now iterate a number of times. The size of
+#                                              # the iteration will be the length of the
+#                                              # repeating melody.
 #   
-#   play notes.choose, release: 0.1  # 'Randomly' choose a note from our ring of
-#   # notes. See how this isn't actually random
-#   # but uses a reproducible method! These notes
-#   # are therefore repeated over and over...
-#   sleep 0.125
-#   end
-#   end
+#             play notes.choose, release: 0.1  # 'Randomly' choose a note from our ring of
+#                                              # notes. See how this isn't actually random
+#                                              # but uses a reproducible method! These notes
+#                                              # are therefore repeated over and over...
+#             sleep 0.125
+#           end
+#         end
 #   
-#   play notes.choose, amp: 1.5, release: 0.5 # Note that this line is outside of
-#   # the with_random_seed block and therefore
-#   # the randomisation never gets reset and this
-#   # part of the melody never repeats.
-#   end
-#   end
+#         play notes.choose, amp: 1.5, release: 0.5 # Note that this line is outside of
+#                                                   # the with_random_seed block and therefore
+#                                                   # the randomisation never gets reset and this
+#                                                   # part of the melody never repeats.
+#       end
+#     end
 #
-def with_random_seed(_seed)
+def with_random_seed(_seed = nil)
   #This is a stub, used for indexing
 end
 
@@ -6919,45 +6876,44 @@ end
 # 
 # See `with_sched_ahead_time` for a version of this function which allows you to set the schedule ahead time to any arbitrary value. Note, `with_real_time` will override any value set with `set_sched_ahead_time!` for the current thread.
 # 
-# @param _ []
 # @accepts_block false
 # @introduced 3.0.0
 # @example
 #   use_real_time 1 # Code will now run approximately 1 second ahead of audio.
 #
-def with_real_time(_)
+def with_real_time
   #This is a stub, used for indexing
 end
 
 # Block-scoped sample-duration-based bpm modification
 # Block-scoped modification of bpm so that sleeping for 1 will sleep for the duration of the sample.
 # @param _string_or_number [sample_name_or_duration]
-# @option opts :num_beats The number of beats within the sample. By default this is 1.
+# @param num_beats The number of beats within the sample. By default this is 1.
 # @accepts_block true
 # @introduced 2.1.0
 # @example
 #   live_loop :dnb do
-#   with_sample_bpm :loop_amen do #Set bpm based on :loop_amen duration
-#   sample :bass_dnb_f
-#   sample :loop_amen
-#   sleep 1                     #`sleep`ing for 1 sleeps for duration of :loop_amen
-#   end
+#     with_sample_bpm :loop_amen do #Set bpm based on :loop_amen duration
+#       sample :bass_dnb_f
+#       sample :loop_amen
+#       sleep 1                     #`sleep`ing for 1 sleeps for duration of :loop_amen
+#     end
 #   end
 #
 # @example
 #   live_loop :dnb do
-#   with_sample_bpm :loop_amen, num_beats: 4 do # Set bpm based on :loop_amen duration
-#   # but also specify that the sample duration
-#   # is actually 4 beats long.
-#   sample :bass_dnb_f
-#   sample :loop_amen
-#   sleep 4                     #`sleep`ing for 4 sleeps for duration of :loop_amen
-#   # as we specified that the sample consisted of
-#   # 4 beats
-#   end
+#     with_sample_bpm :loop_amen, num_beats: 4 do # Set bpm based on :loop_amen duration
+#                                                 # but also specify that the sample duration
+#                                                 # is actually 4 beats long.
+#       sample :bass_dnb_f
+#       sample :loop_amen
+#       sleep 4                     #`sleep`ing for 4 sleeps for duration of :loop_amen
+#                                   # as we specified that the sample consisted of
+#                                   # 4 beats
+#     end
 #   end
 #
-def with_sample_bpm(_string_or_number, num_beats: nil)
+def with_sample_bpm(_string_or_number = nil, num_beats: nil)
   #This is a stub, used for indexing
 end
 
@@ -6973,12 +6929,12 @@ end
 #   sample :loop_amen # plays amen break with an amp of 0.5, cutoff of 70 and defaults for rest of args
 #   
 #   with_sample_defaults cutoff: 90 do
-#   sample :loop_amen  # plays amen break with a cutoff of 90 and defaults for rest of args - note that amp is no longer 0.5
+#     sample :loop_amen  # plays amen break with a cutoff of 90 and defaults for rest of args - note that amp is no longer 0.5
 #   end
 #   
 #   sample :loop_amen  # plays amen break with a cutoff of 70 and amp is 0.5 again as the previous defaults are restored.
 #
-def with_sample_defaults()
+def with_sample_defaults
   #This is a stub, used for indexing
 end
 
@@ -6993,12 +6949,12 @@ end
 # @introduced 3.0.0
 # @example
 #   with_sched_ahead_time 1 do
-#   play 70  # Sound will happen with a latency of 1
+#     play 70  # Sound will happen with a latency of 1
 #   end
 #   
 #   play 70  # Sound will happen with the default latency (0.5s)
 #
-def with_sched_ahead_time(_time)
+def with_sched_ahead_time(_time = nil)
   #This is a stub, used for indexing
 end
 
@@ -7007,66 +6963,66 @@ end
 # @param _shift [beats]
 # @param _pulse [number]
 # @param _tick [symbol]
-# @option opts :shift How much time to delay/forward the block. Greater values produce more emphasised swing. Defaults to 0.1 beats.
-# @option opts :pulse How often to apply the swing. Defaults to 4.
-# @option opts :tick A key for the tick with which to count pulses. Override this if you have more than one `with_swing` block in your `live_loop` or thread to stop them interfering with each other.
-# @option opts :offset Count offset - before modding the count with the pulse size - integer offset to add to the result of calling `tick` with the specified tick key (via the `tick:` opt)
+# @param shift How much time to delay/forward the block. Greater values produce more emphasised swing. Defaults to 0.1 beats.
+# @param pulse How often to apply the swing. Defaults to 4.
+# @param tick A key for the tick with which to count pulses. Override this if you have more than one `with_swing` block in your `live_loop` or thread to stop them interfering with each other.
+# @param offset Count offset - before modding the count with the pulse size - integer offset to add to the result of calling `tick` with the specified tick key (via the `tick:` opt)
 # @accepts_block false
 # @introduced 3.0.0
 # @example
 #   live_loop :foo do
-#   with_swing 0.1 do
-#   sample :elec_beep      # plays the :elec_beep sample late except for every 4th time
-#   end
-#   sleep 0.25
-#   end
-#
-# @example
-#   live_loop :foo do
-#   with_swing -0.1 do
-#   sample :elec_beep      # plays the :elec_beep sample slightly early
-#   end                      # except for every 4th time
-#   sleep 0.25
+#     with_swing 0.1 do
+#       sample :elec_beep      # plays the :elec_beep sample late except for every 4th time
+#     end
+#     sleep 0.25
 #   end
 #
 # @example
 #   live_loop :foo do
-#   with_swing -0.1, pulse: 8 do
-#   sample :elec_beep      # plays the :elec_beep sample slightly early
-#   end                      # except for every 8th time
-#   sleep 0.25
+#     with_swing -0.1 do
+#       sample :elec_beep      # plays the :elec_beep sample slightly early
+#     end                      # except for every 4th time
+#     sleep 0.25
+#   end
+#
+# @example
+#   live_loop :foo do
+#     with_swing -0.1, pulse: 8 do
+#       sample :elec_beep      # plays the :elec_beep sample slightly early
+#     end                      # except for every 8th time
+#     sleep 0.25
 #   end
 #
 # @example
 #   # Use unique tick names if you plan on using with_swing
 #   # more than once in any given live_loop or thread.
 #   live_loop :foo do
-#   with_swing 0.14, tick: :a do
-#   sample :elec_beep      # plays the :elec_beep sample slightly late
-#   end                      # except for every 4th time
+#     with_swing 0.14, tick: :a do
+#       sample :elec_beep      # plays the :elec_beep sample slightly late
+#     end                      # except for every 4th time
 #   
-#   with_swing -0.1, tick: :b do
-#   sample :elec_beep, rate: 2  # plays the :elec_beep sample at double rate
-#   end                           #  slightly early except for every 4th time
-#   sleep 0.25
+#     with_swing -0.1, tick: :b do
+#       sample :elec_beep, rate: 2  # plays the :elec_beep sample at double rate
+#     end                           #  slightly early except for every 4th time
+#     sleep 0.25
 #   end
 #
 # @example
 #   live_loop :foo do
-#   with_swing 0.1 do
-#   cue :tick              # send out cue messages with swing timing
-#   end
-#   sleep 0.25
+#     with_swing 0.1 do
+#       cue :tick              # send out cue messages with swing timing
+#     end
+#     sleep 0.25
 #   end
 #   
 #   live_loop :bar do
-#   sync :tick
-#   sample :elec_beep       # sync on the swing cue messages to bring the swing into
-#   # another live loop (sync will match the timing and clock of
-#   # the sending live loop)
+#     sync :tick
+#     sample :elec_beep       # sync on the swing cue messages to bring the swing into
+#                             # another live loop (sync will match the timing and clock of
+#                             # the sending live loop)
 #   end
 #
-def with_swing(_shift, _pulse, _tick, shift: nil, pulse: nil, tick: nil, offset: nil)
+def with_swing(_shift = nil, _pulse = nil, _tick = nil, shift: nil, pulse: nil, tick: nil, offset: nil)
   #This is a stub, used for indexing
 end
 
@@ -7082,13 +7038,13 @@ end
 #   play 50 # Plays with supersaw synth
 #   sleep 2
 #   with_synth :saw_beep do
-#   play 50 # Plays with saw_beep synth
+#     play 50 # Plays with saw_beep synth
 #   end
 #   sleep 2
 #   # Previous synth is restored
 #   play 50 # Plays with supersaw synth
 #
-def with_synth(_synth_name)
+def with_synth(_synth_name = nil)
   #This is a stub, used for indexing
 end
 
@@ -7104,12 +7060,12 @@ end
 #   play 50 # plays note 50 with an amp of 0.5, pan of -1 and defaults for rest of args
 #   
 #   with_synth_defaults amp: 0.6, cutoff: 80 do
-#   play 50 # plays note 50 with an amp of 0.6, cutoff of 80 and defaults for rest of args (including pan)
+#     play 50 # plays note 50 with an amp of 0.6, cutoff of 80 and defaults for rest of args (including pan)
 #   end
 #   
 #   play 60 # plays note 60 with an amp of 0.5, pan of -1 and defaults for rest of args
 #
-def with_synth_defaults()
+def with_synth_defaults
   #This is a stub, used for indexing
 end
 
@@ -7120,15 +7076,15 @@ end
 # @introduced 2.10.0
 # @example
 #   with_timing_guarantees true
-#   sample :loop_amen  #=> if time is behind by any margin, this will not trigger
+#     sample :loop_amen  #=> if time is behind by any margin, this will not trigger
 #   end
 #
 # @example
 #   with_timing_guarantees false
-#   sample :loop_amen  #=> unless time is too far behind, this will trigger even when late.
+#     sample :loop_amen  #=> unless time is too far behind, this will trigger even when late.
 #   end
 #
-def with_timing_guarantees(_bool)
+def with_timing_guarantees(_bool = nil)
   #This is a stub, used for indexing
 end
 
@@ -7142,15 +7098,15 @@ end
 #   play 62 # Plays note 65
 #   
 #   with_transpose 12 do
-#   play 50 # Plays note 62
-#   sleep 1
-#   play 72 # Plays note 84
+#     play 50 # Plays note 62
+#     sleep 1
+#     play 72 # Plays note 84
 #   end
 #   
 #   # Original transpose value is restored
 #   play 80 # Plays note 83
 #
-def with_transpose(_note_shift)
+def with_transpose(_note_shift = nil)
   #This is a stub, used for indexing
 end
 
@@ -7164,14 +7120,14 @@ end
 #   use_tuning :equal, :c
 #   play :e4 # Plays note 64
 #   with_tuning :just, :c do
-#   play :e4 # Plays note 63.8631
-#   sleep 1
-#   play :c4 # Plays note 60
+#     play :e4 # Plays note 63.8631
+#     sleep 1
+#     play :c4 # Plays note 60
 #   end
 #   # Original tuning value is restored
 #   play :e4 # Plays note 64
 #
-def with_tuning(_tuning, _fundamental_note)
+def with_tuning(_tuning = nil, _fundamental_note = nil)
   #This is a stub, used for indexing
 end
 

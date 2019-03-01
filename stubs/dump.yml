@@ -247,25 +247,6 @@
     play 60
     sleep 1
     end # will play 60 8 times
-- :name: :eval_file
-  :introduced: !ruby/struct:Sandbox::SonicPi::Version
-    x: 3
-    y: 2
-    z: 0
-  :summary: Evaluate the contents of the file inline in the current thread like a
-    function.
-  :args:
-  - - :filename
-    - :path
-  :returns: 
-  :opts: 
-  :accepts_block: false
-  :doc: Reads the full contents of the file with `path` and executes within the current
-    thread like a function call.
-  :examples:
-  - |2-
-
-    eval_file "~/path/to/sonic-pi-code.rb" #=> will run the contents of this file
 - :name: :use_osc_logging
   :introduced: !ruby/struct:Sandbox::SonicPi::Version
     x: 3
@@ -701,14 +682,13 @@
       play 80          #=> plays at 1.1
       sleep 0.5
       play 80          #=> plays at 1.6
-
-    end                # time shifts back by 0.6 beats
-
+                       # time shifts back by 0.1 beats
+                       # however, the sleep 0.5 is still accounted for
+    end
                        # we now honour the original sleep 1 and the
-                       # sleep 0.5 within the time_warp block is
-                       # ignored including the 0.1 shift offset
-
-    play 70            #=> plays at 1
+                       # sleep 0.5 within the time_warp block, but
+                       # any time shift delta has been removed
+    play 70            #=> plays at 1.5
   - |-
     # shift backwards in time
 
@@ -722,11 +702,12 @@
       sleep 0.5
       play 80          #=> plays at 1.4
                        # time shifts forward by 0.1 beats
+                       # however, the sleep 0.5 is still accounted for
     end
                        # we now honour the original sleep 1 and the
-                       # sleep 0.5 within the time_warp block is
-                       # ignored, including the -0.1 offset
-    play 70            #=> plays at 1
+                       # sleep 0.5 within the time_warp block, but
+                       # any time shift delta has been removed
+    play 70            #=> plays at 1.5
   - |-
     # Ticks count linearly through time_warp
 
@@ -934,10 +915,6 @@
   - "\n  puts tick(:foo) #=> 0 # named ticks have their own counts\n  puts tick(:foo)
     #=> 1\n  puts tick(:foo) #=> 2\n  puts tick(:bar) #=> 0 # tick :bar is independent
     of tick :foo\n  "
-  - "\n  # You can tick by more than increments of 1\n  # using the step: opt\n\n
-    \ puts tick             #=> 0\n  puts tick             #=> 1\n  puts tick             #=>
-    2\n  puts tick(step: 2)    #=> 4\n  puts tick(step: 2)    #=> 6\n  puts tick(step:
-    10)   #=> 16\n  puts tick             #=> 17\n  "
   - " # Each_live loop has its own separate ticks\n  live_loop :fast_tick do\n    puts
     tick   # the fast_tick live_loop's tick will\n    sleep 2     # be updated every
     2 seconds\n  end\n\n  live_loop :slow_tick do\n    puts tick   # the slow_tick
@@ -1259,8 +1236,8 @@
   :accepts_block: false
   :memoize: true
   :doc: Create a ring buffer representing a straight line between start and finish
-    of steps elements. Steps defaults to `4`. Indexes wrap around positively and negatively.
-    Similar to `range`.
+    of num_slices elements. Num slices defaults to `8`. Indexes wrap around positively
+    and negatively. Similar to `range`.
   :examples:
   - "(line 0, 4, steps: 4)    #=> (ring 0.0, 1.0, 2.0, 3.0)"
   - "(line 5, 0, steps: 5)    #=> (ring 5.0, 4.0, 3.0, 2.0, 1.0)"
@@ -2307,8 +2284,8 @@
       print rand_look(0.5) #=> will print a number like 0.375030517578125 to the output pane
       print rand_look(0.5) #=> will print the same number again
       print rand_look(0.5) #=> will print the same number again
-      print rand(0.5) #=> will print a different random number
-      print rand_look(0.5) #=> will print the same number as the previous line again.
+      print rand_(0.5) #=> will print a different random number
+      print rand_look(0.5) #=> will print the same number as the prevoius line again.
 - :name: :rand_i_look
   :introduced: !ruby/struct:Sandbox::SonicPi::Version
     x: 2
@@ -4712,13 +4689,8 @@
     z: 0
   :summary: A named audio stream live from your soundcard
   :args:
-  - - :name
-    - :symbol
+  - []
   :returns: :SynthNode
-  :opts:
-    :input: The audio card input to read audio from.
-    :stereo: If set to truthy value (true, 1) will read from two consecutive audio
-      card inputs.
   :accepts_block: false
   :args_size: 0
   :opts_keys:
@@ -4880,14 +4852,8 @@
     z: 0
   :summary: Intialise or return named buffer
   :args:
-  - - :symbol
-    - :name
-  - - :number
-    - :duration
-  :alt_args:
-  - - :symbol
-    - :name
-  :returns: :buffer
+  - []
+  :returns: 
   :opts: 
   :accepts_block: false
   :doc: Initialise or return a named buffer with a specific duration (defaults to
@@ -7176,7 +7142,7 @@
   - |2-
 
     # External samples
-    sample "/path/to/sample.wav"                          # Play any Wav, Aif, Ogg, Oga, or FLAC sample on your computer
+    sample "/path/to/sample.wav"                          # Play any Wav, Aif or FLAC sample on your computer
                                                             # by simply passing a string representing the full
                                                             # path
   - |2-
@@ -8017,6 +7983,41 @@
     `out_bus`. For example, the following synth would work nicely:\n\n\n    (\n    SynthDef(\\piTest,\n
     \            {|freq = 200, amp = 1, out_bus = 0 |\n               Out.ar(out_bus,\n
     \                     SinOsc.ar([freq,freq],0,0.5)* Line.kr(1, 0, 5, amp, doneAction:
+    2))}\n    ).writeDefFile(\"/Users/sam/Desktop/\")\n    )\n\n\n    "
+  :args:
+  - - :path
+    - :string
+  :opts: 
+  :accepts_block: false
+  :examples:
+  - 'load_synthdefs "~/Desktop/my_noises" # Load all synthdefs in my_noises folder'
+- :name: :scale_names
+  :introduced: !ruby/struct:Sandbox::SonicPi::Version
+    x: 2
+    y: 6
+    z: 0
+  :summary: All scale names
+  :doc: Returns a ring containing all scale names known to Sonic Pi
+  :args: []
+  :opts: 
+  :accepts_block: false
+  :memoize: true
+  :examples:
+  - 'puts scale_names #=>  prints a list of all the scales'
+- :name: :chord_names
+  :introduced: !ruby/struct:Sandbox::SonicPi::Version
+    x: 2
+    y: 6
+    z: 0
+  :summary: All chord names
+  :doc: Returns a ring containing all chord names known to Sonic Pi
+  :args: []
+  :opts: 
+  :accepts_block: false
+  :memoize: true
+  :examples:
+  - 'puts chord_names #=>  prints a list of all the chords'
+* Line.kr(1, 0, 5, amp, doneAction:
     2))}\n    ).writeDefFile(\"/Users/sam/Desktop/\")\n    )\n\n\n    "
   :args:
   - - :path

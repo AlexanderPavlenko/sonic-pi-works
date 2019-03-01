@@ -71,21 +71,27 @@ dump.write YAML.dump(Docs::RAW)
 Docs::RAW.sort_by! { |item| item[:name] }
 args_prefix = '_'
 Docs::RAW.each do |item|
-  args   = item[:args]&.map { |arg| "#{args_prefix}#{arg[0]}" }&.join(', ')
-  opts   = item[:opts]&.keys&.map { |k| "#{k}: nil" }&.join(', ')
-  method = "#{item[:name]}(#{[args, opts].compact.reject(&:empty?).join(', ')})"
+  # TODO: detect which params are required
+  args = item[:args]
+  args = [] if args.flatten.empty?
+  opts = item[:opts]
+  opts = {} if opts.nil?
+  list = args.map { |arg| "#{args_prefix}#{arg[0]} = nil" }
+  list.concat opts.each_key.map { |k| "#{k}: nil" }
+  method = "#{item[:name]}#{list.empty? ? nil : "(#{list.join(', ')})"}"
+
   puts "# #{item[:summary]}"
   item[:doc].each_line do |line|
     puts "# #{line}"
   end
-  item[:args]&.each { |arg| puts "# @param #{args_prefix}#{arg[0]} [#{arg[1]}]" }
-  item[:opts]&.each { |opt, desc| puts "# @option opts #{opt.inspect} #{desc}" }
+  args.each { |arg| puts "# @param #{args_prefix}#{arg[0]} [#{arg[1]}]" }
+  opts.each { |opt, desc| puts "# @param #{opt} #{desc}" }
   puts "# @accepts_block #{item[:accepts_block]}"
   puts "# @introduced #{item[:introduced]&.values&.join('.')}"
   item[:examples]&.each do |example|
     puts "# @example"
     example.strip.each_line do |line|
-      puts "#   #{line.strip}"
+      puts "#   #{line}"
     end
     puts "#"
   end
