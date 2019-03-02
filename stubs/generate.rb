@@ -84,10 +84,10 @@ Docs::RAW.each do |item|
   item[:doc].each_line do |line|
     puts "# #{line}"
   end
+  puts "# @accepts_block #{item[:accepts_block]}"
   args.each { |arg| puts "# @param #{args_prefix}#{arg[0]} [#{arg[1]}]" }
   opts.each { |opt, desc| puts "# @param #{opt} #{desc}" }
-  puts "# @accepts_block #{item[:accepts_block]}"
-  puts "# @introduced #{item[:introduced]&.values&.join('.')}"
+  puts "# @since #{item[:introduced]&.values&.join('.')}"
   item[:examples]&.each do |example|
     puts "# @example"
     example.strip.each_line do |line|

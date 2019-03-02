@@ -1,16 +1,16 @@
 # Get all sample names
 # Return a list of all the sample names available
 # @accepts_block false
-# @introduced 2.0.0
+# @since 2.0.0
 def all_sample_names
   #This is a stub, used for indexing
 end
 
 # Ensure arg is valid
 # Raises an exception if the argument is either nil or false.
-# @param _arg [anything]
 # @accepts_block false
-# @introduced 2.8.0
+# @param _arg [anything]
+# @since 2.8.0
 # @example
 #   # Simple assertions
 #   assert true   # As true is neither nil or false, this assertion passes
@@ -33,10 +33,10 @@ end
 
 # Ensure args are equal
 # Raises an exception if both arguments aren't equal. 
+# @accepts_block false
 # @param _arg1 [anything]
 # @param _arg2 [anything]
-# @accepts_block false
-# @introduced 2.8.0
+# @since 2.8.0
 # @example
 #   # Simple assertions
 #   assert_equal 1, 1
@@ -56,9 +56,9 @@ end
 
 # Ensure block throws an error
 # Runs the block and ensures that it raises the correct Exception. Useful for asserting that an Exception will be raised. You may specify the particular Exception class, which defaults to `Exception`.
-# @param _class [Exception]
 # @accepts_block true
-# @introduced 3.0.0
+# @param _class [Exception]
+# @since 3.0.0
 # @example
 #   assert_error do
 #     play 70
@@ -91,10 +91,10 @@ end
 # Currently similarity is only defined for numbers - all other types are compared for equality with assert_equal.
 # 
 # Useful for testing in cases where floating point imprecision stops you from being able to use `assert_equal`. 
+# @accepts_block false
 # @param _arg1 [anything]
 # @param _arg2 [anything]
-# @accepts_block false
-# @introduced 3.0.0
+# @since 3.0.0
 # @example
 #   # Simple assertions
 #   assert_similar 1, 1 #=> True
@@ -113,10 +113,10 @@ end
 # Note, all code within the block is executed in its own thread. Therefore despite inheriting all thread locals such as the random stream and ticks, modifications will be isolated to the block and will not affect external code.
 # 
 # `at` is just-in-time scheduling using multiple isolated threads. See `time_warp` for ahead-of-time scheduling within the current thread.
+# @accepts_block true
 # @param _times [list]
 # @param _params [list]
-# @accepts_block true
-# @introduced 2.1.0
+# @since 2.1.0
 # @example
 #   at 4 do
 #       sample :ambi_choir    # play sample after waiting for 4 beats
@@ -189,7 +189,7 @@ end
 # Get current beat
 # Returns the beat value for the current thread/live_loop. Beats are advanced only by calls to `sleep` and `sync`. Beats are distinct from virtual time (the value obtained by calling `vt`) in that it has no notion of rate. It is just essentially a counter for sleeps. After a `sync`, the beat is overridden with the beat value from the thread which called `cue`. 
 # @accepts_block false
-# @introduced 2.10.0
+# @since 2.10.0
 # @example
 #   use_bpm 120  # The current BPM makes no difference
 #     puts beat    #=> 0
@@ -206,7 +206,7 @@ end
 # Return block duration
 # Given a block, runs it and returns the amount of time that has passed. This time is in seconds and is not scaled to the current BPM. Any threads spawned in the block are not accounted for.
 # @accepts_block true
-# @introduced 2.9.0
+# @since 2.9.0
 # @example
 #   dur = block_duration do
 #     play 50
@@ -236,7 +236,7 @@ end
 # Determine if block contains sleep time
 # Given a block, runs it and returns whether or not the block contained sleeps or syncs
 # @accepts_block true
-# @introduced 2.9.0
+# @since 2.9.0
 # @example
 #   slept = block_slept? do
 #     play 50
@@ -274,9 +274,9 @@ end
 
 # Create a ring of boolean values
 # Create a new ring of booleans values from 1s and 0s, which can be easier to write and manipulate in a live setting.
-# @param _list [array]
 # @accepts_block false
-# @introduced 2.2.0
+# @param _list [array]
+# @since 2.2.0
 # @example
 #   (bools 1, 0)    #=> (ring true, false)
 #
@@ -289,9 +289,9 @@ end
 
 # Beat time conversion
 # Beat time representation. Scales the time to the current BPM. Useful for adding bpm scaling
-# @param _seconds [number]
 # @accepts_block false
-# @introduced 2.8.0
+# @param _seconds [number]
+# @since 2.8.0
 # @example
 #   use_bpm 120  # Set the BPM to be double the default
 #     puts bt(1) # 0.5
@@ -307,7 +307,7 @@ end
 # Intialise or return named buffer
 # Initialise or return a named buffer with a specific duration (defaults to 8 beats). Useful for working with the `:record` FX. If the buffer is requested with a different duration, then a new buffer will be initialised and the old one recycled.
 # @accepts_block false
-# @introduced 3.0.0
+# @since 3.0.0
 # @example
 #   buffer(:foo) # load a 8s buffer and name it :foo
 #   b = buffer(:foo) # return cached buffer and bind it to b
@@ -340,9 +340,9 @@ end
 # If no arguments are given, will return a lambda function which when called takes an argument which will be a list to be chosen from. This is useful for choosing random `onset:` vals for samples
 # 
 # Always returns a single element (or nil)
-# @param _list [array]
 # @accepts_block false
-# @introduced 2.0.0
+# @param _list [array]
+# @since 2.0.0
 # @example
 #   loop do
 #       play choose([60, 64, 67]) #=> plays one of 60, 64 or 67 at random
@@ -364,12 +364,12 @@ end
 
 # Create chord
 # Creates an immutable ring of Midi note numbers when given a tonic note and a chord type. If only passed a chord type, will default the tonic to 0. See examples.
+# @accepts_block false
 # @param _tonic [symbol]
 # @param _name [symbol]
 # @param invert Apply the specified num inversions to chord. See the fn `chord_invert`.
 # @param num_octaves Create an arpeggio of the chord over n octaves
-# @accepts_block false
-# @introduced 2.0.0
+# @since 2.0.0
 # @example
 #   puts (chord :e, :minor) # returns a ring of midi notes - (ring 64, 67, 71)
 #
@@ -467,12 +467,12 @@ end
 
 # Construct chords of stacked thirds, based on scale degrees
 # In music we build chords from scales. For example, a C major chord is made by taking the 1st, 3rd and 5th notes of the C major scale (C, E and G). If you do this on a piano you might notice that you play one, skip one, play one, skip one etc. If we use the same spacing and start from the second note in C major (which is a D), we get a D minor chord which is the 2nd, 4th and 6th notes in C major (D, F and A). We can move this pattern all the way up or down the scale to get different types of chords. `chord_degree` is a helper method that returns a ring of midi note numbers when given a degree (starting point in a scale) which is a symbol `:i`, `:ii`, `:iii`, `:iv`, `:v`, `:vi`, `:vii` or a number `1`-`7`. The second argument is the tonic note of the scale, the third argument is the scale type and finally the fourth argument is number of notes to stack up in the chord. If we choose 4 notes from degree `:i` of the C major scale, we take the 1st, 3rd, 5th and 7th notes of the scale to get a C major 7 chord.
+# @accepts_block false
 # @param _degree [symbol_or_number]
 # @param _tonic [symbol]
 # @param _scale [symbol]
 # @param _number_of_notes [number]
-# @accepts_block false
-# @introduced 2.1.0
+# @since 2.1.0
 # @example
 #   puts (chord_degree :i, :A3, :major) # returns a ring of midi notes - (ring 57, 61, 64, 68) - an A major 7 chord
 #
@@ -504,10 +504,10 @@ end
 # An inversion is simply rotating the chord and shifting the wrapped notes up or down an octave. For example, consider the chord :e3, :minor - `(ring 52, 55, 59)`. When we invert it once, we rotate the notes around to `(ring 55, 59, 52)`. However, because note 52 is wrapped round, it's shifted up an octave (12 semitones) so the actual first inversion of the chord :e3, :minor is `(ring 55, 59, 52 + 12)` or `(ring 55, 59, 64)`.
 # 
 # Note that it's also possible to directly invert chords on creation with the `invert:` opt - `(chord :e3, :minor, invert: 2)`
+# @accepts_block false
 # @param _notes [list]
 # @param _shift [number]
-# @accepts_block false
-# @introduced 2.6.0
+# @since 2.6.0
 # @example
 #   play (chord_invert (chord :A3, "M"), 0) #No inversion     - (ring 57, 61, 64)
 #   sleep 1
@@ -522,7 +522,7 @@ end
 # All chord names
 # Returns a ring containing all chord names known to Sonic Pi
 # @accepts_block false
-# @introduced 2.6.0
+# @since 2.6.0
 # @example
 #   puts chord_names #=>  prints a list of all the chords
 #
@@ -533,7 +533,7 @@ end
 # Clear all thread locals to defaults
 # All settings such as the current synth, BPM, random stream and tick values will be reset to their defaults. Consider using `reset` to reset all these values to those inherited from the parent thread.
 # @accepts_block false
-# @introduced 2.11.0
+# @since 2.11.0
 # @example
 #   Clear wipes out the threads locals
 #   use_synth :blade
@@ -574,7 +574,7 @@ end
 # Block level commenting
 # Does not evaluate any of the code within the block. However, any optional args passed before the block *will* be evaluated although they will be ignored. See `uncomment` for switching commenting off without having to remove the comment form.
 # @accepts_block true
-# @introduced 2.0.0
+# @since 2.0.0
 # @example
 #   comment do # starting a block level comment:
 #       play 50 # not played
@@ -590,9 +590,9 @@ end
 # Control a running synth node by passing new parameters to it. A synth node represents a running synth and can be obtained by assigning the return value of a call to play or sample or by specifying a parameter to the do/end block of an FX. You may modify any of the parameters you can set when triggering the synth, sample or FX. See documentation for opt details. If the synth to control is a chord, then control will change all the notes of that chord group at once to a new target set of notes - see example. Also, you may use the on: opt to conditionally trigger the control - see the docs for the `synth` and `sample` fns for more information.
 # 
 # If no synth to control is specified, then the last synth triggered by the current (or parent) thread will be controlled - see example below.
-# @param _node [synth_node]
 # @accepts_block false
-# @introduced 2.0.0
+# @param _node [synth_node]
+# @since 2.0.0
 # @example
 #   ## Basic control
 #   
@@ -709,12 +709,12 @@ end
 
 # Cue other threads
 # Send a heartbeat synchronisation message containing the (virtual) timestamp of the current thread. Useful for syncing up external threads via the `sync` fn. Any opts which are passed are given to the thread which syncs on the `cue_id`. The values of the opts must be immutable. Currently numbers, symbols, booleans, nil and frozen strings, or vectors/rings/frozen arrays/maps of immutable values are supported.
+# @accepts_block false
 # @param _cue_id [symbol]
 # @param your_key Your value
 # @param another_key Another value
 # @param key All these opts are passed through to the thread which syncs
-# @accepts_block false
-# @introduced 2.0.0
+# @since 2.0.0
 # @example
 #   in_thread do
 #       sync :foo # this parks the current thread waiting for a foo cue message to be received.
@@ -795,7 +795,7 @@ end
 # 
 # This can be set via the fns `use_arg_checks` and `with_arg_checks`.
 # @accepts_block false
-# @introduced 2.0.0
+# @since 2.0.0
 # @example
 #   puts current_arg_checks # Print out the current arg check setting
 #
@@ -808,7 +808,7 @@ end
 # 
 # Affected by calls to `use_bpm`, `with_bpm`, `use_sample_bpm` and `with_sample_bpm`.
 # @accepts_block false
-# @introduced 2.6.0
+# @since 2.6.0
 # @example
 #   use_bpm 60
 #     puts current_beat_duration #=> 1
@@ -825,7 +825,7 @@ end
 # 
 # This can be set via the fns `use_bpm`, `with_bpm`, `use_sample_bpm` and `with_sample_bpm`.
 # @accepts_block false
-# @introduced 2.0.0
+# @since 2.0.0
 # @example
 #   puts current_bpm # Print out the current bpm
 #
@@ -838,7 +838,7 @@ end
 # 
 # This can be set via the fns `use_cent_tuning` and `with_cent_tuning`.
 # @accepts_block false
-# @introduced 2.9.0
+# @since 2.9.0
 # @example
 #   puts current_cent_tuning # Print out the current cent shift
 #
@@ -851,7 +851,7 @@ end
 # 
 # This can be set via the fns `use_debug` and `with_debug`.
 # @accepts_block false
-# @introduced 2.0.0
+# @since 2.0.0
 # @example
 #   puts current_debug # Print out the current debug setting
 #
@@ -864,7 +864,7 @@ end
 # 
 # This can be set via the fns `use_midi_defaults`, `with_midi_defaults`, `use_merged_midi_defaults` and `with_merged_midi_defaults`.
 # @accepts_block false
-# @introduced 3.0.0
+# @since 3.0.0
 # @example
 #   use_midi_defaults channel: 1, port: "foo"
 #   midi_note_on :e1 # Sends MIDI :e1 note on to channel 1 on port "foo"
@@ -879,7 +879,7 @@ end
 # 
 # This can be set via the fns `use_octave` and `with_octave`.
 # @accepts_block false
-# @introduced 2.9.0
+# @since 2.9.0
 # @example
 #   puts current_octave # Print out the current octave shift
 #
@@ -892,7 +892,7 @@ end
 # 
 # This can be set via the fns `use_random_seed` and `with_random_seed`. It is incremented every time you use the random number generator via fns such as `choose` and `rand`.
 # @accepts_block false
-# @introduced 2.10.0
+# @since 2.10.0
 # @example
 #   puts current_random_seed # Print out the current random seed
 #
@@ -917,7 +917,7 @@ end
 # 
 # This can be set via the fns `use_sample_defaults`, `with_sample_defaults`, `use_merged_sample_defaults` and `with_merged_sample_defaults`.
 # @accepts_block false
-# @introduced 2.5.0
+# @since 2.5.0
 # @example
 #   use_sample_defaults amp: 0.5, cutoff: 80
 #   sample :loop_amen # Plays amen break with amp 0.5 and cutoff 80
@@ -932,7 +932,7 @@ end
 # 
 # This can be set via the fn `set_sched_ahead_time!`.
 # @accepts_block false
-# @introduced 2.0.0
+# @since 2.0.0
 # @example
 #   set_sched_ahead_time! 0.5
 #   puts current_sched_ahead_time # Prints 0.5
@@ -946,7 +946,7 @@ end
 # 
 # This can be set via the fns `use_synth` and `with_synth`.
 # @accepts_block false
-# @introduced 2.0.0
+# @since 2.0.0
 # @example
 #   puts current_synth # Print out the current synth name
 #
@@ -959,7 +959,7 @@ end
 # 
 # This can be set via the fns `use_synth_defaults`, `with_synth_defaults`, `use_merged_synth_defaults` and `with_merged_synth_defaults`.
 # @accepts_block false
-# @introduced 2.0.0
+# @since 2.0.0
 # @example
 #   use_synth_defaults amp: 0.5, cutoff: 80
 #   play 50 # Plays note 50 with amp 0.5 and cutoff 80
@@ -974,7 +974,7 @@ end
 # 
 # Unlike `Time.now`, Multiple calls to `current_time` with no interleaved calls to `sleep` or `sync` will return the same value.
 # @accepts_block false
-# @introduced 3.0.0
+# @since 3.0.0
 # @example
 #   puts current_time # 2017-03-19 23:37:57 +0000
 #
@@ -998,7 +998,7 @@ end
 # 
 # This can be set via the fns `use_transpose` and `with_transpose`.
 # @accepts_block false
-# @introduced 2.0.0
+# @since 2.0.0
 # @example
 #   puts current_transpose # Print out the current transpose value
 #
@@ -1011,7 +1011,7 @@ end
 # 
 # This can be set via the fn `set_volume!`.
 # @accepts_block false
-# @introduced 2.0.0
+# @since 2.0.0
 # @example
 #   puts current_volume # Print out the current volume
 #
@@ -1025,9 +1025,9 @@ end
 
 # Decrement
 # Decrement a number by `1`. Equivalent to `n - 1`
-# @param _n [number]
 # @accepts_block false
-# @introduced 2.1.0
+# @param _n [number]
+# @since 2.1.0
 # @example
 #   dec 1 # returns 0
 #
@@ -1040,9 +1040,9 @@ end
 
 # Define a new function
 # Allows you to group a bunch of code and give it your own name for future re-use. Functions are very useful for structuring your code. They are also the gateway into live coding as you may redefine a function whilst a thread is calling it, and the next time the thread calls your function, it will use the latest definition.
-# @param _name [symbol]
 # @accepts_block true
-# @introduced 2.0.0
+# @param _name [symbol]
+# @since 2.0.0
 # @example
 #   # Define a new function called foo
 #     define :foo do
@@ -1065,10 +1065,10 @@ end
 
 # Define a named value only once
 # Allows you to assign the result of some code to a name, with the property that the code will only execute once - therefore stopping re-definitions. This is useful for defining values that you use in your compositions but you don't want to reset every time you press run. You may force the block to execute again regardless of whether or not it has executed once already by using the override option (see examples).
+# @accepts_block true
 # @param _name [symbol]
 # @param override If set to true, re-definitions are allowed and this acts like define
-# @accepts_block true
-# @introduced 2.0.0
+# @since 2.0.0
 # @example
 #   defonce :foo do  # Define a new function called foo
 #       sleep 1        # Sleep for a beat in the function definition. Note that this amount
@@ -1124,11 +1124,11 @@ end
 
 # Convert a degree into a note
 # For a given scale and tonic it takes a symbol `:i`, `:ii`, `:iii`, `:iv`,`:v`, `:vi`, `:vii` or a number `1`-`7` and resolves it to a midi note.
+# @accepts_block false
 # @param _degree [symbol_or_number]
 # @param _tonic [symbol]
 # @param _scale [symbol]
-# @accepts_block false
-# @introduced 2.1.0
+# @since 2.1.0
 # @example
 #   play degree(:ii, :D3, :major)
 #   play degree(2, :C3, :minor)
@@ -1139,9 +1139,9 @@ end
 
 # Squash and repeat time
 # Runs the block `d` times with the bpm for the block also multiplied by `d`. Great for repeating sections a number of times faster yet keeping within a fixed time. If `d` is less than 1, then time will be stretched accordingly and the block will take longer to complete.
-# @param _d [density]
 # @accepts_block true
-# @introduced 2.3.0
+# @param _d [density]
+# @since 2.3.0
 # @example
 #   use_bpm 60   # Set the BPM to 60
 #   
@@ -1171,9 +1171,9 @@ end
 
 # Random dice throw
 # Throws a dice with the specified num_sides (defaults to `6`) and returns the score as a number between `1` and `num_sides`.
-# @param _num_sides [number]
 # @accepts_block false
-# @introduced 2.0.0
+# @param _num_sides [number]
+# @since 2.0.0
 # @example
 #   dice # will return a number between 1 and 6 inclusively
 #          # (with an even probability distribution).
@@ -1187,10 +1187,10 @@ end
 
 # Create a ring of successive doubles
 # Create a ring containing the results of successive doubling of the `start` value. If `num_doubles` is negative, will return a ring of `halves`.
+# @accepts_block false
 # @param _start [number]
 # @param _num_doubles [int]
-# @accepts_block false
-# @introduced 2.10.0
+# @since 2.10.0
 # @example
 #   (doubles 60, 2)  #=> (ring 60, 120)
 #
@@ -1209,10 +1209,10 @@ end
 
 # Factor test
 # Test to see if factor is indeed a factor of `val`. In other words, can `val` be divided exactly by factor.
+# @accepts_block false
 # @param _val [number]
 # @param _factor [number]
-# @accepts_block false
-# @introduced 2.1.0
+# @since 2.1.0
 # @example
 #   factor?(10, 2) # true - 10 is a multiple of 2 (2 * 5 = 10)
 #
@@ -1229,7 +1229,7 @@ end
 # Get all FX names
 # Return a list of all the FX available
 # @accepts_block false
-# @introduced 2.10.0
+# @since 2.10.0
 def fx_names
   #This is a stub, used for indexing
 end
@@ -1238,9 +1238,9 @@ end
 # Retrieve information from Time State set prior to the current time from either the current or any other thread. If called multiple times will always return the same value unless a call to `sleep`, `sync`, `set` or `cue` is interleaved. Also, calls to `get` will always return the same value across Runs for deterministic behaviour - which means you may safely use it in your compositions for repeatable music.
 # 
 # May be used within a `time_warp` to retrieve past events. If in a time warp, `get` can not be called from a future position. Does not advance time.
-# @param _time_state_key [default]
 # @accepts_block false
-# @introduced 3.0.0
+# @param _time_state_key [default]
+# @since 3.0.0
 # @example
 #   get :foo #=> returns the last value set as :foo, or nil
 #
@@ -1263,10 +1263,10 @@ end
 
 # Create a ring of successive halves
 # Create a ring containing the results of successive halving of the `start` value. If `num_halves` is negative, will return a ring of `doubles`.
+# @accepts_block false
 # @param _start [number]
 # @param _num_halves [int]
-# @accepts_block false
-# @introduced 2.10.0
+# @since 2.10.0
 # @example
 #   (halves 60, 2)  #=> (ring 60, 30)
 #
@@ -1285,9 +1285,9 @@ end
 
 # Hz to MIDI conversion
 # Convert a frequency in hz to a midi note. Note that the result isn't an integer and there is a potential for some very minor rounding errors.
-# @param _freq [number]
 # @accepts_block false
-# @introduced 2.0.0
+# @param _freq [number]
+# @since 2.0.0
 # @example
 #   hz_to_midi(261.63) #=> 60.0003
 #
@@ -1299,12 +1299,12 @@ end
 # Execute a given block (between `do` ... `end`) in a new thread. Use for playing multiple 'parts' at once. Each new thread created inherits all the use/with defaults of the parent thread such as the time, current synth, bpm, default synth args, etc. Despite inheriting defaults from the parent thread, any modifications of the defaults in the new thread will *not* affect the parent thread. Threads may be named with the `name:` optional arg. Named threads will print their name in the logging pane when they print their activity. If you attempt to create a new named thread with a name that is already in use by another executing thread, no new thread will be created.
 # 
 # It is possible to delay the initial trigger of the thread on creation with both the `delay:` and `sync:` opts. See their respective docstrings. If both `delay:` and `sync:` are specified, on initial thread creation first the delay will be honoured and then the sync.
+# @accepts_block true
 # @param name Make this thread a named thread with name. If a thread with this name already exists, a new thread will not be created.
 # @param delay Initial delay in beats before the thread starts. Default is 0.
 # @param sync Initial sync symbol. Will sync with this symbol before the thread starts.
 # @param sync_bpm Initial sync symbol. Will sync with this symbol before the live_loop starts. Live loop will also inherit the BPM of the thread which cued the symbol.
-# @accepts_block true
-# @introduced 2.0.0
+# @since 2.0.0
 # @example
 #   loop do      # If you write two loops one after another like this,
 #       play 50    # then only the first loop will execute as the loop acts
@@ -1405,9 +1405,9 @@ end
 
 # Increment
 # Increment a number by `1`. Equivalent to `n + 1`
-# @param _n [number]
 # @accepts_block false
-# @introduced 2.1.0
+# @param _n [number]
+# @since 2.1.0
 # @example
 #   inc 1 # returns 2
 #
@@ -1420,9 +1420,9 @@ end
 
 # Kill synth
 # Kill a running synth sound or sample. In order to kill a sound, you need to have stored a reference to it in a variable.
-# @param _node [synth_node]
 # @accepts_block false
-# @introduced 2.0.0
+# @param _node [synth_node]
+# @since 2.0.0
 # @example
 #   # store a reference to a running synth in a variable called foo:
 #   foo = play 50, release: 4
@@ -1441,10 +1441,10 @@ end
 
 # Knit a sequence of repeated values
 # Knits a series of value, count pairs to create a ring buffer where each value is repeated count times.
+# @accepts_block false
 # @param _value [anything]
 # @param _count [number]
-# @accepts_block false
-# @introduced 2.2.0
+# @since 2.2.0
 # @example
 #   (knit 1, 5)    #=> (ring 1, 1, 1, 1, 1)
 #
@@ -1457,12 +1457,12 @@ end
 
 # Create a ring buffer representing a straight line
 # Create a ring buffer representing a straight line between start and finish of num_slices elements. Num slices defaults to `8`. Indexes wrap around positively and negatively. Similar to `range`.
+# @accepts_block false
 # @param _start [number]
 # @param _finish [number]
 # @param steps number of slices or segments along the line
 # @param inclusive boolean value representing whether or not to include finish value in line
-# @accepts_block false
-# @introduced 2.5.0
+# @since 2.5.0
 # @example
 #   (line 0, 4, steps: 4)    #=> (ring 0.0, 1.0, 2.0, 3.0)
 #
@@ -1488,7 +1488,7 @@ end
 # To stop a `live_audio` synth, use the `:stop` arg: `live_audio :foo, :stop`.
 # .
 # @accepts_block false
-# @introduced 3.0.0
+# @since 3.0.0
 # @example
 #   # Basic usage
 #   live_audio :foo  # Play whatever audio is coming into the sound card on input 1
@@ -1553,6 +1553,7 @@ end
 # If the `live_loop` block is given a parameter, this is given the result of the last run of the loop (with initial value either being `0` or an init arg). This allows you to 'thread' values across loops.
 # 
 # Finally, it is possible to delay the initial trigger of the live_loop on creation with both the `delay:` and `sync:` opts. See their respective docstrings. If both `delay:` and `sync:` are specified, on initial live_loop creation first the delay will be honoured and then the sync.
+# @accepts_block true
 # @param _name [symbol]
 # @param init initial value for optional block arg
 # @param auto_cue enable or disable automatic cue (default is true)
@@ -1560,8 +1561,7 @@ end
 # @param sync Initial sync symbol. Will sync with this symbol before the live_loop starts.
 # @param sync_bpm Initial sync symbol. Will sync with this symbol before the live_loop starts. Live loop will also inherit the BPM of the thread which cued the symbol.
 # @param seed override initial random generator seed before starting loop.
-# @accepts_block true
-# @introduced 2.1.0
+# @since 2.1.0
 # @example
 #   ## Define and start a simple live loop
 #   
@@ -1664,9 +1664,9 @@ end
 
 # Load the contents of a file to the current buffer
 # Given a path to a file, will read the contents and load it into the current buffer. This will replace any previous content.
-# @param _path [string]
 # @accepts_block false
-# @introduced 2.10.0
+# @param _path [string]
+# @since 2.10.0
 # @example
 #   load_buffer "~/sonic-pi-tracks/phat-beats.rb" # will replace content of current buffer with contents of the file
 #
@@ -1676,9 +1676,9 @@ end
 
 # Load a built-in example
 # Given a keyword representing an example, will load it into the current buffer. This will replace any previous content.
-# @param _path [string]
 # @accepts_block false
-# @introduced 2.10.0
+# @param _path [string]
+# @since 2.10.0
 # @example
 #   load_example :rerezzed # will replace content of current buffer with the rerezzed example
 #
@@ -1690,9 +1690,9 @@ end
 # Given a path to a `.wav`, `.wave`, `.aif`, `.aiff`, `.ogg`, `.oga` or `.flac` file, pre-loads the sample into memory.
 # 
 # You may also specify the same set of source and filter pre-args available to `sample` itself. `load_sample` will then load all matching samples. See `sample`'s docs for more information.
-# @param _path [string]
 # @accepts_block false
-# @introduced 2.0.0
+# @param _path [string]
+# @since 2.0.0
 # @example
 #   load_sample :elec_blip # :elec_blip is now loaded and ready to play as a sample
 #   sample :elec_blip # No delay takes place when attempting to trigger it
@@ -1714,9 +1714,9 @@ end
 # Given a directory containing multiple `.wav`, `.wave`, `.aif`, `.aiff`, `.ogg`, `.oga` or `.flac` files, pre-loads all the samples into memory.
 # 
 #  You may also specify the same set of source and filter pre-args available to `sample` itself. `load_sample` will load all matching samples (not just the sample `sample` would play given the same opts) - see `sample`'s docs for more information.
-# @param _paths [list]
 # @accepts_block false
-# @introduced 2.0.0
+# @param _paths [list]
+# @since 2.0.0
 # @example
 #   load_sample :elec_blip # :elec_blip is now loaded and ready to play as a sample
 #    sample :elec_blip # No delay takes place when attempting to trigger it
@@ -1758,9 +1758,9 @@ end
 # 
 # 
 #     
-# @param _path [string]
 # @accepts_block false
-# @introduced 2.0.0
+# @param _path [string]
+# @since 2.0.0
 # @example
 #   load_synthdefs "~/Desktop/my_noises" # Load all synthdefs in my_noises folder
 #
@@ -1770,9 +1770,9 @@ end
 
 # Obtain value of a tick
 # Read and return value of default tick. If a `key` is specified, read the value of that specific tick. Ticks are `in_thread` and `live_loop` local, so the tick read will be the tick of the current thread calling `look`.
-# @param offset Offset to add to index returned. Useful when calling look on lists, rings and vectors to offset the returned value
 # @accepts_block false
-# @introduced 2.6.0
+# @param offset Offset to add to index returned. Useful when calling look on lists, rings and vectors to offset the returned value
+# @since 2.6.0
 # @example
 #   puts look #=> 0
 #     puts look #=> 0
@@ -1825,7 +1825,7 @@ end
 # 
 # For a more powerful, flexible loop built for live coding see `live_loop`.
 # @accepts_block true
-# @introduced 2.0.0
+# @since 2.0.0
 # @example
 #   play 70       # note 70 is played
 #   
@@ -1844,9 +1844,9 @@ end
 
 # Create an immutable map
 # Create a new immutable key/value map from args. 
-# @param _list [array]
 # @accepts_block false
-# @introduced 2.11.0
+# @param _list [array]
+# @since 2.11.0
 # @example
 #   (map foo: 1, bar: 2)[:foo] #=> 1
 #
@@ -1862,9 +1862,9 @@ end
 
 # Minecraft Pi - normalise block code
 # Given a block name or id will return a number representing the id of the block or throw an exception if the name or id isn't valid
-# @param _name [symbol_or_number]
 # @accepts_block false
-# @introduced 2.5.0
+# @param _name [symbol_or_number]
+# @since 2.5.0
 # @example
 #   puts mc_block_id :air #=> 0
 #
@@ -1884,7 +1884,7 @@ end
 # Minecraft Pi - list all block ids
 # Returns a list of all the valid block ids as numbers. Note not all numbers are valid block ids. For example, 19 is not a valid block id.
 # @accepts_block false
-# @introduced 2.5.0
+# @since 2.5.0
 # @example
 #   puts mc_block_ids #=> [0, 1, 2, 3, 4, 5...
 #
@@ -1894,9 +1894,9 @@ end
 
 # Minecraft Pi - normalise block name
 # Given a block id or a block name will return a symbol representing the block name or throw an exception if the id or name isn't valid.
-# @param _id [number_or_symbol]
 # @accepts_block false
-# @introduced 2.5.0
+# @param _id [number_or_symbol]
+# @since 2.5.0
 # @example
 #   puts mc_block_name :air #=> :air
 #
@@ -1916,7 +1916,7 @@ end
 # Minecraft Pi - list all block names
 # Returns a list of all the valid block names as symbols
 # @accepts_block false
-# @introduced 2.5.0
+# @since 2.5.0
 # @example
 #   puts mc_block_names #=> [:air, :stone, :grass, :dirt, :cobblestone...
 #
@@ -1927,7 +1927,7 @@ end
 # Minecraft Pi - fixed camera mode
 # Set the camera mode to fixed.
 # @accepts_block false
-# @introduced 2.5.0
+# @since 2.5.0
 # @example
 #
 def mc_camera_fixed
@@ -1937,7 +1937,7 @@ end
 # Minecraft Pi - normal camera mode
 # Set the camera mode to normal.
 # @accepts_block false
-# @introduced 2.5.0
+# @since 2.5.0
 # @example
 #
 def mc_camera_normal
@@ -1947,7 +1947,7 @@ end
 # Minecraft Pi - move camera
 # Move the camera to a new location.
 # @accepts_block false
-# @introduced 2.5.0
+# @since 2.5.0
 # @example
 #
 def mc_camera_set_location
@@ -1957,7 +1957,7 @@ end
 # Minecraft Pi - third person camera mode
 # Set the camera mode to third person
 # @accepts_block false
-# @introduced 2.5.0
+# @since 2.5.0
 # @example
 #
 def mc_camera_third_person
@@ -1967,7 +1967,7 @@ end
 # Minecraft Pi - synonym for mc_message
 # See mc_message
 # @accepts_block false
-# @introduced 2.5.0
+# @since 2.5.0
 def mc_chat_post
   #This is a stub, used for indexing
 end
@@ -1975,7 +1975,7 @@ end
 # Minecraft Pi - restore checkpoint
 # Restore the world to the last snapshot taken with `mc_checkpoint_save`.
 # @accepts_block false
-# @introduced 2.5.0
+# @since 2.5.0
 # @example
 #
 def mc_checkpoint_restore
@@ -1985,7 +1985,7 @@ end
 # Minecraft Pi - save checkpoint
 # Take a snapshot of the world and save it. Restore back with `mc_checkpoint_restore`
 # @accepts_block false
-# @introduced 2.5.0
+# @since 2.5.0
 # @example
 #
 def mc_checkpoint_save
@@ -1994,11 +1994,11 @@ end
 
 # Minecraft Pi - get type of block at coords
 # Returns the type of the block at the coords `x`, `y`, `z` as a symbol.
+# @accepts_block false
 # @param _x [number]
 # @param _y [number]
 # @param _z [number]
-# @accepts_block false
-# @introduced 2.5.0
+# @since 2.5.0
 # @example
 #   puts mc_get_block 40, 50, 60 #=> :air
 #
@@ -2009,7 +2009,7 @@ end
 # Minecraft Pi - synonym for mc_ground_height
 # See `mc_ground_height`
 # @accepts_block false
-# @introduced 2.5.0
+# @since 2.5.0
 def mc_get_height
   #This is a stub, used for indexing
 end
@@ -2017,7 +2017,7 @@ end
 # Minecraft Pi - synonym for mc_location
 # See `mc_location`
 # @accepts_block false
-# @introduced 2.5.0
+# @since 2.5.0
 def mc_get_pos
   #This is a stub, used for indexing
 end
@@ -2025,7 +2025,7 @@ end
 # Minecraft Pi - get location of current tile/block
 # Returns the coordinates of the nearest block that the player is next to. This is more course grained than `mc_location` as it only returns whole number coordinates.
 # @accepts_block false
-# @introduced 2.5.0
+# @since 2.5.0
 # @example
 #   puts mc_get_tile #=> [10, 20, 101]
 #
@@ -2035,10 +2035,10 @@ end
 
 # Minecraft Pi - get ground height at x, z coords
 # Returns the height of the ground at the specified `x` and `z` coords.
+# @accepts_block false
 # @param _x [number]
 # @param _z [number]
-# @accepts_block false
-# @introduced 2.5.0
+# @since 2.5.0
 # @example
 #   puts mc_ground_height 40, 50 #=> 43 (height of world at x=40, z=50)
 #
@@ -2049,7 +2049,7 @@ end
 # Minecraft Pi - get current location
 # Returns a list of floats `[x, y, z]` coords of the current location for Steve. The coordinates are finer grained than raw block coordinates but may be used anywhere you might use block coords.
 # @accepts_block false
-# @introduced 2.5.0
+# @since 2.5.0
 # @example
 #   puts mc_location    #=> [10.1, 20.67, 101.34]
 #
@@ -2062,9 +2062,9 @@ end
 
 # Minecraft Pi - post a chat message
 # Post contents of `msg` on the Minecraft chat display. You may pass multiple arguments and all will be joined to form a single message (with spaces).
-# @param _msg [string]
 # @accepts_block false
-# @introduced 2.5.0
+# @param _msg [string]
+# @since 2.5.0
 # @example
 #   mc_message "Hello from Sonic Pi" #=> Displays "Hello from Sonic Pi" on Minecraft's chat display
 #
@@ -2074,6 +2074,7 @@ end
 
 # Minecraft Pi - set area of blocks
 # Set an area/box of blocks of type `block_name` defined by two distinct sets of coordinates.
+# @accepts_block false
 # @param _block_name [symbol_or_number]
 # @param _x [number]
 # @param _y [number]
@@ -2081,20 +2082,19 @@ end
 # @param _x2 [number]
 # @param _y2 [number]
 # @param _z2 [number]
-# @accepts_block false
-# @introduced 2.5.0
+# @since 2.5.0
 def mc_set_area(_block_name = nil, _x = nil, _y = nil, _z = nil, _x2 = nil, _y2 = nil, _z2 = nil)
   #This is a stub, used for indexing
 end
 
 # Minecraft Pi - set block at specific coord
 # Change the block type of the block at coords `x`, `y`, `z` to `block_type`. The block type may be specified either as a symbol such as `:air` or a number. See `mc_block_ids` and `mc_block_types` for lists of valid symbols and numbers.
+# @accepts_block false
 # @param _x [number]
 # @param _y [number]
 # @param _z [number]
 # @param _block_name [symbol_or_number]
-# @accepts_block false
-# @introduced 2.5.0
+# @since 2.5.0
 # @example
 #   mc_set_block :glass, 40, 50, 60 #=> set block at coords 40, 50, 60 to type glass
 #
@@ -2105,17 +2105,17 @@ end
 # Minecraft Pi - synonym for mc_teleport
 # See `mc_teleport`
 # @accepts_block false
-# @introduced 2.5.0
+# @since 2.5.0
 def mc_set_pos
   #This is a stub, used for indexing
 end
 
 # Minecraft Pi - set location to coords of specified tile/block
+# @accepts_block false
 # @param _x [number]
 # @param _y [number]
 # @param _z [number]
-# @accepts_block false
-# @introduced 2.5.0
+# @since 2.5.0
 # @example
 #
 def mc_set_tile(_x = nil, _y = nil, _z = nil)
@@ -2124,10 +2124,10 @@ end
 
 # Minecraft Pi - teleport to world surface at x and z coords
 # Teleports you to the specified x and z coordinates with the y automatically set to place you on the surface of the world. For example, if the x and z coords target a mountain, you'll be placed on top of the mountain, not in the air or under the ground. See mc_ground_height for discovering the height of the ground at a given x, z point.
+# @accepts_block false
 # @param _x [number]
 # @param _z [number]
-# @accepts_block false
-# @introduced 2.5.0
+# @since 2.5.0
 # @example
 #   mc_surface_teleport 40, 50 #=> Teleport user to coords x = 40, y = height of surface, z = 50
 #
@@ -2137,11 +2137,11 @@ end
 
 # Minecraft Pi - teleport to a new location
 # Magically teleport the player to the location specified by the `x`, `y`, `z` coordinates. Use this for automatically moving the player either small or large distances around the world.
+# @accepts_block false
 # @param _x [number]
 # @param _y [number]
 # @param _z [number]
-# @accepts_block false
-# @introduced 2.5.0
+# @since 2.5.0
 # @example
 #   mc_teleport 40, 50, 60  # The player will be moved to the position with coords:
 #                           # x: 40, y: 50, z: 60
@@ -2154,12 +2154,12 @@ end
 # Sends a MIDI note on event to *all* connected MIDI devices and *all* channels and then after sustain beats sends a MIDI note off event. Ensures MIDI trigger is synchronised with standard calls to play and sample. Co-operates completely with Sonic Pi's timing system including `time_warp`.
 # 
 # If `note` is specified as `:off` then all notes will be turned off (same as `midi_all_notes_off`).
+# @accepts_block false
 # @param _note [number]
 # @param sustain Duration of note event in beats
 # @param vel Velocity of note as a MIDI number
 # @param on If specified and false/nil/0 will stop the midi on/off messages from being sent out. (Ensures all opts are evaluated in this call to `midi` regardless of value).
-# @accepts_block false
-# @introduced 3.0.0
+# @since 3.0.0
 # @example
 #   midi :e1, sustain: 0.3, vel_f: 0.5, channel: 3 # Play E, octave 1 for 0.3 beats at half velocity on channel 3 on all connected MIDI ports.
 #
@@ -2185,11 +2185,11 @@ end
 # When an All Notes Off event is received, all oscillators will turn off.
 # 
 # [MIDI 1.0 Specification - Channel Mode Messages - All Notes Off](https://www.midi.org/specifications/item/table-1-summary-of-midi-message)
+# @accepts_block false
 # @param channel Channel to send the all notes off message to
 # @param port MIDI port to send to
 # @param on If specified and false/nil/0 will stop the midi all notes off message from being sent out. (Ensures all opts are evaluated in this call to `midi_all_notes_off` regardless of value).
-# @accepts_block false
-# @introduced 3.0.0
+# @since 3.0.0
 # @example
 #   midi_all_notes_off #=> Turn off all notes on MIDI devices on all channels (and ports)
 #
@@ -2208,6 +2208,7 @@ end
 # You may also optionally pass the control value as a floating point value between 0 and 1 such as 0.2 or 0.785 (which will be mapped to MIDI values between 0 and 127) using the `val_f:` opt.
 # 
 # [MIDI 1.0 Specification - Channel Voice Messages - Control change](https://www.midi.org/specifications/item/table-1-summary-of-midi-message)
+# @accepts_block false
 # @param _control_num [midi]
 # @param _value [midi]
 # @param channel Channel(s) to send to
@@ -2215,8 +2216,7 @@ end
 # @param value Control value as a MIDI number.
 # @param val_f Control value as a value between 0 and 1 (will be converted to a MIDI value)
 # @param on If specified and false/nil/0 will stop the midi cc message from being sent out. (Ensures all opts are evaluated in this call to `midi_cc` regardless of value).
-# @accepts_block false
-# @introduced 3.0.0
+# @since 3.0.0
 # @example
 #   midi_cc 100, 32  #=> Sends MIDI cc message to control 100 with value 32 to all ports and channels
 #
@@ -2244,14 +2244,14 @@ end
 # You may also optionally pass the pressure value as a floating point value between 0 and 1 such as 0.2 or 0.785 (which will be mapped to MIDI values between 0 and 127) using the `val_f:` opt.
 # 
 # [MIDI 1.0 Specification - Channel Voice Messages - Channel Pressure (Aftertouch)](https://www.midi.org/specifications/item/table-1-summary-of-midi-message)
+# @accepts_block false
 # @param _val [midi]
 # @param channel Channel(s) to send to
 # @param port MIDI port(s) to send to
 # @param value Pressure value as a MIDI number.
 # @param val_f Pressure value as a value between 0 and 1 (will be converted to a MIDI value)
 # @param on If specified and false/nil/0 will stop the midi channel pressure message from being sent out. (Ensures all opts are evaluated in this call to `midi_channel_pressure` regardless of value).
-# @accepts_block false
-# @introduced 3.0.0
+# @since 3.0.0
 # @example
 #   midi_channel_pressure 50  #=> Sends MIDI channel pressure message with value 50 to all ports and channels
 #
@@ -2272,11 +2272,11 @@ end
 # Sends enough MIDI clock ticks for one beat to *all* connected MIDI devices. Use the `port:` opt to restrict which MIDI ports are used.
 # 
 # The MIDI specification requires 24 clock tick events to be sent per beat. These can either be sent manually using `midi_clock_tick` or all 24 can be scheduled in one go using this fn. `midi_clock_beat` will therefore schedule for 24 clock ticks to be sent linearly spread over duration beats. This fn will automatically take into account the current BPM and any `time_warp`s.
+# @accepts_block false
 # @param _duration [beats]
 # @param port MIDI port to send to
 # @param on If specified and false/nil/0 will stop the midi clock tick messages from being sent out. (Ensures all opts are evaluated in this call to `midi_clock_beat` regardless of value).
-# @accepts_block false
-# @introduced 3.0.0
+# @since 3.0.0
 # @example
 #   midi_clock_beat #=> Send 24 clock ticks over a period of 1 beat
 #
@@ -2307,10 +2307,10 @@ end
 # Typical MIDI devices expect the clock to send 24 ticks per quarter note (typically a beat). See `midi_clock_beat` for a simple way of sending all the ticks for a given beat.
 # 
 # [MIDI 1.0 Specification - System Real-Time Messages - Timing Clock](https://www.midi.org/specifications/item/table-1-summary-of-midi-message)
+# @accepts_block false
 # @param port MIDI port to send to
 # @param on If specified and false/nil/0 will stop the midi clock tick message from being sent out. (Ensures all opts are evaluated in this call to `midi_clock_tick` regardless of value).
-# @accepts_block false
-# @introduced 3.0.0
+# @since 3.0.0
 # @example
 #   midi_clock_tick #=> Send an individual clock tick to all connected MIDI devices on all ports.
 #
@@ -2324,9 +2324,9 @@ end
 # Upon receiving the MIDI continue event, the MIDI device(s) will continue at the point the sequence was stopped.
 # 
 # [MIDI 1.0 Specification - System Real-Time Messages - Continue](https://www.midi.org/specifications/item/table-1-summary-of-midi-message)
-# @param port MIDI Port(s) to send the continue message to
 # @accepts_block false
-# @introduced 3.0.0
+# @param port MIDI Port(s) to send the continue message to
+# @since 3.0.0
 # @example
 #   midi_continue #=> Send continue message to all connected MIDI devices
 #
@@ -2340,11 +2340,11 @@ end
 # All devices on a given channel will respond only to data received over MIDI. Played data, etc. will be ignored. See `midi_local_control_on` to enable local control.
 # 
 # [MIDI 1.0 Specification - Channel Mode Messages - Local Control Off](https://www.midi.org/specifications/item/table-1-summary-of-midi-message)
+# @accepts_block false
 # @param channel Channel to send the local control off message to
 # @param port MIDI port to send to
 # @param on If specified and false/nil/0 will stop the midi local control off message from being sent out. (Ensures all opts are evaluated in this call to `midi_local_control_off` regardless of value).
-# @accepts_block false
-# @introduced 3.0.0
+# @since 3.0.0
 # @example
 #   midi_local_control_off #=> Disable local control on MIDI devices on all channels (and ports)
 #
@@ -2361,11 +2361,11 @@ end
 # All devices on a given channel will respond both to data received over MIDI and played data, etc. See `midi_local_control_off` to disable local control.
 # 
 # [MIDI 1.0 Specification - Channel Mode Messages - Local Control On](https://www.midi.org/specifications/item/table-1-summary-of-midi-message)
+# @accepts_block false
 # @param channel Channel to send the local control on message to
 # @param port MIDI port to send to
 # @param on If specified and false/nil/0 will stop the midi local control on message from being sent out. (Ensures all opts are evaluated in this call to `midi_local_control_on` regardless of value).
-# @accepts_block false
-# @introduced 3.0.0
+# @since 3.0.0
 # @example
 #   midi_local_control_on #=> Enable local control on MIDI devices on all channels (and ports)
 #
@@ -2389,14 +2389,14 @@ end
 # Note that this fn also includes the behaviour of `midi_all_notes_off`.
 # 
 # [MIDI 1.0 Specification - Channel Mode Messages - Omni Mode Off | Omni Mode On | Mono Mode On (Poly Off) | Poly Mode On](https://www.midi.org/specifications/item/table-1-summary-of-midi-message)
+# @accepts_block false
 # @param _mode [mode_keyword]
 # @param channel Channel to send the MIDI mode message to
 # @param port MIDI port to send to
 # @param mode Mode keyword - one of :omni_off, :omni_on, :mono or :poly
 # @param num_chans Used in mono mode only - Number of channels (defaults to 16)
 # @param on If specified and false/nil/0 will stop the midi local control off message from being sent out. (Ensures all opts are evaluated in this call to `midi_local_control_off` regardless of value).
-# @accepts_block false
-# @introduced 3.0.0
+# @since 3.0.0
 # @example
 #   midi_mode :omni_on #=> Turn Omni Mode On on all ports and channels
 #
@@ -2423,6 +2423,7 @@ end
 # You may also optionally pass the release velocity value as a floating point value between 0 and 1 such as 0.2 or 0.785 (which will be mapped to MIDI values between 0 and 127) using the `vel_f:` opt.
 # 
 # [MIDI 1.0 Specification - Channel Voice Messages - Note off event](https://www.midi.org/specifications/item/table-1-summary-of-midi-message)
+# @accepts_block false
 # @param _note [midi]
 # @param _release_velocity [midi]
 # @param channel MIDI channel(s) to send event on as a number or list of numbers.
@@ -2430,8 +2431,7 @@ end
 # @param velocity Release velocity as a MIDI number.
 # @param vel_f Release velocity as a value between 0 and 1 (will be converted to a MIDI velocity)
 # @param on If specified and false/nil/0 will stop the midi note off message from being sent out. (Ensures all opts are evaluated in this call to `midi_note_off` regardless of value).
-# @accepts_block false
-# @introduced 3.0.0
+# @since 3.0.0
 # @example
 #   midi_note_off :e3 #=> Sends MIDI note off for :e3 with the default release velocity of 127 to all ports and channels
 #
@@ -2473,6 +2473,7 @@ end
 # You may also optionally pass the velocity value as a floating point value between 0 and 1 such as 0.2 or 0.785 (which will be linearly mapped to MIDI values between 0 and 127) using the vel_f: opt.
 # 
 # [MIDI 1.0 Specification - Channel Voice Messages - Note on event](https://www.midi.org/specifications/item/table-1-summary-of-midi-message)
+# @accepts_block false
 # @param _note [midi]
 # @param _velocity [midi]
 # @param channel MIDI channel(s) to send event on
@@ -2480,8 +2481,7 @@ end
 # @param velocity Note velocity as a MIDI number.
 # @param vel_f Velocity as a value between 0 and 1 (will be converted to a MIDI velocity between 0 and 127)
 # @param on If specified and false/nil/0 will stop the midi note on message from being sent out. (Ensures all opts are evaluated in this call to `midi_note_on` regardless of value).
-# @accepts_block false
-# @introduced 3.0.0
+# @since 3.0.0
 # @example
 #   midi_note_on :e3  #=> Sends MIDI note on :e3 with the default velocity of 12 to all ports and channels
 #
@@ -2515,9 +2515,9 @@ end
 
 # Create a ring buffer of midi note numbers
 # Create a new immutable ring buffer of notes from args. Indexes wrap around positively and negatively. Final ring consists only of MIDI numbers and nil.
-# @param _list [array]
 # @accepts_block false
-# @introduced 2.7.0
+# @param _list [array]
+# @since 2.7.0
 # @example
 #   (midi_notes :d3, :d4, :d5) #=> (ring 50, 62, 74)
 #
@@ -2534,12 +2534,12 @@ end
 # Program number can be passed as a note such as `:e3` and decimal values will be rounded down or up to the nearest whole number - so values between 3.5 and 4 will be rounded up to 4 and values between 3.49999... and 3 will be rounded down to 3.
 # 
 # [MIDI 1.0 Specification - Channel Voice Messages - Program change](https://www.midi.org/specifications/item/table-1-summary-of-midi-message)
+# @accepts_block false
 # @param _program_num [midi]
 # @param channel Channel(s) to send to
 # @param port MIDI port(s) to send to
 # @param on If specified and false/nil/0 will stop the midi pc message from being sent out. (Ensures all opts are evaluated in this call to `midi_pc` regardless of value).
-# @accepts_block false
-# @introduced 3.0.2
+# @since 3.0.2
 # @example
 #   midi_pc 100  #=> Sends MIDI pc message to all ports and channels
 #
@@ -2570,14 +2570,14 @@ end
 # * When using the `delta_midi:` opt no pitch bend is the value 8192
 # 
 # [MIDI 1.0 Specification - Channel Voice Messages - Pitch Bend Change](https://www.midi.org/specifications/item/table-1-summary-of-midi-message)
+# @accepts_block false
 # @param _delta [float01]
 # @param channel Channel(s) to send to
 # @param port MIDI port(s) to send to
 # @param delta Pitch bend value as a number between 0 and 1 (will be converted to a value between 0 and 16383). No bend is the central value 0.5
 # @param delta_midi Pitch bend value as a number between 0 and 16383 inclusively. No bend is central value 8192.
 # @param on If specified and false/nil/0 will stop the midi pitch bend message from being sent out. (Ensures all opts are evaluated in this call to `midi_pitch_bend` regardless of value).
-# @accepts_block false
-# @introduced 3.0.0
+# @since 3.0.0
 # @example
 #   midi_pitch_bend 0  #=> Sends MIDI pitch bend message with value 0 to all ports and channels
 #
@@ -2605,6 +2605,7 @@ end
 # You may also optionally pass the pressure value as a floating point value between 0 and 1 such as 0.2 or 0.785 (which will be mapped to MIDI values between 0 and 127) using the `val_f:` opt.
 # 
 # [MIDI 1.0 Specification - Channel Voice Messages - Polyphonic Key Pressure (Aftertouch)](https://www.midi.org/specifications/item/table-1-summary-of-midi-message)
+# @accepts_block false
 # @param _note [midi]
 # @param _value [midi]
 # @param channel Channel(s) to send to
@@ -2612,8 +2613,7 @@ end
 # @param value Pressure value as a MIDI number.
 # @param val_f Pressure value as a value between 0 and 1 (will be converted to a MIDI value)
 # @param on If specified and false/nil/0 will stop the midi poly pressure message from being sent out. (Ensures all opts are evaluated in this call to `midi_poly_pressure` regardless of value).
-# @accepts_block false
-# @introduced 3.0.0
+# @since 3.0.0
 # @example
 #   midi_poly_pressure 100, 32  #=> Sends a MIDI poly key pressure message to control note 100 with value 32 to all ports and channels
 #
@@ -2643,13 +2643,13 @@ end
 # Non-number values will be automatically turned into numbers prior to sending the event if possible (if this conversion does not work an Error will be thrown).
 # 
 # See https://www.midi.org/specifications/item/table-1-summary-of-midi-message for a summary of MIDI messages and their corresponding byte structures.
+# @accepts_block false
 # @param _a [byte]
 # @param _b [byte]
 # @param _c [byte]
 # @param port Port(s) to send the raw MIDI message events to
 # @param on If specified and false/nil/0 will stop the raw midi message from being sent out. (Ensures all opts are evaluated in this call to `midi_raw` regardless of value).
-# @accepts_block false
-# @introduced 3.0.0
+# @since 3.0.0
 # @example
 #   midi_raw 176, 121, 0  #=> Sends the MIDI reset command
 #
@@ -2672,13 +2672,13 @@ end
 # All controller values are reset to their defaults.
 # 
 # [MIDI 1.0 Specification - Channel Mode Messages - Reset All Controllers](https://www.midi.org/specifications/item/table-1-summary-of-midi-message)
+# @accepts_block false
 # @param _value [number]
 # @param channel Channel to send the midi reset message to
 # @param port MIDI port to send to
 # @param value Value must only be zero (the default) unless otherwise allowed in a specific Recommended Practice
 # @param on If specified and false/nil/0 will stop the midi reset message from being sent out. (Ensures all opts are evaluated in this call to `midi_reset` regardless of value).
-# @accepts_block false
-# @introduced 3.0.0
+# @since 3.0.0
 # @example
 #   midi_reset #=> Reset MIDI devices on all channels (and ports)
 #
@@ -2695,11 +2695,11 @@ end
 # All oscillators will turn off, and their volume envelopes are set to zero as soon as possible.
 # 
 # [MIDI 1.0 Specification - Channel Mode Messages - All Sound Off](https://www.midi.org/specifications/item/table-1-summary-of-midi-message)
+# @accepts_block false
 # @param channel Channel to send the sound off message to
 # @param port MIDI port to send to
 # @param on If specified and false/nil/0 will stop the midi sound off on message from being sent out. (Ensures all opts are evaluated in this call to `midi_sound_off` regardless of value).
-# @accepts_block false
-# @introduced 3.0.0
+# @since 3.0.0
 # @example
 #   midi_sound_off #=> Silence MIDI devices on all ports and channels
 #
@@ -2717,7 +2717,7 @@ end
 # 
 # [MIDI 1.0 Specification - System Real-Time Messages - Start](https://www.midi.org/specifications/item/table-1-summary-of-midi-message)
 # @accepts_block false
-# @introduced 3.0.0
+# @since 3.0.0
 # @example
 #   midi_start #=> Send start message to all connected MIDI devices
 #
@@ -2731,9 +2731,9 @@ end
 # Stops the current sequence.
 # 
 # [MIDI 1.0 Specification - System Real-Time Messages - Start](https://www.midi.org/specifications/item/table-1-summary-of-midi-message)
-# @param port MIDI Port(s) to send the stop message to
 # @accepts_block false
-# @introduced 3.0.0
+# @param port MIDI Port(s) to send the stop message to
+# @since 3.0.0
 # @example
 #   midi_stop #=> Send stop message to all connected MIDI devices
 #
@@ -2743,9 +2743,9 @@ end
 
 # MIDI to Hz conversion
 # Convert a midi note to hz
-# @param _note [symbol_or_number]
 # @accepts_block false
-# @introduced 2.0.0
+# @param _note [symbol_or_number]
+# @since 2.0.0
 # @example
 #   midi_to_hz(60) #=> 261.6256
 #
@@ -2755,19 +2755,19 @@ end
 
 # Define a new function
 # Does nothing. Use to stop a define from actually defining. Simpler than wrapping whole define in a comment block or commenting each individual line out.
-# @param _name [symbol]
 # @accepts_block true
-# @introduced 2.1.0
+# @param _name [symbol]
+# @since 2.1.0
 def ndefine(_name = nil)
   #This is a stub, used for indexing
 end
 
 # Describe note
 # Takes a midi note, a symbol (e.g. `:C`) or a string (e.g. `"C"`) and resolves it to a midi note. You can also pass an optional `octave:` parameter to get the midi note for a given octave. Please note - `octave:` param overrides any octave specified in a symbol i.e. `:c3`. If the note is `nil`, `:r` or `:rest`, then `nil` is returned (`nil` represents a rest)
+# @accepts_block false
 # @param _note [symbol_or_number]
 # @param octave The octave of the note. Overrides any octave declaration in the note symbol such as :c2. Default is 4
-# @accepts_block false
-# @introduced 2.0.0
+# @since 2.0.0
 # @example
 #   # These all return 60 which is the midi number for middle C (octave 4)
 #   puts note(60)
@@ -2790,10 +2790,10 @@ end
 
 # Get note info
 # Returns an instance of `SonicPi::Note`. Please note - `octave:` param overrides any octave specified in a symbol i.e. `:c3`
+# @accepts_block false
 # @param _note [symbol_or_number]
 # @param octave The octave of the note. Overrides any octave declaration in the note symbol such as :c2. Default is 4
-# @accepts_block false
-# @introduced 2.0.0
+# @since 2.0.0
 # @example
 #   puts note_info(:C, octave: 2)
 #   # returns #<SonicPi::Note :C2>
@@ -2804,11 +2804,11 @@ end
 
 # Get a range of notes
 # Produces a ring of all the notes between a low note and a high note. By default this is chromatic (all the notes) but can be filtered with a pitches: argument. This opens the door to arpeggiator style sequences and other useful patterns. If you try to specify only pitches which aren't in the range it will raise an error - you have been warned!
+# @accepts_block false
 # @param _low_note [note]
 # @param _high_note [note]
 # @param pitches An array of notes (symbols or ints) to filter on. Octave information is ignored.
-# @accepts_block false
-# @introduced 2.6.0
+# @since 2.6.0
 # @example
 #   (note_range :c4, :c5) # => (ring 60,61,62,63,64,65,66,67,68,69,70,71,72)
 #
@@ -2837,10 +2837,10 @@ end
 
 # Create a ring of octaves
 # Create a ring of successive octaves starting at `start` for `num_octaves`. 
+# @accepts_block false
 # @param _start [note]
 # @param _num_octaves [pos_int]
-# @accepts_block false
-# @introduced 2.8.0
+# @since 2.8.0
 # @example
 #   (octs 60, 2)  #=> (ring 60, 72)
 #
@@ -2853,9 +2853,9 @@ end
 
 # Optionally evaluate block
 # Optionally evaluate the block depending on the truthiness of the supplied condition. The truthiness rules are as follows: all values are seen as true except for: false, nil and 0. Lambdas will be automatically called and the truthiness of their results used.
-# @param _condition [truthy]
 # @accepts_block false
-# @introduced 2.10.0
+# @param _condition [truthy]
+# @since 2.10.0
 # @example
 #   on true do
 #     play 70     #=> will play 70 as true is truthy
@@ -2902,9 +2902,9 @@ end
 
 # Random true value with specified probability
 # Returns `true` or `false` with a specified probability - it will return true every one in num times where num is the param you specify
-# @param _num [number]
 # @accepts_block false
-# @introduced 2.0.0
+# @param _num [number]
+# @since 2.0.0
 # @example
 #   one_in 2 # will return true with a probability of 1/2, false with probability 1/2
 #
@@ -2949,9 +2949,9 @@ end
 # See `osc_send` for a version which allows you to specify the hostname and port directly (ignoring any values set via `use_osc` or `with_osc`).
 # 
 # For further information see the OSC spec: [http://opensoundcontrol.org/spec-1_0](http://opensoundcontrol.org/spec-1_0)
-# @param _path [arguments]
 # @accepts_block false
-# @introduced 3.0.0
+# @param _path [arguments]
+# @since 3.0.0
 # @example
 #   # Send a simple OSC message to another program on the same machine
 #   
@@ -3021,12 +3021,12 @@ end
 # Similar to `osc` except ignores any `use_osc` settings and sends the OSC message directly to the specified `hostname` and `port`.
 # 
 # See `osc` for more information.
+# @accepts_block true
 # @param _hostname [string]
 # @param _port [number]
 # @param _path [osc_path]
 # @param _args [list]
-# @accepts_block true
-# @introduced 3.0.0
+# @since 3.0.0
 # @example
 #   osc_send "localhost", 7000, "/foo/baz"  # Send an OSC message to port 7000 on the same machine
 #
@@ -3049,11 +3049,11 @@ end
 # If no arguments are given, will return a lambda function which when called takes an argument which will be a list to be picked from. This is useful for choosing random `onset:` vals for samples.
 # 
 # Always returns a list-like thing (either an array or ring)
+# @accepts_block false
 # @param _list [array]
 # @param _n [number_or_nil]
 # @param skip Number of rands to skip over with each successive pick
-# @accepts_block false
-# @introduced 2.10.0
+# @since 2.10.0
 # @example
 #   puts [1, 2, 3, 4, 5].pick(3) #=> [4, 4, 3]
 #
@@ -3079,9 +3079,9 @@ end
 
 # relative MIDI pitch to frequency ratio
 # Convert a midi note to a ratio which when applied to a frequency will scale the frequency by the number of semitones. Useful for changing the pitch of a sample by using it as a way of generating the rate.
-# @param _pitch [midi_number]
 # @accepts_block false
-# @introduced 2.5.0
+# @param _pitch [midi_number]
+# @since 2.5.0
 # @example
 #   pitch_to_ratio 12 #=> 2.0
 #
@@ -3116,6 +3116,7 @@ end
 # 
 # Note that the default opts listed are only a guide to the most common opts across all the synths. Not all synths support all the default opts and each synth typically supports many more opts specific to that synth. For example, the `:tb303` synth supports 45 unique opts. For a full list of a synth's opts see its documentation in the Help system.
 #     
+# @accepts_block true
 # @param _note [symbol_or_number]
 # @param amp The amplitude of the note
 # @param amp_slide The duration in beats for amplitude changes to take place
@@ -3132,8 +3133,7 @@ end
 # @param slide Default slide time in beats for all slide opts. Individually specified slide opts will override this value
 # @param pitch Pitch adjustment in semitones. 1 is up a semitone, 12 is up an octave, -12 is down an octave etc.  Decimal numbers can be used for fine tuning.
 # @param on If specified and false/nil/0 will stop the synth from being played. Ensures all opts are evaluated.
-# @accepts_block true
-# @introduced 2.0.0
+# @since 2.0.0
 # @example
 #   play 50 # Plays note 50 on the current synth
 #
@@ -3171,6 +3171,7 @@ end
 # Play a list of notes at the same time.
 # 
 # Accepts optional args for modification of the synth being played. See each synth's documentation for synth-specific opts. See `use_synth` and `with_synth` for changing the current synth.
+# @accepts_block false
 # @param _notes [list]
 # @param amp The amplitude of the note
 # @param amp_slide The duration in beats for amplitude changes to take place
@@ -3187,8 +3188,7 @@ end
 # @param slide Default slide time in beats for all slide opts. Individually specified slide opts will override this value
 # @param pitch Pitch adjustment in semitones. 1 is up a semitone, 12 is up an octave, -12 is down an octave etc.  Decimal numbers can be used for fine tuning.
 # @param on If specified and false/nil/0 will stop the synth from being played. Ensures all opts are evaluated.
-# @accepts_block false
-# @introduced 2.0.0
+# @since 2.0.0
 # @example
 #   play_chord [40, 45, 47]
 #   
@@ -3224,11 +3224,11 @@ end
 #   It might help to think about music notation - if the level 1 is a crotchet/quarter note, then level two is like a quaver/eighth note and so on, all the way down to hemidemisemiquavers and beyond.
 # 
 #   If you want to use a triplet rhythm you can use a special notation to spread across multiple beats e.g. `[:d5, :cs5, {over: 2, val: [:c5,:c5,:c5]}, :b4, :bb4, :a4]`. This spaces the three `:c5` notes over the space of two normal notes which gives you a quaver triplet rhythm. You might recognize this from Bizet's opera Carmen.
+# @accepts_block false
 # @param _pattern []
 # @param beat_length Length of a single (top level) beat - defaults to 1
 # @param mode One of `:notes`, `:samples` or `:lambdas` depending on what is in your nested pattern. See examples below.
-# @accepts_block false
-# @introduced 2.8.0
+# @since 2.8.0
 # @example
 #   play_nested_pattern [:c, [:d, :f], :e, :c]
 #                                   # Same as:
@@ -3310,9 +3310,9 @@ end
 # Play list of notes with the current synth one after another with a sleep of 1
 # 
 # Accepts optional args for modification of the synth being played. See each synth's documentation for synth-specific opts. See use_synth and with_synth for changing the current synth.
-# @param _notes [list]
 # @accepts_block false
-# @introduced 2.0.0
+# @param _notes [list]
+# @since 2.0.0
 # @example
 #   play_pattern [40, 41, 42] # Same as:
 #                             #   play 40
@@ -3337,6 +3337,7 @@ end
 # If the list of times is smaller than the number of gaps between notes, the list is repeated again. If the list of times is longer than the number of gaps between notes, then some of the times are ignored. See examples for more detail.
 # 
 # Accepts optional args for modification of the synth being played. See each synth's documentation for synth-specific opts. See `use_synth` and `with_synth` for changing the current synth.
+# @accepts_block false
 # @param _notes [list]
 # @param _times [list_or_number]
 # @param amp The amplitude of the note
@@ -3354,8 +3355,7 @@ end
 # @param slide Default slide time in beats for all slide opts. Individually specified slide opts will override this value
 # @param pitch Pitch adjustment in semitones. 1 is up a semitone, 12 is up an octave, -12 is down an octave etc.  Decimal numbers can be used for fine tuning.
 # @param on If specified and false/nil/0 will stop the synth from being played. Ensures all opts are evaluated.
-# @accepts_block false
-# @introduced 2.0.0
+# @since 2.0.0
 # @example
 #   play_pattern_timed [40, 42, 44, 46], [1, 2, 3]
 #   
@@ -3414,9 +3414,9 @@ end
 
 # Display a message in the output pane
 # Displays the information you specify as a string inside the output pane. This can be a number, symbol, or a string itself. Useful for debugging. Synonym for `puts`.
-# @param _output [anything]
 # @accepts_block false
-# @introduced 2.0.0
+# @param _output [anything]
+# @since 2.0.0
 # @example
 #   print "hello there"   #=> will print the string "hello there" to the output pane
 #
@@ -3432,9 +3432,9 @@ end
 
 # Display a message in the output pane
 # Displays the information you specify as a string inside the output pane. This can be a number, symbol, or a string itself. Useful for debugging. Synonym for `print`.
-# @param _output [anything]
 # @accepts_block false
-# @introduced 2.0.0
+# @param _output [anything]
+# @since 2.0.0
 # @example
 #   print "hello there"   #=> will print the string "hello there" to the output pane
 #
@@ -3450,10 +3450,10 @@ end
 
 # Quantise a value to resolution
 # Round value to the nearest multiple of step resolution.
+# @accepts_block false
 # @param _n [number]
 # @param _step [positive_number]
-# @accepts_block false
-# @introduced 2.1.0
+# @since 2.1.0
 # @example
 #   quantise(10, 1) # 10 is already a multiple of 1, so returns 10
 #
@@ -3478,9 +3478,9 @@ end
 
 # Create a ramp vector
 # Create a new immutable ramp vector from args. Indexes always return first or last value if out of bounds.
-# @param _list [array]
 # @accepts_block false
-# @introduced 2.6.0
+# @param _list [array]
+# @since 2.6.0
 # @example
 #   (ramp 1, 2, 3)[0] #=> 1
 #
@@ -3508,9 +3508,9 @@ end
 
 # Generate a random float below a value
 # Given a max number, produces a float between `0` and the supplied max value. If max is a range, produces a float within the range. With no args returns a random value between `0` and `1`.
-# @param _max [number_or_range]
 # @accepts_block false
-# @introduced 2.0.0
+# @param _max [number_or_range]
+# @since 2.0.0
 # @example
 #   print rand(0.5) #=> will print a number like 0.375030517578125 to the output pane
 #
@@ -3520,9 +3520,9 @@ end
 
 # Roll back random generator
 # Roll the random generator back essentially 'undoing' the last call to `rand`. You may specify an amount to roll back allowing you to skip back n calls to `rand`.
-# @param _amount [number]
 # @accepts_block false
-# @introduced 2.7.0
+# @param _amount [number]
+# @since 2.7.0
 # @example
 #   # Basic rand stream rollback
 #   
@@ -3557,9 +3557,9 @@ end
 
 # Generate a random whole number below a value (exclusive)
 # Given a max number, produces a whole number between `0` and the supplied max value exclusively. If max is a range produces an int within the range. With no args returns either `0` or `1`
-# @param _max [number_or_range]
 # @accepts_block false
-# @introduced 2.0.0
+# @param _max [number_or_range]
+# @since 2.0.0
 # @example
 #   print rand_i(5) #=> will print either 0, 1, 2, 3, or 4 to the output pane
 #
@@ -3571,9 +3571,9 @@ end
 # Given a max number, produces a whole number between `0` and the supplied max value exclusively. If max is a range produces an int within the range. With no args returns either `0` or `1`.
 # 
 # Does not consume a random value from the stream. Therefore, multiple sequential calls to `rand_i_look` will all return the same value.
-# @param _max [number_or_range]
 # @accepts_block false
-# @introduced 2.11.0
+# @param _max [number_or_range]
+# @since 2.11.0
 # @example
 #   print rand_i_look(5) #=> will print either 0, 1, 2, 3, or 4 to the output pane
 #
@@ -3592,9 +3592,9 @@ end
 # Given a max number, produces a number between `0` and the supplied max value exclusively. If max is a range produces an int within the range. With no args returns a value between `0` and `1`.
 # 
 # Does not consume a random value from the stream. Therefore, multiple sequential calls to `rand_look` will all return the same value.
-# @param _max [number_or_range]
 # @accepts_block false
-# @introduced 2.11.0
+# @param _max [number_or_range]
+# @since 2.11.0
 # @example
 #   print rand_look(0.5) #=> will print a number like 0.375030517578125 to the output pane
 #
@@ -3612,7 +3612,7 @@ end
 # Reset rand generator to last seed
 # Resets the random stream to the last specified seed. See `use_random_seed` for changing the seed.
 # @accepts_block false
-# @introduced 2.7.0
+# @since 2.7.0
 # @example
 #   puts rand # prints 0.75006103515625
 #     puts rand # prints 0.733917236328125
@@ -3627,9 +3627,9 @@ end
 
 # Jump forward random generator
 # Jump the random generator forward essentially skipping the next call to `rand`. You may specify an amount to jump allowing you to skip n calls to `rand`.
-# @param _amount [number]
 # @accepts_block false
-# @introduced 2.7.0
+# @param _amount [number]
+# @since 2.7.0
 # @example
 #   # Basic rand stream skip
 #   
@@ -3665,13 +3665,13 @@ end
 
 # Create a ring buffer with the specified start, finish and step size
 # Create a new ring buffer from the range arguments (start, finish and step size). Step size defaults to `1`. Indexes wrap around positively and negatively
+# @accepts_block false
 # @param _start [number]
 # @param _finish [number]
 # @param _step_size [number]
 # @param step Size of increment between steps; step size.
 # @param inclusive If set to true, range is inclusive of finish value
-# @accepts_block false
-# @introduced 2.2.0
+# @since 2.2.0
 # @example
 #   (range 1, 5)    #=> (ring 1, 2, 3, 4)
 #
@@ -3693,9 +3693,9 @@ end
 
 # relative frequency ratio to MIDI pitch
 # Convert a frequency ratio to a midi note which when added to a note will transpose the note to match the frequency ratio.
-# @param _ratio [number]
 # @accepts_block false
-# @introduced 2.7.0
+# @param _ratio [number]
+# @since 2.7.0
 # @example
 #   ratio_to_pitch 2 #=> 12.0
 #
@@ -3708,11 +3708,11 @@ end
 
 # Random number in centred distribution
 # Returns a random number within the range with width around centre. If optional arg `step:` is used, the result is quantised by step.
+# @accepts_block false
 # @param _width [number]
 # @param _centre [number]
 # @param step Step size of value to quantise to.
-# @accepts_block false
-# @introduced 2.3.0
+# @since 2.3.0
 # @example
 #   print rdist(1, 0) #=> will print a number between -1 and 1
 #
@@ -3732,16 +3732,16 @@ end
 # 
 # After using `recording_start` and `recording_stop`, a temporary file is created until you decide to use `recording_save`. If you've decided you don't want to save it you can use this method to delete the temporary file straight away, otherwise the operating system will take care of deleting it later.
 # @accepts_block false
-# @introduced 
+# @since 
 def recording_delete
   #This is a stub, used for indexing
 end
 
 # Save recording
 # Save previous recording to the specified location
-# @param _path [string]
 # @accepts_block false
-# @introduced 2.0.0
+# @param _path [string]
+# @since 2.0.0
 def recording_save(_path = nil)
   #This is a stub, used for indexing
 end
@@ -3749,7 +3749,7 @@ end
 # Start recording
 # Start recording all sound to a `.wav` file stored in a temporary directory.
 # @accepts_block false
-# @introduced 2.0.0
+# @since 2.0.0
 def recording_start
   #This is a stub, used for indexing
 end
@@ -3757,7 +3757,7 @@ end
 # Stop recording
 # Stop current recording.
 # @accepts_block false
-# @introduced 2.0.0
+# @since 2.0.0
 def recording_stop
   #This is a stub, used for indexing
 end
@@ -3765,7 +3765,7 @@ end
 # Reset all thread locals
 # All settings such as the current synth, BPM, random stream and tick values will be reset to the values inherited from the parent thread. Consider using `clear` to reset all these values to their defaults.
 # @accepts_block false
-# @introduced 2.11.0
+# @since 2.11.0
 # @example
 #   # Basic Reset
 #   use_synth :blade
@@ -3826,7 +3826,7 @@ end
 # Reset master mixer
 # The master mixer is the final mixer that all sound passes through. This fn resets it to its default set - undoing any changes made via set_mixer_control!
 # @accepts_block false
-# @introduced 2.9.0
+# @since 2.9.0
 # @example
 #   set_mixer_control! lpf: 70 # LPF cutoff value of master mixer is now 70
 #   sample :loop_amen          # :loop_amen sample is played with low cutoff
@@ -3840,9 +3840,9 @@ end
 
 # Determine if note or args is a rest
 # Given a note or an args map, returns true if it represents a rest and false if otherwise
-# @param _note_or_args [number_symbol_or_map]
 # @accepts_block false
-# @introduced 2.1.0
+# @param _note_or_args [number_symbol_or_map]
+# @since 2.1.0
 # @example
 #   puts rest? nil # true
 #
@@ -3873,9 +3873,9 @@ end
 
 # Create a ring buffer
 # Create a new immutable ring buffer from args. Indexes wrap around positively and negatively
-# @param _list [array]
 # @accepts_block false
-# @introduced 2.2.0
+# @param _list [array]
+# @since 2.2.0
 # @example
 #   (ring 1, 2, 3)[0] #=> 1
 #
@@ -3894,11 +3894,11 @@ end
 
 # Generate a random float between two numbers
 # Given two numbers, this produces a float between the supplied min and max values exclusively. Both min and max need to be supplied. For random integers, see `rrand_i`. If optional arg `step:` is used, the result is quantised by step.
+# @accepts_block false
 # @param _min [number]
 # @param _max [number]
 # @param step Step size of value to quantise to.
-# @accepts_block false
-# @introduced 2.0.0
+# @since 2.0.0
 # @example
 #   print rrand(0, 10) #=> will print a number like 8.917730007820797 to the output pane
 #
@@ -3914,10 +3914,10 @@ end
 
 # Generate a random whole number between two points inclusively
 # Given two numbers, this produces a whole number between the min and max you supplied inclusively. Both min and max need to be supplied. For random floats, see `rrand`
+# @accepts_block false
 # @param _min [number]
 # @param _max [number]
-# @accepts_block false
-# @introduced 2.0.0
+# @since 2.0.0
 # @example
 #   print rrand_i(0, 10) #=> will print a random number between 0 and 10 (e.g. 4, 0 or 10) to the output pane
 #
@@ -3933,9 +3933,9 @@ end
 
 # Real time conversion
 # Real time representation. Returns the amount of beats for the value in real-time seconds. Useful for bypassing any bpm scaling
-# @param _seconds [number]
 # @accepts_block false
-# @introduced 2.0.0
+# @param _seconds [number]
+# @since 2.0.0
 # @example
 #   use_bpm 120  # modifies all time to be half
 #     play 50
@@ -3950,9 +3950,9 @@ end
 
 # Evaluate the code passed as a String as a new Run
 # Executes the code passed as a string in a new Run. This works as if the code was in a buffer and Run button was pressed.
-# @param _code [string]
 # @accepts_block false
-# @introduced 2.11.0
+# @param _code [string]
+# @since 2.11.0
 # @example
 #   run_code "sample :ambi_lunar_land" #=> will play the :ambi_lunar_land sample
 #
@@ -3969,9 +3969,9 @@ end
 
 # Evaluate the contents of the file as a new Run
 # Reads the full contents of the file with `path` and executes it in a new Run. This works as if the code in the file was in a buffer and Run button was pressed.
-# @param _filename [path]
 # @accepts_block false
-# @introduced 2.11.0
+# @param _filename [path]
+# @since 2.11.0
 # @example
 #   run_file "~/path/to/sonic-pi-code.rb" #=> will run the contents of this file
 #
@@ -4003,6 +4003,7 @@ end
 # 9. Lambdas - `lambda {|s| [s.choose] }` - the ultimate power tool for filters. Allows you to create a custom fn which receives a list of candidates as an arg and which should return a new list of candidates (this may be smaller, larger, re-ordered it's up to you).
 # 
 # By combining commands which add to the candidates and then filtering those candidates it is possible to work with folders full of samples in very powerful ways. Note that the specific ordering of filter parameters is irrelevant with the exception of the numbers - in which case the last number is the index. All the candidates will be gathered first before the filters are applied.
+# @accepts_block true
 # @param _name_or_path [symbol_or_string]
 # @param rate Rate with which to play back the sample. Higher rates mean an increase in pitch and a decrease in duration. Default is 1.
 # @param beat_stretch Stretch (or shrink) the sample to last for exactly the specified number of beats. Please note - this does *not* keep the pitch constant and is essentially the same as modifying the rate directly.
@@ -4056,8 +4057,7 @@ end
 # @param relax_time Time taken for the amplitude adjustments to be released. Usually a little longer than clamp_time. If both times are too short, you can get some (possibly unwanted) artefacts. Also known as the time of the release phase. Only valid if the compressor is enabled by turning on the `compress:` opt.
 # @param slide Default slide time in beats for all slide opts. Individually specified slide opts will override this value.
 # @param path Path of the sample to play. Typically this opt is rarely used instead of the more powerful source/filter system. However it can be useful when working with pre-made opt maps.
-# @accepts_block true
-# @introduced 2.0.0
+# @since 2.0.0
 # @example
 #   # Play a built-in sample
 #   sample :loop_amen # Plays the Amen break
@@ -4386,9 +4386,9 @@ end
 
 # Get sample data
 # Alias for the `load_sample` method. Loads sample if necessary and returns buffer information.
-# @param _path [string]
 # @accepts_block false
-# @introduced 2.0.0
+# @param _path [string]
+# @since 2.0.0
 # @example
 #   see load_sample
 #
@@ -4400,6 +4400,7 @@ end
 # Given the name of a loaded sample, or a path to a `.wav`, `.wave`, `.aif`, `.aiff`, `.ogg`, `.oga` or `.flac` file returns the length of time in beats that the sample would play for. `sample_duration` understands and accounts for all the opts you can pass to `sample` which have an effect on the playback duration such as `rate:`. The time returned is scaled to the current BPM.
 # 
 # *Note:* avoid using `sample_duration` to set the sleep time in `live_loop`s, prefer stretching the sample with the `beat_stretch:` opt or changing the BPM instead. See the examples below for details.
+# @accepts_block false
 # @param _path [string]
 # @param rate Rate modifier. For example, doubling the rate will halve the duration.
 # @param start Start position of sample playback as a value from 0 to 1
@@ -4411,8 +4412,7 @@ end
 # @param beat_stretch Change the rate of the sample so that its new duration matches the specified number of beats.
 # @param pitch_stretch Change the rate of the sample so that its new duration matches the specified number of beats but attempt to preserve pitch.
 # @param rpitch Change the rate to shift the pitch up or down the specified number of MIDI notes.
-# @accepts_block false
-# @introduced 2.0.0
+# @since 2.0.0
 # @example
 #   # Simple use
 #   puts sample_duration(:loop_garzul) # returns 8.0 because this sample is 8 seconds long
@@ -4539,9 +4539,9 @@ end
 # Frees the memory and resources consumed by loading the sample on the server. Subsequent calls to `sample` and friends will re-load the sample on the server.
 # 
 # You may also specify the same set of source and filter pre-args available to `sample` itself. `sample_free` will then free all matching samples. See `sample`'s docs for more information.
-# @param _path [string]
 # @accepts_block false
-# @introduced 2.9.0
+# @param _path [string]
+# @since 2.9.0
 # @example
 #   sample :loop_amen # The Amen break is now loaded into memory and played
 #   sleep 2
@@ -4580,7 +4580,7 @@ end
 # Free all loaded samples on the synth server
 # Unloads all samples therefore freeing the memory and resources consumed. Subsequent calls to `sample` and friends will re-load the sample on the server.
 # @accepts_block false
-# @introduced 2.9.0
+# @since 2.9.0
 # @example
 #   sample :loop_amen        # load and play :loop_amen
 #   sample :ambi_lunar_land  # load and play :ambi_lunar_land
@@ -4595,16 +4595,16 @@ end
 # Get all sample groups
 # Return a list of all the sample groups available
 # @accepts_block false
-# @introduced 2.0.0
+# @since 2.0.0
 def sample_groups
   #This is a stub, used for indexing
 end
 
 # Get sample information
 # Alias for the `load_sample` method. Loads sample if necessary and returns sample information.
-# @param _path [string]
 # @accepts_block false
-# @introduced 2.0.0
+# @param _path [string]
+# @since 2.0.0
 # @example
 #   see load_sample
 #
@@ -4614,9 +4614,9 @@ end
 
 # Test if sample was pre-loaded
 # Given a path to a `.wav`, `.wave`, `.aif`, `.aiff`, `.ogg`, `.oga` or `.flac` file, returns `true` if the sample has already been loaded.
-# @param _path [string]
 # @accepts_block false
-# @introduced 2.2.0
+# @param _path [string]
+# @since 2.2.0
 # @example
 #   load_sample :elec_blip # :elec_blip is now loaded and ready to play as a sample
 #   puts sample_loaded? :elec_blip # prints true because it has been pre-loaded
@@ -4628,18 +4628,18 @@ end
 
 # Get sample names
 # Return a ring of sample names for the specified group
-# @param _group [symbol]
 # @accepts_block false
-# @introduced 2.0.0
+# @param _group [symbol]
+# @since 2.0.0
 def sample_names(_group = nil)
   #This is a stub, used for indexing
 end
 
 # Sample Pack Filter Resolution
 # Accepts the same pre-args and opts as `sample` and returns a ring of matched sample paths.
-# @param _pre_args [source_and_filter_types]
 # @accepts_block false
-# @introduced 2.10.0
+# @param _pre_args [source_and_filter_types]
+# @since 2.10.0
 # @example
 #   sample_paths "/path/to/samples/" #=> ring of all top-level samples in /path/to/samples
 #
@@ -4656,11 +4656,11 @@ end
 
 # Create scale
 # Creates a ring of MIDI note numbers when given a tonic note and a scale name. Also takes an optional `num_octaves:` parameter (octave `1` is the default). If only passed the scale name, the tonic defaults to 0. See examples.
+# @accepts_block false
 # @param _tonic [symbol]
 # @param _name [symbol]
 # @param num_octaves The number of octaves you'd like the scale to consist of. More octaves means a larger scale. Default is 1.
-# @accepts_block false
-# @introduced 2.0.0
+# @since 2.0.0
 # @example
 #   puts (scale :C, :major) # returns the following ring of MIDI note numbers: (ring 60, 62, 64, 65, 67, 69, 71, 72)
 #
@@ -4776,7 +4776,7 @@ end
 # All scale names
 # Returns a ring containing all scale names known to Sonic Pi
 # @accepts_block false
-# @introduced 2.6.0
+# @since 2.6.0
 # @example
 #   puts scale_names #=>  prints a list of all the scales
 #
@@ -4787,7 +4787,7 @@ end
 # Return information about the internal SuperCollider sound server
 # Create a map of information about the running audio synthesiser SuperCollider. 
 # @accepts_block false
-# @introduced 2.11.0
+# @since 2.11.0
 # @example
 #   puts scsynth_info  #=>  (map sample_rate: 44100.0,
 #                               #         sample_dur: 2.2675736545352265e-05,
@@ -4809,9 +4809,9 @@ end
 # On some systems with certain configurations (such as wireless speakers, and even a typical Windows environment with the default audio drivers) the audio latency can be large. If all the user is doing is generating audio via calls such as `play`, `synth` and `sample`, then this latency essentially adds to the schedule ahead time and for the most part can be ignored. However, if the user is combining audio with external MIDI/OSC triggered events, this latency can result in a noticeable offset. This function allows you to address this offset by moving the audio events forwards and backwards in time.
 # 
 # So, for example, if your audio system has an audio latency of 150ms, you can compensate for this by setting Sonic Pi's latency to be a negative value: `set_audio_latency! -150`.
-# @param _milliseconds [number]
 # @accepts_block false
-# @introduced 3.1.0
+# @param _milliseconds [number]
+# @since 3.1.0
 # @example
 #   set_audio_latency! 100 # Audio events will now be scheduled 100ms
 #                                                     # after the schedule ahead time
@@ -4832,9 +4832,9 @@ end
 # See `use_cent_tuning` for setting the cent tuning value locally for a specific thread or `live_loop`. This is a global value and will shift the tuning for *all* notes. It will also persist for the entire session.
 # 
 # Important note: the cent tuning set by `set_cent_tuning!` is independent of any thread-local cent tuning values set by `use_cent_tuning` or `with_cent_tuning`. 
-# @param _cent_shift [number]
 # @accepts_block false
-# @introduced 2.10.0
+# @param _cent_shift [number]
+# @since 2.10.0
 # @example
 #   play 50 # Plays note 50
 #   set_cent_tuning! 1
@@ -4846,9 +4846,9 @@ end
 
 # Set control delta globally
 # Specify how many seconds between successive modifications (i.e. trigger then controls) of a specific node on a specific thread. Set larger if you are missing control messages sent extremely close together in time.
-# @param _time [number]
 # @accepts_block false
-# @introduced 2.1.0
+# @param _time [number]
+# @since 2.1.0
 # @example
 #   set_control_delta! 0.1                 # Set control delta to 0.1
 #   
@@ -4866,6 +4866,7 @@ end
 
 # Control master mixer
 # The master mixer is the final mixer that all sound passes through. This fn gives you control over the master mixer allowing you to manipulate all the sound playing through Sonic Pi at once. For example, you can sweep a lpf or hpf over the entire sound. You can reset the controls back to their defaults with `reset_mixer!`.
+# @accepts_block false
 # @param pre_amp Controls the amplitude of the signal prior to the FX stage of the mixer (prior to lpf/hpf stages). Has slide opts. Default 1.
 # @param amp Controls the amplitude of the signal after the FX stage. Has slide opts. Default 1.
 # @param hpf Global hpf FX. Has slide opts. Default 0.
@@ -4874,8 +4875,7 @@ end
 # @param lpf_bypass Bypass the global lpf. 0=no bypass, 1=bypass. Default 0.
 # @param limiter_bypass Bypass the final limiter. 0=no bypass, 1=bypass. Default 0.
 # @param leak_dc_bypass Bypass the final DC leak correction FX. 0=no bypass, 1=bypass. Default 0.
-# @accepts_block false
-# @introduced 2.7.0
+# @since 2.7.0
 # @example
 #   set_mixer_control! lpf: 30, lpf_slide: 16 # slide the global lpf to 30 over 16 beats.
 #
@@ -4885,9 +4885,9 @@ end
 
 # Set the bit depth for recording wav files
 # When you hit the record button, Sonic Pi saves all the audio you can hear into a wav file. By default, this file uses a resolution of 16 bits which is the same as CD audio and good enough for most use cases. However, when working with professional equipment, it is common to want to work with even higher quality files such as 24 bits and even 32 bits. This function allows you to switch the default from 16 to one of 8, 16, 24 or 32.
-# @param _bit_depth [number]
 # @accepts_block false
-# @introduced 2.11.0
+# @param _bit_depth [number]
+# @since 2.11.0
 # @example
 #   set_recording_bit_depth! 24                 # Set recording bit depth to 24
 #
@@ -4897,9 +4897,9 @@ end
 
 # Set sched ahead time globally
 # Specify how many seconds ahead of time the synths should be triggered. This represents the amount of time between pressing 'Run' and hearing audio. A larger time gives the system more room to work with and can reduce performance issues in playing fast sections on slower platforms. However, a larger time also increases latency between modifying code and hearing the result whilst live coding.
-# @param _time [number]
 # @accepts_block false
-# @introduced 2.0.0
+# @param _time [number]
+# @since 2.0.0
 # @example
 #   set_sched_ahead_time! 1 # Code will now run approximately 1 second ahead of audio.
 #
@@ -4909,9 +4909,9 @@ end
 
 # Set Volume globally
 # Set the main system volume to `vol`. Accepts a value between `0` and `5` inclusive. Vols greater or smaller than the allowed values are trimmed to keep them within range. Default is `1`.
-# @param _vol [number]
 # @accepts_block false
-# @introduced 2.0.0
+# @param _vol [number]
+# @since 2.0.0
 # @example
 #   set_volume! 2 # Set the main system volume to 2
 #
@@ -4927,9 +4927,9 @@ end
 
 # Randomise order of a list
 # Returns a new list with the same elements as the original but with their order shuffled. Also works for strings
-# @param _list [array]
 # @accepts_block false
-# @introduced 2.1.0
+# @param _list [array]
+# @since 2.1.0
 # @example
 #   shuffle [1, 2, 3, 4] #=> Would return something like: [3, 4, 2, 1]
 #
@@ -4942,9 +4942,9 @@ end
 
 # Wait for beat duration
 # Wait for a number of beats before triggering the next command. Beats are converted to seconds by scaling to the current bpm setting.
-# @param _beats [number]
 # @accepts_block false
-# @introduced 2.0.0
+# @param _beats [number]
+# @since 2.0.0
 # @example
 #   # Without calls to sleep, all sounds would happen at once:
 #   
@@ -4986,7 +4986,7 @@ end
 # Print a string representing a list of numeric values as a spark graph/bar chart
 # Given a list of numeric values, this method turns them into a string of bar heights and prints them out. Useful for quickly graphing the shape of an array.
 # @accepts_block false
-# @introduced 2.5.0
+# @since 2.5.0
 # @example
 #   spark (range 1, 5)    #=> ▁▃▅█
 #
@@ -5000,7 +5000,7 @@ end
 # Returns a string representing a list of numeric values as a spark graph/bar chart
 # Given a list of numeric values, this method turns them into a string of bar heights. Useful for quickly graphing the shape of an array. Remember to use puts so you can see the output. See `spark` for a simple way of printing a spark graph.
 # @accepts_block false
-# @introduced 2.5.0
+# @since 2.5.0
 # @example
 #   puts (spark_graph (range 1, 5))    #=> ▁▃▅█
 #
@@ -5013,11 +5013,11 @@ end
 
 # Euclidean distribution for beats
 # Creates a new ring of boolean values which space a given number of accents as evenly as possible throughout a bar. This is an implementation of the process described in 'The Euclidean Algorithm Generates Traditional Musical Rhythms' (Toussaint 2005).
+# @accepts_block false
 # @param _num_accents [number]
 # @param _size [number]
 # @param rotate rotate to the next strong beat allowing for easy permutations of the original rhythmic grouping (see example)
-# @accepts_block false
-# @introduced 2.4.0
+# @since 2.4.0
 # @example
 #   (spread 3, 8)    #=> (ring true, false, false, true, false, false, true, false) a spacing of 332
 #
@@ -5092,7 +5092,7 @@ end
 # Get server status
 # This returns a Hash of information about the synthesis environment. Mostly used for debugging purposes.
 # @accepts_block false
-# @introduced 2.0.0
+# @since 2.0.0
 # @example
 #   puts status # Returns something similar to:
 #               # {
@@ -5115,7 +5115,7 @@ end
 # Stop current thread or run
 # Stops the current thread or if not in a thread, stops the current run. Does not stop any running synths triggered previously in the run/thread or kill any existing sub-threads.
 # @accepts_block false
-# @introduced 2.5.0
+# @since 2.5.0
 # @example
 #   sample :loop_amen #=> this sample is played until completion
 #     sleep 0.5
@@ -5151,10 +5151,10 @@ end
 
 # Stretch a sequence of values
 # Stretches a list of values each value repeated count times. Always returns a ring regardless of the type of the list that is stretched. To preserve type, consider using `.stretch` i.e. `(ramp 1, 2, 3).stretch(2) #=> (ramp 1, 1, 2, 2, 3, 3)`
+# @accepts_block false
 # @param _list [anything]
 # @param _count [number]
-# @accepts_block false
-# @introduced 2.6.0
+# @since 2.6.0
 # @example
 #   (stretch [1,2], 3)    #=> (ring 1, 1, 1, 2, 2, 2)
 #
@@ -5167,10 +5167,10 @@ end
 
 # Sync with other threads
 # Pause/block the current thread until a `cue` heartbeat with a matching `cue_id` is received. When a matching `cue` message is received, unblock the current thread, and continue execution with the virtual time set to match the thread that sent the `cue` heartbeat. The current thread is therefore synced to the `cue` thread. If multiple cue ids are passed as arguments, it will `sync` on the first matching `cue_id`. The BPM of the cueing thread can optionally be inherited by using the bpm_sync: opt.
+# @accepts_block false
 # @param _cue_id [symbol]
 # @param bpm_sync Inherit the BPM of the cueing thread. Default is false
-# @accepts_block false
-# @introduced 2.0.0
+# @since 2.0.0
 # @example
 #   in_thread do
 #       sync :foo # this parks the current thread waiting for a foo sync message to be received.
@@ -5236,9 +5236,9 @@ end
 
 # Sync and inherit BPM from other threads 
 # An alias for `sync` with the `bpm_sync:` opt set to true.
-# @param _cue_id [symbol]
 # @accepts_block false
-# @introduced 2.10.0
+# @param _cue_id [symbol]
+# @since 2.10.0
 # @example
 #   See examples for sync
 #
@@ -5256,6 +5256,7 @@ end
 # If a block is given, it is assumed to take one arg which will be the controllable synth node and the body of the block is run in an implicit `in_thread`. This allows for asynchronous control of the synth without interferring with time. For synchronous control capture the result of `synth` as a variable and use that.
 # 
 # Note that the default opts listed are only a guide to the most common opts across all the synths. Not all synths support all the default opts and each synth typically supports many more opts specific to that synth. For example, the `:tb303` synth supports 45 unique opts. For a full list of a synth's opts see its documentation in the Help system. This can be accessed directly by clicking on the name of the synth and using the shortcut `C-i`
+# @accepts_block true
 # @param _synth_name [symbol]
 # @param amp The amplitude of the note
 # @param amp_slide The duration in beats for amplitude changes to take place
@@ -5272,8 +5273,7 @@ end
 # @param slide Default slide time in beats for all slide opts. Individually specified slide opts will override this value
 # @param pitch Pitch adjustment in semitones. 1 is up a semitone, 12 is up an octave, -12 is down an octave etc.  Decimal numbers can be used for fine tuning.
 # @param on If specified and false/nil/0 will stop the synth from being played. Ensures all opts are evaluated.
-# @accepts_block true
-# @introduced 2.0.0
+# @since 2.0.0
 # @example
 #   use_synth :beep            # Set current synth to :beep
 #   play 60                    # Play note 60 with opt defaults
@@ -5342,18 +5342,18 @@ end
 # Get all synth names
 # Return a list of all the synths available
 # @accepts_block false
-# @introduced 2.9.0
+# @since 2.9.0
 def synth_names
   #This is a stub, used for indexing
 end
 
 # Increment a tick and return value
 # Increment the default tick by 1 and return value. Successive calls to `tick` will continue to increment the default tick. If a `key` is specified, increment that specific tick. If an increment `value` is specified, increment key by that value rather than 1. Ticks are `in_thread` and `live_loop` local, so incrementing a tick only affects the current thread's version of that tick. See `tick_reset` and `tick_set` for directly manipulating the tick vals.
+# @accepts_block false
 # @param _key [symbol]
 # @param step The amount to tick up by. Default is 1.
 # @param offset Offset to add to index returned. Useful when calling tick on lists, rings and vectors to offset the returned value. Default is 0.
-# @accepts_block false
-# @introduced 2.6.0
+# @since 2.6.0
 # @example
 #   puts tick #=> 0
 #     puts tick #=> 1
@@ -5438,7 +5438,7 @@ end
 # Reset tick to 0
 # Reset default tick to 0. If a `key` is referenced, set that tick to 0 instead. Same as calling tick_set(0)
 # @accepts_block false
-# @introduced 2.6.0
+# @since 2.6.0
 # @example
 #   # increment default tick a few times
 #     tick
@@ -5466,7 +5466,7 @@ end
 # Reset all ticks
 # Reset all ticks - default and keyed
 # @accepts_block false
-# @introduced 2.6.0
+# @since 2.6.0
 # @example
 #   tick      # increment default tick and tick :foo
 #     tick
@@ -5485,9 +5485,9 @@ end
 
 # Set tick to a specific value
 # Set the default tick to the specified `value`. If a `key` is referenced, set that tick to `value` instead. Next call to `look` will return `value`.
-# @param _value [number]
 # @accepts_block false
-# @introduced 2.6.0
+# @param _value [number]
+# @since 2.6.0
 # @example
 #   tick_set 40 # set default tick to 40
 #     puts look   #=> 40
@@ -5513,9 +5513,9 @@ end
 # If the `time_warp` block is within a `density` block, the delta time is not affected (although all the other times such as sleep and phase durations will be affected) - see example.
 # 
 # `time_warp` is ahead-of-time scheduling within the current thread. See `at` for just-in-time scheduling using multiple isolated threads.
-# @param _delta_time [number]
 # @accepts_block true
-# @introduced 2.11.0
+# @param _delta_time [number]
+# @since 2.11.0
 # @example
 #   # shift forwards in time
 #   play 70            #=> plays at time 0
@@ -5690,7 +5690,7 @@ end
 # Block level comment ignoring
 # Evaluates all of the code within the block. Use to reverse the effect of the comment without having to explicitly remove it.
 # @accepts_block true
-# @introduced 2.0.0
+# @since 2.0.0
 # @example
 #   uncomment do # starting a block level comment:
 #       play 50 # played
@@ -5704,9 +5704,9 @@ end
 
 # Enable and disable BPM scaling
 # Turn synth argument bpm scaling on or off for the current thread. This is on by default. Note, using `rt` for args will result in incorrect times when used after turning arg bpm scaling off.
-# @param _bool [boolean]
 # @accepts_block false
-# @introduced 2.0.0
+# @param _bool [boolean]
+# @since 2.0.0
 # @example
 #   use_bpm 120
 #   play 50, release: 2 # release is actually 1 due to bpm scaling
@@ -5730,9 +5730,9 @@ end
 
 # Enable and disable arg checks
 # When triggering synths, each argument is checked to see if it is sensible. When argument checking is enabled and an argument isn't sensible, you'll see an error in the debug pane. This setting allows you to explicitly enable and disable the checking mechanism. See with_arg_checks for enabling/disabling argument checking only for a specific `do`/`end` block.
-# @param _true_or_false [boolean]
 # @accepts_block false
-# @introduced 2.0.0
+# @param _true_or_false [boolean]
+# @since 2.0.0
 # @example
 #   play 50, release: 5 # Args are checked
 #   use_arg_checks false
@@ -5754,9 +5754,9 @@ end
 #   * Techno/trance: 120-140 bpm
 #   * Dubstep: 135-145 bpm
 #   * Drum and bass: 160-180 bpm
-# @param _bpm [number]
 # @accepts_block false
-# @introduced 2.0.0
+# @param _bpm [number]
+# @since 2.0.0
 # @example
 #   # default tempo is 60 bpm
 #     4.times do
@@ -5788,9 +5788,9 @@ end
 
 # Set new tempo as a multiple of current tempo
 # Sets the tempo in bpm (beats per minute) as a multiplication of the current tempo. Affects all containing calls to `sleep` and all temporal synth arguments which will be scaled to match the new bpm. See also `use_bpm`
-# @param _mul [number]
 # @accepts_block false
-# @introduced 2.3.0
+# @param _mul [number]
+# @since 2.3.0
 # @example
 #   use_bpm 60   # Set the BPM to 60
 #     play 50
@@ -5810,9 +5810,9 @@ end
 # Uniformly tunes your music by shifting all notes played by the specified number of cents. To shift up by a cent use a cent tuning of 1. To shift down use negative numbers. One semitone consists of 100 cents.
 # 
 # See `with_cent_tuning` for setting the cent tuning value only for a specific `do`/`end` block. To transpose entire semitones see `use_transpose`.
-# @param _cent_shift [number]
 # @accepts_block false
-# @introduced 2.9.0
+# @param _cent_shift [number]
+# @since 2.9.0
 # @example
 #   play 50 # Plays note 50
 #   use_cent_tuning 1
@@ -5824,9 +5824,9 @@ end
 
 # Enable and disable cue logging
 # Enable or disable log messages created on cues. This does not disable the cues themselves, it just stops them from being printed to the log
-# @param _true_or_false [boolean]
 # @accepts_block false
-# @introduced 2.6.0
+# @param _true_or_false [boolean]
+# @since 2.6.0
 # @example
 #   use_cue_logging true # Turn on cue messages
 #
@@ -5839,9 +5839,9 @@ end
 
 # Enable and disable debug
 # Enable or disable messages created on synth triggers. If this is set to false, the synths will be silent until debug is turned back on. Silencing debug messages can reduce output noise and also increase performance on slower platforms. See `with_debug` for setting the debug value only for a specific `do`/`end` block.
-# @param _true_or_false [boolean]
 # @accepts_block false
-# @introduced 2.0.0
+# @param _true_or_false [boolean]
+# @since 2.0.0
 # @example
 #   use_debug true # Turn on debug messages
 #
@@ -5855,7 +5855,7 @@ end
 # Merge MIDI defaults
 # Specify new default values to be used by all subsequent calls to `midi_*` fns. Merges the specified values with any previous defaults, rather than replacing them
 # @accepts_block false
-# @introduced 3.0.0
+# @since 3.0.0
 # @example
 #   midi_note_on :e1 # Sends MIDI :e1 note_on with default opts
 #   
@@ -5876,7 +5876,7 @@ end
 # Merge new sample defaults
 # Specify new default values to be used by all subsequent calls to `sample`. Merges the specified values with any previous defaults, rather than replacing them.
 # @accepts_block false
-# @introduced 2.9.0
+# @since 2.9.0
 # @example
 #   sample :loop_amen # plays amen break with default arguments
 #   
@@ -5895,7 +5895,7 @@ end
 # Merge synth defaults
 # Specify synth arg values to be used by any following call to play. Merges the specified values with any previous defaults, rather than replacing them.
 # @accepts_block false
-# @introduced 2.0.0
+# @since 2.0.0
 # @example
 #   play 50 #=> Plays note 50
 #   
@@ -5920,7 +5920,7 @@ end
 # Use new MIDI defaults
 # Specify new default values to be used by all subsequent calls to `midi_*` fns. Will remove and override any previous defaults.
 # @accepts_block false
-# @introduced 3.0.0
+# @since 3.0.0
 # @example
 #   midi_note_on :e1 # Sends MIDI :e1 note_on with default opts
 #   
@@ -5938,9 +5938,9 @@ end
 
 # Enable and disable MIDI logging
 # Enable or disable log messages created on MIDI functions. This does not disable the MIDI functions themselves, it just stops them from being printed to the log
-# @param _true_or_false [boolean]
 # @accepts_block false
-# @introduced 3.0.0
+# @param _true_or_false [boolean]
+# @since 3.0.0
 # @example
 #   use_midi_logging true # Turn on MIDI logging
 #
@@ -5953,9 +5953,9 @@ end
 
 # Note octave transposition
 # Transposes your music by shifting all notes played by the specified number of octaves. To shift up by an octave use a transpose of 1. To shift down use negative numbers. See `with_octave` for setting the octave shift only for a specific `do`/`end` block. For transposing the notes within the octave range see `use_transpose`.
-# @param _octave_shift [number]
 # @accepts_block false
-# @introduced 2.9.0
+# @param _octave_shift [number]
+# @since 2.9.0
 # @example
 #   play 50 # Plays note 50
 #   use_octave 1
@@ -5984,10 +5984,10 @@ end
 # 
 # Note that calls to `osc_send` will ignore these values.
 # 
+# @accepts_block false
 # @param _hostname [string]
 # @param _port [number]
-# @accepts_block false
-# @introduced 3.0.0
+# @since 3.0.0
 # @example
 #   # Send a simple OSC message to another program on the same machine
 #   
@@ -6057,9 +6057,9 @@ end
 
 # Enable and disable OSC logging
 # Enable or disable log messages created on OSC functions. This does not disable the OSC functions themselves, it just stops them from being printed to the log
-# @param _true_or_false [boolean]
 # @accepts_block false
-# @introduced 3.0.0
+# @param _true_or_false [boolean]
+# @since 3.0.0
 # @example
 #   use_osc_logging true # Turn on OSC logging
 #
@@ -6072,9 +6072,9 @@ end
 
 # Set random seed generator to known seed
 # Resets the random number generator to the specified seed. All subsequently generated random numbers and randomisation functions such as `shuffle` and `choose` will use this new generator and the current generator is discarded. Use this to change the sequence of random numbers in your piece in a way that can be reproduced. Especially useful if combined with iteration. See examples.
-# @param _seed [number]
 # @accepts_block false
-# @introduced 2.0.0
+# @param _seed [number]
+# @since 2.0.0
 # @example
 #   ## Basic usage
 #   
@@ -6121,7 +6121,7 @@ end
 # See `use_sched_ahead_time` for a version of this function which allows you to set the schedule ahead time to any arbitrary value. Note, `use_real_time` will override any value set with `set_sched_ahead_time!` for the current thread.
 # 
 # @accepts_block false
-# @introduced 3.0.0
+# @since 3.0.0
 # @example
 #   use_real_time 1 # Code will now run approximately 1 second ahead of audio.
 #
@@ -6131,10 +6131,10 @@ end
 
 # Sample-duration-based bpm modification
 # Modify bpm so that sleeping for 1 will sleep for the duration of the sample.
+# @accepts_block false
 # @param _string_or_number [sample_name_or_duration]
 # @param num_beats The number of beats within the sample. By default this is 1.
-# @accepts_block false
-# @introduced 2.1.0
+# @since 2.1.0
 # @example
 #   use_sample_bpm :loop_amen  #Set bpm based on :loop_amen duration
 #   
@@ -6164,7 +6164,7 @@ end
 # Use new sample defaults
 # Specify new default values to be used by all subsequent calls to `sample`. Will remove and override any previous defaults.
 # @accepts_block false
-# @introduced 2.5.0
+# @since 2.5.0
 # @example
 #   sample :loop_amen # plays amen break with default arguments
 #   
@@ -6186,9 +6186,9 @@ end
 # See `set_sched_ahead_time!` for a global version of this function. Note, `use_sched_ahead_time` will override any value set with `set_sched_ahead_time!` for the current thread.
 # 
 # See `use_real_time` for a simple way of setting the schedule ahead time to 0.
-# @param _time [number]
 # @accepts_block false
-# @introduced 3.0.0
+# @param _time [number]
+# @since 3.0.0
 # @example
 #   use_sched_ahead_time 1 # Code will now run approximately 1 second ahead of audio.
 #
@@ -6212,9 +6212,9 @@ end
 
 # Switch current synth
 # Switch the current synth to `synth_name`. Affects all further calls to `play`. See `with_synth` for changing the current synth only for a specific `do`/`end` block.
-# @param _synth_name [symbol]
 # @accepts_block false
-# @introduced 2.0.0
+# @param _synth_name [symbol]
+# @since 2.0.0
 # @example
 #   play 50 # Plays with default synth
 #   use_synth :mod_sine
@@ -6227,7 +6227,7 @@ end
 # Use new synth defaults
 # Specify new default values to be used by all subsequent calls to `play`. Will remove and override any previous defaults.
 # @accepts_block false
-# @introduced 2.0.0
+# @since 2.0.0
 # @example
 #   play 50 # plays note 50 with default arguments
 #   
@@ -6245,9 +6245,9 @@ end
 
 # Inhibit synth triggers if too late
 # If set to true, synths will not trigger if it is too late. If false, some synth triggers may be late.
-# @param _bool [true_or_false]
 # @accepts_block true
-# @introduced 2.10.0
+# @param _bool [true_or_false]
+# @since 2.10.0
 # @example
 #   use_timing_guarantees true
 #   
@@ -6264,9 +6264,9 @@ end
 
 # Note transposition
 # Transposes your music by shifting all notes played by the specified amount. To shift up by a semitone use a transpose of 1. To shift down use negative numbers. See `with_transpose` for setting the transpose value only for a specific `do`/`end` block. To transpose entire octaves see `use_octave`.
-# @param _note_shift [number]
 # @accepts_block false
-# @introduced 2.0.0
+# @param _note_shift [number]
+# @since 2.0.0
 # @example
 #   play 50 # Plays note 50
 #   use_transpose 1
@@ -6286,10 +6286,10 @@ end
 
 # Use alternative tuning systems
 # In most music we make semitones by dividing the octave into 12 equal parts, which is known as equal temperament. However there are lots of other ways to tune the 12 notes. This method adjusts each midi note into the specified tuning system. Because the ratios between notes aren't always equal, be careful to pick a centre note that is in the key of the music you're making for the best sound. Currently available tunings are `:just`, `:pythagorean`, `:meantone` and the default of `:equal`
+# @accepts_block false
 # @param _tuning [symbol]
 # @param _fundamental_note [symbol_or_number]
-# @accepts_block false
-# @introduced 2.6.0
+# @since 2.6.0
 # @example
 #   play :e4 # Plays note 64
 #   use_tuning :just, :c
@@ -6311,9 +6311,9 @@ end
 
 # Create a vector
 # Create a new immutable vector from args. Out of range indexes return nil.
-# @param _list [array]
 # @accepts_block false
-# @introduced 2.6.0
+# @param _list [array]
+# @since 2.6.0
 # @example
 #   (vector 1, 2, 3)[0] #=> 1
 #
@@ -6342,7 +6342,7 @@ end
 # Get current version information
 # Return information representing the current version of Sonic Pi. This information may be further inspected with `version.major`, `version.minor`, `version.patch` and `version.dev`
 # @accepts_block false
-# @introduced 2.0.0
+# @since 2.0.0
 # @example
 #   puts version # => Prints out the current version such as v2.0.1
 #
@@ -6362,7 +6362,7 @@ end
 # Get virtual time
 # Get the virtual time of the current thread.
 # @accepts_block false
-# @introduced 2.1.0
+# @since 2.1.0
 # @example
 #   puts vt # prints 0
 #      sleep 1
@@ -6374,9 +6374,9 @@ end
 
 # Wait for duration
 # Synonym for `sleep` - see `sleep`
-# @param _beats [number]
 # @accepts_block false
-# @introduced 2.0.0
+# @param _beats [number]
+# @since 2.0.0
 def wait(_beats = nil)
   #This is a stub, used for indexing
 end
@@ -6384,7 +6384,7 @@ end
 # Block-level enable and disable BPM scaling
 # Turn synth argument bpm scaling on or off for the supplied block. Note, using `rt` for args will result in incorrect times when used within this block.
 # @accepts_block true
-# @introduced 2.0.0
+# @since 2.0.0
 # @example
 #   use_bpm 120
 #   play 50, release: 2 # release is actually 1 due to bpm scaling
@@ -6408,9 +6408,9 @@ end
 
 # Block-level enable and disable arg checks
 # Similar to `use_arg_checks` except only applies to code within supplied `do`/`end` block. Previous arg check value is restored after block.
-# @param _true_or_false [boolean]
 # @accepts_block true
-# @introduced 2.0.0
+# @param _true_or_false [boolean]
+# @since 2.0.0
 # @example
 #   # Turn on arg checking:
 #   use_arg_checks true
@@ -6444,9 +6444,9 @@ end
 #   * Dubstep: 135-145 bpm
 #   * Drum and bass: 160-180 bpm
 #   
-# @param _bpm [number]
 # @accepts_block true
-# @introduced 2.0.0
+# @param _bpm [number]
+# @since 2.0.0
 # @example
 #   # default tempo is 60 bpm
 #     4.times do
@@ -6479,9 +6479,9 @@ end
 
 # Set new tempo as a multiple of current tempo for block
 # Sets the tempo in bpm (beats per minute) for everything in the given block as a multiplication of the current tempo. Affects all containing calls to `sleep` and all temporal synth arguments which will be scaled to match the new bpm. See also `with_bpm`
-# @param _mul [number]
 # @accepts_block true
-# @introduced 2.3.0
+# @param _mul [number]
+# @since 2.3.0
 # @example
 #   use_bpm 60   # Set the BPM to 60
 #     play 50
@@ -6501,9 +6501,9 @@ end
 
 # Block-level cent tuning
 # Similar to `use_cent_tuning` except only applies cent shift to code within supplied `do`/`end` block. Previous cent tuning value is restored after block. One semitone consists of 100 cents. To transpose entire semitones see `with_transpose`.
-# @param _cent_shift [number]
 # @accepts_block true
-# @introduced 2.9.0
+# @param _cent_shift [number]
+# @since 2.9.0
 # @example
 #   use_cent_tuning 1
 #   play 50 # Plays note 50.01
@@ -6521,9 +6521,9 @@ end
 
 # Block-level enable and disable cue logging
 # Similar to use_cue_logging except only applies to code within supplied `do`/`end` block. Previous cue log value is restored after block.
-# @param _true_or_false [boolean]
 # @accepts_block true
-# @introduced 2.6.0
+# @param _true_or_false [boolean]
+# @since 2.6.0
 # @example
 #   # Turn on debugging:
 #     use_cue_logging true
@@ -6544,9 +6544,9 @@ end
 
 # Block-level enable and disable debug
 # Similar to use_debug except only applies to code within supplied `do`/`end` block. Previous debug value is restored after block.
-# @param _true_or_false [boolean]
 # @accepts_block true
-# @introduced 2.0.0
+# @param _true_or_false [boolean]
+# @since 2.0.0
 # @example
 #   # Turn on debugging:
 #   use_debug true
@@ -6571,11 +6571,11 @@ end
 # This applies the named effect (FX) to everything within a given `do`/`end` block. Effects may take extra parameters to modify their behaviour. See FX help for parameter details.
 # 
 # For advanced control, it is also possible to modify the parameters of an effect within the body of the block. If you define the block with a single argument, the argument becomes a reference to the current effect and can be used to control its parameters (see examples).
+# @accepts_block true
 # @param _fx_name [symbol]
 # @param reps Number of times to repeat the block in an iteration.
 # @param kill_delay Amount of time to wait after all synths triggered by the block have completed before stopping and freeing the effect synthesiser.
-# @accepts_block true
-# @introduced 2.0.0
+# @since 2.0.0
 # @example
 #   # Basic usage
 #   with_fx :distortion do # Use the distortion effect with default parameters
@@ -6632,7 +6632,7 @@ end
 # Block-level merge midi defaults
 # Specify opt values to be used by any following call to the `midi_*` fns within the specified `do`/`end` block. Merges the specified values with any previous midi defaults, rather than replacing them. After the `do`/`end` block has completed, previous defaults (if any) are restored.
 # @accepts_block true
-# @introduced 3.0.0
+# @since 3.0.0
 # @example
 #   midi_note_on :e1 # Sends MIDI :e1 note_on with default opts
 #   
@@ -6658,7 +6658,7 @@ end
 # Block-level use merged sample defaults
 # Specify new default values to be used by all subsequent calls to `sample` within the `do`/`end` block.  Merges the specified values with any previous sample defaults, rather than replacing them. After the `do`/`end` block has completed, the previous sampled defaults (if any) are restored.
 # @accepts_block false
-# @introduced 2.9.0
+# @since 2.9.0
 # @example
 #   sample :loop_amen # plays amen break with default arguments
 #   
@@ -6679,7 +6679,7 @@ end
 # Block-level merge synth defaults
 # Specify synth arg values to be used by any following call to play within the specified `do`/`end` block. Merges the specified values with any previous synth defaults, rather than replacing them. After the `do`/`end` block has completed, previous defaults (if any) are restored.
 # @accepts_block true
-# @introduced 2.0.0
+# @since 2.0.0
 # @example
 #   with_merged_synth_defaults amp: 0.5, pan: 1 do
 #     play 50 # => plays note 50 with amp 0.5 and pan 1
@@ -6705,7 +6705,7 @@ end
 # Block-level use new MIDI defaults
 # Specify new default values to be used by all calls to `midi_*` fns within the `do`/`end` block. After the `do`/`end` block has completed the previous MIDI defaults (if any) are restored.
 # @accepts_block true
-# @introduced 3.0.0
+# @since 3.0.0
 # @example
 #   midi_note_on :e1 # Sends MIDI :e1 note on with default opts
 #   
@@ -6729,9 +6729,9 @@ end
 
 # Block-level enable and disable MIDI logging
 # Similar to use_midi_logging except only applies to code within supplied `do`/`end` block. Previous MIDI log value is restored after block.
-# @param _true_or_false [boolean]
 # @accepts_block true
-# @introduced 3.0.0
+# @param _true_or_false [boolean]
+# @since 3.0.0
 # @example
 #   # Turn on MIDI logging:
 #     use_midi_logging true
@@ -6752,9 +6752,9 @@ end
 
 # Block level octave transposition
 # Transposes your music by shifting all notes played by the specified number of octaves within the specified block. To shift up by an octave use a transpose of 1. To shift down use negative numbers. For transposing the notes within the octave range see `with_transpose`.
-# @param _octave_shift [number]
 # @accepts_block true
-# @introduced 2.9.0
+# @param _octave_shift [number]
+# @since 2.9.0
 # @example
 #   play 50 # Plays note 50
 #   sleep 1
@@ -6770,10 +6770,10 @@ end
 
 # Block-level setting for the default hostname and port number of outgoing OSC messages.
 # Sets the destination host and port that `osc` will send messages to for the given do/end block.
+# @accepts_block true
 # @param _hostname [string]
 # @param _port [number]
-# @accepts_block true
-# @introduced 3.0.0
+# @since 3.0.0
 # @example
 #   use_osc "localhost", 7000  # Specify port 7010
 #   osc "/foo/baz"             # Send an OSC message to port 7000
@@ -6793,9 +6793,9 @@ end
 
 # Block-level enable and disable OSC logging
 # Similar to use_osc_logging except only applies to code within supplied `do`/`end` block. Previous OSC log value is restored after block.
-# @param _true_or_false [boolean]
 # @accepts_block true
-# @introduced 3.0.0
+# @param _true_or_false [boolean]
+# @since 3.0.0
 # @example
 #   # Turn on OSC logging:
 #     use_osc_logging true
@@ -6816,9 +6816,9 @@ end
 
 # Specify random seed for code block
 # Resets the random number generator to the specified seed for the specified code block. All generated random numbers and randomisation functions such as `shuffle` and `choose` within the code block will use this new generator. Once the code block has completed, the original generator is restored and the code block generator is discarded. Use this to change the sequence of random numbers in your piece in a way that can be reproduced. Especially useful if combined with iteration. See examples.
-# @param _seed [number]
 # @accepts_block true
-# @introduced 2.0.0
+# @param _seed [number]
+# @since 2.0.0
 # @example
 #   use_random_seed 1 # reset random seed to 1
 #     puts rand # => 0.417022004702574
@@ -6877,7 +6877,7 @@ end
 # See `with_sched_ahead_time` for a version of this function which allows you to set the schedule ahead time to any arbitrary value. Note, `with_real_time` will override any value set with `set_sched_ahead_time!` for the current thread.
 # 
 # @accepts_block false
-# @introduced 3.0.0
+# @since 3.0.0
 # @example
 #   use_real_time 1 # Code will now run approximately 1 second ahead of audio.
 #
@@ -6887,10 +6887,10 @@ end
 
 # Block-scoped sample-duration-based bpm modification
 # Block-scoped modification of bpm so that sleeping for 1 will sleep for the duration of the sample.
+# @accepts_block true
 # @param _string_or_number [sample_name_or_duration]
 # @param num_beats The number of beats within the sample. By default this is 1.
-# @accepts_block true
-# @introduced 2.1.0
+# @since 2.1.0
 # @example
 #   live_loop :dnb do
 #     with_sample_bpm :loop_amen do #Set bpm based on :loop_amen duration
@@ -6920,7 +6920,7 @@ end
 # Block-level use new sample defaults
 # Specify new default values to be used by all subsequent calls to `sample` within the `do`/`end` block. After the `do`/`end` block has completed, the previous sampled defaults (if any) are restored. For the contents of the block, will remove and override any previous defaults.
 # @accepts_block false
-# @introduced 2.5.0
+# @since 2.5.0
 # @example
 #   sample :loop_amen # plays amen break with default arguments
 #   
@@ -6944,9 +6944,9 @@ end
 # See `set_sched_ahead_time!` for a global version of this function. Note, `with_sched_ahead_time` will override any value set with `set_sched_ahead_time!` for the given block within the current thread.
 # 
 # See `with_real_time` for a simple way of setting the schedule ahead time to 0.
-# @param _time [number]
 # @accepts_block false
-# @introduced 3.0.0
+# @param _time [number]
+# @since 3.0.0
 # @example
 #   with_sched_ahead_time 1 do
 #     play 70  # Sound will happen with a latency of 1
@@ -6960,6 +6960,7 @@ end
 
 # Add swing to successive calls to do/end block
 # Runs block within a `time_warp` except for once every `pulse` consecutive runs (defaulting to 4). When used for rhythmical purposes this results in one in every `pulse` calls of the block being 'on beat' and the rest shifted forward or backwards in time by `shift` beats.
+# @accepts_block false
 # @param _shift [beats]
 # @param _pulse [number]
 # @param _tick [symbol]
@@ -6967,8 +6968,7 @@ end
 # @param pulse How often to apply the swing. Defaults to 4.
 # @param tick A key for the tick with which to count pulses. Override this if you have more than one `with_swing` block in your `live_loop` or thread to stop them interfering with each other.
 # @param offset Count offset - before modding the count with the pulse size - integer offset to add to the result of calling `tick` with the specified tick key (via the `tick:` opt)
-# @accepts_block false
-# @introduced 3.0.0
+# @since 3.0.0
 # @example
 #   live_loop :foo do
 #     with_swing 0.1 do
@@ -7028,9 +7028,9 @@ end
 
 # Block-level synth switching
 # Switch the current synth to `synth_name` but only for the duration of the `do`/`end` block. After the `do`/`end` block has completed, the previous synth is restored.
-# @param _synth_name [symbol]
 # @accepts_block true
-# @introduced 2.0.0
+# @param _synth_name [symbol]
+# @since 2.0.0
 # @example
 #   play 50 # Plays with default synth
 #   sleep 2
@@ -7051,7 +7051,7 @@ end
 # Block-level use new synth defaults
 # Specify new default values to be used by all calls to `play` within the `do`/`end` block. After the `do`/`end` block has completed the previous synth defaults (if any) are restored.
 # @accepts_block true
-# @introduced 2.0.0
+# @since 2.0.0
 # @example
 #   play 50 # plays note 50 with default arguments
 #   
@@ -7071,9 +7071,9 @@ end
 
 # Block-scoped inhibition of synth triggers if too late
 # For the given block, if set to true, synths will not trigger if it is too late. If false, some synth triggers may be late. After the block has completed, the previous value is restored. 
-# @param _bool [true_or_false]
 # @accepts_block true
-# @introduced 2.10.0
+# @param _bool [true_or_false]
+# @since 2.10.0
 # @example
 #   with_timing_guarantees true
 #     sample :loop_amen  #=> if time is behind by any margin, this will not trigger
@@ -7090,9 +7090,9 @@ end
 
 # Block-level note transposition
 # Similar to use_transpose except only applies to code within supplied `do`/`end` block. Previous transpose value is restored after block. To transpose entire octaves see `with_octave`.
-# @param _note_shift [number]
 # @accepts_block true
-# @introduced 2.0.0
+# @param _note_shift [number]
+# @since 2.0.0
 # @example
 #   use_transpose 3
 #   play 62 # Plays note 65
@@ -7112,10 +7112,10 @@ end
 
 # Block-level tuning modification
 # Similar to use_tuning except only applies to code within supplied `do`/`end` block. Previous tuning value is restored after block.
+# @accepts_block true
 # @param _tuning [symbol]
 # @param _fundamental_note [symbol_or_number]
-# @accepts_block true
-# @introduced 2.6.0
+# @since 2.6.0
 # @example
 #   use_tuning :equal, :c
 #   play :e4 # Plays note 64
