@@ -66,6 +66,7 @@ class Sequence
   #     - velocity: v1 | v50 | v100 | ...
   #     - probability: p1 | p50 | p100 | ...
   #     - repeats: r1 | r4 | r16 | ...
+  #     - duration: d1 | d1/3 | d1/8 | ...
   #   - or anything else to use all the defaults
   # @example Multiline pattern
   #   :B2 v40 p60 r2 | :B3 | _ | KABOOM
@@ -92,6 +93,8 @@ class Sequence
               step.probability = value.to_i / 100.0
             when 'r'
               step.repeats = value.to_i
+            when 'd'
+              step.duration = eval("#{value}.0").to_f
             end
           end
         end
@@ -106,13 +109,16 @@ class Sequence
   # @see Step.initialize If pattern is an Enumerable<Step>
   # @param note [Symbol, Integer] Overrides note for all steps
   # @param channel [Integer] Overrides channel for all steps
-  def initialize(pattern, note: nil, channel: nil)
-    override   = { note: note, channel: channel }.compact
+  # @param override [Hash] Overrides other properties for all steps
+  def initialize(pattern, note: nil, channel: nil, override: {})
+    override   = override.merge({ note: note, channel: channel }.compact).compact
     parsed     =
       if pattern.is_a?(String)
         self.class.parse(pattern)
       elsif pattern.is_a?(Enumerable)
         pattern
+      elsif pattern.respond_to?(:call) && pattern.respond_to?(:to_enum)
+        pattern.to_enum(:call)
       else
         raise ArgumentError, "Invalid pattern: #{ pattern.inspect }"
       end
@@ -140,13 +146,20 @@ class Sequence
       return
     end
 
-    n   ||= steps.size
     seq = steps
+    raise "Reversing the sequence of unknown size may take infinite time" if reverse && !finite?
     seq = steps.reverse_each if reverse && finite?
     if n.nil?
       seq.each(&:play)
     else
-      seq.cycle.take(n).each(&:play)
+      seq.rewind
+      n.times do
+        seq.next.play
+      rescue StopIteration
+        seq.rewind
+        seq.peek # break infinite retry if sequence is empty
+        retry
+      end
     end
   end
 
