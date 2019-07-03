@@ -2,8 +2,7 @@ $core = self
 use_timing_guarantees true
 
 Step = Struct.new(
-  *%i[note channel velocity probability repeats duration],
-  keyword_init: true
+  *%i[note channel velocity probability repeats duration port]
 ) do
 
   # @param note [Symbol, Integer] MIDI parameter; :A..:G, :A2 - with octave, :Fs3 - sharp, :Eb3 - flat
@@ -14,9 +13,10 @@ Step = Struct.new(
   # @param probability [Float, Integer] 1 - plays each time, 0 - never plays, 0.5 - Kernel.rand decides
   # @param repeats [Integer] Number of times to play the note per duration
   # @param duration [Float] Play time in beats
-  def initialize(note: :G2, channel: 1, velocity: 1, probability: 1, repeats: 1, duration: 0.25)
+  def initialize(note: :G2, channel: 1, port: '*', velocity: 1, probability: 1, repeats: 1, duration: 0.25)
     self.note        = note
     self.channel     = channel.to_i.abs
+    self.port        = port
     self.repeats     = repeats.to_i.abs
     self.duration    = duration.to_f
     self.velocity    = velocity
@@ -27,7 +27,7 @@ Step = Struct.new(
     if probability > 0 && repeats > 0 && rand <= probability
       step = duration / repeats
       repeats.times do
-        $core.midi note, velocity_f: velocity, sustain: step, channel: channel
+        $core.midi note, velocity_f: velocity, sustain: step, channel: channel, port: port
         $core.sleep step
       end
     else
@@ -111,7 +111,8 @@ class Sequence
   # @param channel [Integer] Overrides channel for all steps
   # @param override [Hash] Overrides other properties for all steps
   def initialize(pattern, note: nil, channel: nil, override: {})
-    override   = override.merge({ note: note, channel: channel }.compact).compact
+    defaults   = { note: note, channel: channel }.reject { |_, v| v.nil? }
+    override   = override.merge(defaults).reject { |_, v| v.nil? }
     parsed     =
       if pattern.is_a?(String)
         self.class.parse(pattern)
@@ -154,11 +155,13 @@ class Sequence
     else
       seq.rewind
       n.times do
-        seq.next.play
-      rescue StopIteration
-        seq.rewind
-        seq.peek # break infinite retry if sequence is empty
-        retry
+        begin
+          seq.next.play
+        rescue StopIteration
+          seq.rewind
+          seq.peek # break infinite retry if sequence is empty
+          retry
+        end
       end
     end
   end

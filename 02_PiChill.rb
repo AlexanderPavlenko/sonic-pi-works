@@ -21,7 +21,7 @@ end
 
 live_loop :eai do
   seq = Sequence.new(generator[scale(:A3, :minor_pentatonic), density: 0], channel: 2)
-  with_bpm(12) { seq.play }
+  with_bpm(4) { seq.play }
 end
 
 live_loop :st do
