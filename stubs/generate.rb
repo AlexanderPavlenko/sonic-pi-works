@@ -48,6 +48,12 @@ module Sandbox
       module Sound
         extend Docs
       end
+      module WesternTheory
+        extend Docs
+      end
+      module Maths
+        extend Docs
+      end
       module Support
         module DocSystem
           ;
@@ -61,6 +67,7 @@ module Sandbox
 end
 
 Dir["#{lang}/*.rb"].sort.each do |file|
+  next if %w[ixi.rb].include?(File.basename(file))
   Sandbox.class_eval File.read(file)
 end
 

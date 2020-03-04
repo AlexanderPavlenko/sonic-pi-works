@@ -1,4 +1,37 @@
 ---
+- :name: :set
+  :introduced: !ruby/struct:Sandbox::SonicPi::Version
+    x: 3
+    y: 0
+    z: 0
+  :summary: Store information in the Time State
+  :doc: |-
+    Store information in the Time State for the current time for either the current or any other thread. If called multiple times without an intervening call to `sleep`, `sync`, `set` or `cue`, the last value set will prevail. The value will remain in the Time State until overwritten by another call to `set`, or until Sonic Pi quits.
+
+    May be used within a `time_warp` to set past/future events. Does not affect time.
+  :args:
+  - - :time_state_key
+    - :default
+  - - :value
+    - :anything
+  :accepts_block: false
+  :examples:
+  - |2-
+
+      set :foo, 1 #=> Stores the value 1 with key :foo
+  - |2-
+
+    set :foo, 3  # Set :foo to 3
+    get[:foo] #=> returns 3
+  - |2
+
+    in_thread do
+      set :foo, 3  # Set :foo to 3
+    end
+
+    in_thread do
+      puts get[:foo]  #=> always returns 3 (no race conditions here!)
+    end
 - :name: :cue
   :introduced: !ruby/struct:Sandbox::SonicPi::Version
     x: 2
@@ -98,7 +131,7 @@
     z: 0
   :summary: Get information from the Time State
   :doc: |-
-    Retrieve information from Time State set prior to the current time from either the current or any other thread. If called multiple times will always return the same value unless a call to `sleep`, `sync`, `set` or `cue` is interleaved. Also, calls to `get` will always return the same value across Runs for deterministic behaviour - which means you may safely use it in your compositions for repeatable music.
+    Retrieve information from Time State set prior to the current time from either the current or any other thread. If called multiple times will always return the same value unless a call to `sleep`, `sync`, `set` or `cue` is interleaved. Also, calls to `get` will always return the same value across Runs for deterministic behaviour - which means you may safely use it in your compositions for repeatable music. If no value is stored with the relevant key, will return `nil`.
 
     May be used within a `time_warp` to retrieve past events. If in a time warp, `get` can not be called from a future position. Does not advance time.
   :args:
@@ -246,7 +279,26 @@
     run_code "8.times do
     play 60
     sleep 1
-    end # will play 60 8 times
+    end" # will play 60 8 times
+- :name: :eval_file
+  :introduced: !ruby/struct:Sandbox::SonicPi::Version
+    x: 3
+    y: 2
+    z: 0
+  :summary: Evaluate the contents of the file inline in the current thread like a
+    function.
+  :args:
+  - - :filename
+    - :path
+  :returns: 
+  :opts: 
+  :accepts_block: false
+  :doc: Reads the full contents of the file with `path` and executes within the current
+    thread like a function call.
+  :examples:
+  - |2-
+
+    eval_file "~/path/to/sonic-pi-code.rb" #=> will run the contents of this file
 - :name: :use_osc_logging
   :introduced: !ruby/struct:Sandbox::SonicPi::Version
     x: 3
@@ -297,7 +349,7 @@
   :opts: 
   :accepts_block: false
   :doc: |+
-    Sets the destination host and port that `osc` will send messages to. If no port number is specified - will default to port 4559 (Sonic Pi's default OSC listening port).
+    Sets the destination host and port that `osc` will send messages to. If no port number is specified - will default to port 4560 (Sonic Pi's default OSC listening port).
 
     OSC (Open Sound Control) is a simple way of passing messages between two separate programs on the same computer or even on different computers via a local network or even the internet. `use_osc` allows you to specify which computer (`hostname`) and program (`port`) to send messages to.
 
@@ -469,7 +521,7 @@
     `osc "/set/filter", "lowpass", 80, 0.5`
 
 
-    Note, by default, Sonic Pi listens for OSC messages on port `4559`, so you may send messages to an external machine running Sonic Pi if you know the IP address of that external machine. Any OSC messages received on port `4559` are automatically converted to standard cue events and displayed in the GUI's cue log. This also means that you can use `sync` to wait for the next incoming OSC message with a given path (see example).
+    Note, by default, Sonic Pi listens for OSC messages on port `4560`, so you may send messages to an external machine running Sonic Pi if you know the IP address of that external machine. Any OSC messages received on port `4559` are automatically converted to standard cue events and displayed in the GUI's cue log. This also means that you can use `sync` to wait for the next incoming OSC message with a given path (see example).
 
     Finally, it is also very useful to send OSC messages to aother programs on the same computer. This can be achieved by specifying "localhost" as the hostname and the port as normal (depending on which port the other program is listening on).
 
@@ -682,13 +734,14 @@
       play 80          #=> plays at 1.1
       sleep 0.5
       play 80          #=> plays at 1.6
-                       # time shifts back by 0.1 beats
-                       # however, the sleep 0.5 is still accounted for
-    end
+
+    end                # time shifts back by 0.6 beats
+
                        # we now honour the original sleep 1 and the
-                       # sleep 0.5 within the time_warp block, but
-                       # any time shift delta has been removed
-    play 70            #=> plays at 1.5
+                       # sleep 0.5 within the time_warp block is
+                       # ignored including the 0.1 shift offset
+
+    play 70            #=> plays at 1
   - |-
     # shift backwards in time
 
@@ -702,12 +755,11 @@
       sleep 0.5
       play 80          #=> plays at 1.4
                        # time shifts forward by 0.1 beats
-                       # however, the sleep 0.5 is still accounted for
     end
                        # we now honour the original sleep 1 and the
-                       # sleep 0.5 within the time_warp block, but
-                       # any time shift delta has been removed
-    play 70            #=> plays at 1.5
+                       # sleep 0.5 within the time_warp block is
+                       # ignored, including the -0.1 offset
+    play 70            #=> plays at 1
   - |-
     # Ticks count linearly through time_warp
 
@@ -915,6 +967,10 @@
   - "\n  puts tick(:foo) #=> 0 # named ticks have their own counts\n  puts tick(:foo)
     #=> 1\n  puts tick(:foo) #=> 2\n  puts tick(:bar) #=> 0 # tick :bar is independent
     of tick :foo\n  "
+  - "\n  # You can tick by more than increments of 1\n  # using the step: opt\n\n
+    \ puts tick             #=> 0\n  puts tick             #=> 1\n  puts tick             #=>
+    2\n  puts tick(step: 2)    #=> 4\n  puts tick(step: 2)    #=> 6\n  puts tick(step:
+    10)   #=> 16\n  puts tick             #=> 17\n  "
   - " # Each_live loop has its own separate ticks\n  live_loop :fast_tick do\n    puts
     tick   # the fast_tick live_loop's tick will\n    sleep 2     # be updated every
     2 seconds\n  end\n\n  live_loop :slow_tick do\n    puts tick   # the slow_tick
@@ -1236,8 +1292,8 @@
   :accepts_block: false
   :memoize: true
   :doc: Create a ring buffer representing a straight line between start and finish
-    of num_slices elements. Num slices defaults to `8`. Indexes wrap around positively
-    and negatively. Similar to `range`.
+    of steps elements. Steps defaults to `4`. Indexes wrap around positively and negatively.
+    Similar to `range`.
   :examples:
   - "(line 0, 4, steps: 4)    #=> (ring 0.0, 1.0, 2.0, 3.0)"
   - "(line 5, 0, steps: 5)    #=> (ring 5.0, 4.0, 3.0, 2.0, 1.0)"
@@ -1415,7 +1471,7 @@
   :doc: |-
     Pick n elements from list or ring. Unlike shuffle, after each element has been picked, it is 'returned' to the list so it may be picked again. This means there may be duplicates in the result. If n is greater than the size of the ring/list then duplicates are guaranteed to be in the result.
 
-    If `n` isn't supplied it defaults to the size of the list/ring.
+    If `n` isn't supplied it defaults to a size of 1.
 
     If no arguments are given, will return a lambda function which when called takes an argument which will be a list to be picked from. This is useful for choosing random `onset:` vals for samples.
 
@@ -1432,7 +1488,7 @@
     puts (ring 1, 2).pick(5) #=> (ring 2, 2, 1, 1, 1)
   - |2-
 
-    puts (ring 1, 2, 3).pick #=> (ring 3, 3, 2)
+    puts (ring 1, 2, 3).pick #=> (ring 3)
   - |2-
 
     # Using pick for random sample onsets
@@ -2284,8 +2340,8 @@
       print rand_look(0.5) #=> will print a number like 0.375030517578125 to the output pane
       print rand_look(0.5) #=> will print the same number again
       print rand_look(0.5) #=> will print the same number again
-      print rand_(0.5) #=> will print a different random number
-      print rand_look(0.5) #=> will print the same number as the prevoius line again.
+      print rand(0.5) #=> will print a different random number
+      print rand_look(0.5) #=> will print the same number as the previous line again.
 - :name: :rand_i_look
   :introduced: !ruby/struct:Sandbox::SonicPi::Version
     x: 2
@@ -3417,6 +3473,29 @@
   - |2-
 
     load_example :rerezzed # will replace content of current buffer with the rerezzed example
+- :name: :math_scale
+  :introduced: !ruby/struct:Sandbox::SonicPi::Version
+    x: 3
+    y: 0
+    z: 0
+  :summary: Linear scaling algorithm
+  :args:
+  - []
+  :returns: :nil
+  :opts: 
+  :accepts_block: false
+  :doc: |2+
+
+      Scales a given input value within the specified input range to a
+      corresponding value in the specified output range using the formula:
+
+               (out_max - out_min) (val - in_min)
+       f (x) = --------------------------------  + out_min
+                        in_max - in_min
+
+
+  :examples:
+  - 'math_scale 0.5, 0, 1, 10, 20 #=> 15'
 - :name: :use_midi_logging
   :introduced: !ruby/struct:Sandbox::SonicPi::Version
     x: 3
@@ -3921,6 +4000,31 @@
     down, up and down respectively)'
   - 'midi_raw 0xb0, 0x79, 0x0  #=> Sends the MIDI reset command'
   - 'midi_raw 0b10110000, 0b01111001, 0b00000000  #=> Sends the MIDI reset command'
+- :name: :midi_sysex
+  :introduced: !ruby/struct:Sandbox::SonicPi::Version
+    x: 3
+    y: 2
+    z: 0
+  :summary: Send MIDI System Exclusive (SysEx) message
+  :args: []
+  :returns: :nil
+  :opts:
+    :port: Port(s) to send the MIDI SysEx message events to
+    :on: If specified and false/nil/0 will stop the midi SysEx message from being
+      sent out. (Ensures all opts are evaluated in this call to `midi_sysex` regardless
+      of value).
+  :accepts_block: false
+  :doc: |
+    Sends the MIDI SysEx message to *all* connected MIDI devices.
+
+    MIDI SysEx messages, unlike all other MIDI messages, are variable in length. They allow MIDI device manufacturers to define device-specific messages, for example loading/saving patches, or programming device features such as illuminated buttons.
+
+    Floats will be rounded up or down to the nearest whole number e.g. 176.1 -> 176, 120.5 -> 121, 0.49 -> 0.
+
+    Non-number values will be automatically turned into numbers prior to sending the event if possible (if this conversion does not work an Error will be thrown).
+  :examples:
+  - 'midi_sysex 0xf0, 0x00, 0x20, 0x6b, 0x7f, 0x42, 0x02, 0x00, 0x10, 0x77, 0x11,
+    0xf7  #=> Program an Arturia Beatstep controller to turn the eighth pad pink'
 - :name: :midi_sound_off
   :introduced: !ruby/struct:Sandbox::SonicPi::Version
     x: 3
@@ -4689,8 +4793,13 @@
     z: 0
   :summary: A named audio stream live from your soundcard
   :args:
-  - []
+  - - :name
+    - :symbol
   :returns: :SynthNode
+  :opts:
+    :input: The audio card input to read audio from.
+    :stereo: If set to truthy value (true, 1) will read from two consecutive audio
+      card inputs.
   :accepts_block: false
   :args_size: 0
   :opts_keys:
@@ -4779,24 +4888,6 @@
                                 #         num_audio_busses: 1024.0,
                                 #         num_control_busses: 4096.0,
                                 #         num_buffers: 4096.0)
-- :name: :octs
-  :introduced: !ruby/struct:Sandbox::SonicPi::Version
-    x: 2
-    y: 8
-    z: 0
-  :summary: Create a ring of octaves
-  :args:
-  - - :start
-    - :note
-  - - :num_octaves
-    - :pos_int
-  :returns: :ring
-  :opts: 
-  :accepts_block: false
-  :doc: 'Create a ring of successive octaves starting at `start` for `num_octaves`. '
-  :examples:
-  - "(octs 60, 2)  #=> (ring 60, 72)"
-  - "(octs :e3, 3) #=> (ring 52, 64, 76)"
 - :name: :sample_free
   :introduced: !ruby/struct:Sandbox::SonicPi::Version
     x: 2
@@ -4852,8 +4943,14 @@
     z: 0
   :summary: Intialise or return named buffer
   :args:
-  - []
-  :returns: 
+  - - :symbol
+    - :name
+  - - :number
+    - :duration
+  :alt_args:
+  - - :symbol
+    - :name
+  :returns: :buffer
   :opts: 
   :accepts_block: false
   :doc: Initialise or return a named buffer with a specific duration (defaults to
@@ -4904,45 +5001,6 @@
     sleep 2
     sample_free_all
     sample :loop_amen        # re-loads and plays amen
-- :name: :midi_notes
-  :introduced: !ruby/struct:Sandbox::SonicPi::Version
-    x: 2
-    y: 7
-    z: 0
-  :summary: Create a ring buffer of midi note numbers
-  :args:
-  - - :list
-    - :array
-  :returns: :ring
-  :opts: 
-  :accepts_block: false
-  :memoize: true
-  :doc: Create a new immutable ring buffer of notes from args. Indexes wrap around
-    positively and negatively. Final ring consists only of MIDI numbers and nil.
-  :examples:
-  - "(midi_notes :d3, :d4, :d5) #=> (ring 50, 62, 74)"
-  - "(midi_notes :d3, 62,  nil) #=> (ring 50, 62, nil)"
-- :name: :rest?
-  :introduced: !ruby/struct:Sandbox::SonicPi::Version
-    x: 2
-    y: 1
-    z: 0
-  :summary: Determine if note or args is a rest
-  :doc: Given a note or an args map, returns true if it represents a rest and false
-    if otherwise
-  :args:
-  - - :note_or_args
-    - :number_symbol_or_map
-  :accepts_block: false
-  :examples:
-  - 'puts rest? nil # true'
-  - 'puts rest? :r # true'
-  - 'puts rest? :rest # true'
-  - 'puts rest? 60 # false'
-  - 'puts rest? {} # false'
-  - 'puts rest? {note: :rest} # true'
-  - 'puts rest? {note: nil} # true'
-  - 'puts rest? {note: 50} # false'
 - :name: :use_timing_guarantees
   :introduced: !ruby/struct:Sandbox::SonicPi::Version
     x: 2
@@ -4984,12 +5042,12 @@
   :examples:
   - |2-
 
-    with_timing_guarantees true
+    with_timing_guarantees true do
       sample :loop_amen  #=> if time is behind by any margin, this will not trigger
     end
   - |2-
 
-    with_timing_guarantees false
+    with_timing_guarantees false do
       sample :loop_amen  #=> unless time is too far behind, this will trigger even when late.
     end
 - :name: :use_sample_bpm
@@ -5123,78 +5181,6 @@
       play 50, release: rt(2) # ** Warning: release is NOT 2 seconds! **
       sleep rt(2)             # still sleeps for 2 seconds
     end
-- :name: :pitch_to_ratio
-  :introduced: !ruby/struct:Sandbox::SonicPi::Version
-    x: 2
-    y: 5
-    z: 0
-  :summary: relative MIDI pitch to frequency ratio
-  :doc: Convert a midi note to a ratio which when applied to a frequency will scale
-    the frequency by the number of semitones. Useful for changing the pitch of a sample
-    by using it as a way of generating the rate.
-  :args:
-  - - :pitch
-    - :midi_number
-  :opts: 
-  :accepts_block: false
-  :examples:
-  - 'pitch_to_ratio 12 #=> 2.0'
-  - 'pitch_to_ratio 1 #=> 1.05946'
-  - 'pitch_to_ratio -12 #=> 0.5'
-  - 'sample :ambi_choir, rate: pitch_to_ratio(3) # Plays :ambi_choir 3 semitones above
-    default.'
-  - |2-
-
-    # Play a chromatic scale of semitones
-    (range 0, 16).each do |n|                  # For each note in the range 0->16
-      sample :ambi_choir, rate: pitch_to_ratio(n) # play :ambi_choir at the relative pitch
-      sleep 0.5                                # and wait between notes
-    end
-- :name: :ratio_to_pitch
-  :introduced: !ruby/struct:Sandbox::SonicPi::Version
-    x: 2
-    y: 7
-    z: 0
-  :summary: relative frequency ratio to MIDI pitch
-  :doc: Convert a frequency ratio to a midi note which when added to a note will transpose
-    the note to match the frequency ratio.
-  :args:
-  - - :ratio
-    - :number
-  :opts: 
-  :accepts_block: false
-  :examples:
-  - 'ratio_to_pitch 2 #=> 12.0'
-  - 'ratio_to_pitch 0.5 #=> -12.0'
-- :name: :midi_to_hz
-  :introduced: !ruby/struct:Sandbox::SonicPi::Version
-    x: 2
-    y: 0
-    z: 0
-  :summary: MIDI to Hz conversion
-  :doc: Convert a midi note to hz
-  :args:
-  - - :note
-    - :symbol_or_number
-  :opts: 
-  :accepts_block: false
-  :examples:
-  - 'midi_to_hz(60) #=> 261.6256'
-- :name: :hz_to_midi
-  :introduced: !ruby/struct:Sandbox::SonicPi::Version
-    x: 2
-    y: 0
-    z: 0
-  :summary: Hz to MIDI conversion
-  :doc: Convert a frequency in hz to a midi note. Note that the result isn't an integer
-    and there is a potential for some very minor rounding errors.
-  :args:
-  - - :freq
-    - :number
-  :opts: 
-  :accepts_block: false
-  :examples:
-  - 'hz_to_midi(261.63) #=> 60.0003'
 - :name: :set_audio_latency!
   :introduced: !ruby/struct:Sandbox::SonicPi::Version
     x: 3
@@ -5371,261 +5357,6 @@
     # Arg checking is re-enabled
     play 90 # Args are checked
 
-- :name: :set_cent_tuning!
-  :introduced: !ruby/struct:Sandbox::SonicPi::Version
-    x: 2
-    y: 10
-    z: 0
-  :summary: Global Cent tuning
-  :doc: "Globally tune Sonic Pi to play with another external instrument.\n\nUniformly
-    tunes your music by shifting all notes played by the specified number of cents.
-    To shift up by a cent use a cent tuning of 1. To shift down use negative numbers.
-    One semitone consists of 100 cents.\n\nSee `use_cent_tuning` for setting the cent
-    tuning value locally for a specific thread or `live_loop`. This is a global value
-    and will shift the tuning for *all* notes. It will also persist for the entire
-    session.\n\nImportant note: the cent tuning set by `set_cent_tuning!` is independent
-    of any thread-local cent tuning values set by `use_cent_tuning` or `with_cent_tuning`. "
-  :args:
-  - - :cent_shift
-    - :number
-  :opts: 
-  :accepts_block: false
-  :intro_fn: false
-  :examples:
-  - |2-
-
-    play 50 # Plays note 50
-    set_cent_tuning! 1
-    play 50 # Plays note 50.01
-- :name: :use_cent_tuning
-  :introduced: !ruby/struct:Sandbox::SonicPi::Version
-    x: 2
-    y: 9
-    z: 0
-  :summary: Cent tuning
-  :doc: |-
-    Uniformly tunes your music by shifting all notes played by the specified number of cents. To shift up by a cent use a cent tuning of 1. To shift down use negative numbers. One semitone consists of 100 cents.
-
-    See `with_cent_tuning` for setting the cent tuning value only for a specific `do`/`end` block. To transpose entire semitones see `use_transpose`.
-  :args:
-  - - :cent_shift
-    - :number
-  :opts: 
-  :accepts_block: false
-  :intro_fn: true
-  :examples:
-  - |2-
-
-    play 50 # Plays note 50
-    use_cent_tuning 1
-    play 50 # Plays note 50.01
-- :name: :with_cent_tuning
-  :introduced: !ruby/struct:Sandbox::SonicPi::Version
-    x: 2
-    y: 9
-    z: 0
-  :summary: Block-level cent tuning
-  :doc: Similar to `use_cent_tuning` except only applies cent shift to code within
-    supplied `do`/`end` block. Previous cent tuning value is restored after block.
-    One semitone consists of 100 cents. To transpose entire semitones see `with_transpose`.
-  :args:
-  - - :cent_shift
-    - :number
-  :opts: 
-  :accepts_block: true
-  :requires_block: true
-  :examples:
-  - |2+
-
-    use_cent_tuning 1
-    play 50 # Plays note 50.01
-
-    with_cent_tuning 2 do
-      play 50 # Plays note 50.02
-    end
-
-    # Original cent tuning value is restored
-    play 50 # Plays note 50.01
-
-- :name: :use_octave
-  :introduced: !ruby/struct:Sandbox::SonicPi::Version
-    x: 2
-    y: 9
-    z: 0
-  :summary: Note octave transposition
-  :doc: Transposes your music by shifting all notes played by the specified number
-    of octaves. To shift up by an octave use a transpose of 1. To shift down use negative
-    numbers. See `with_octave` for setting the octave shift only for a specific `do`/`end`
-    block. For transposing the notes within the octave range see `use_transpose`.
-  :args:
-  - - :octave_shift
-    - :number
-  :opts: 
-  :accepts_block: false
-  :intro_fn: true
-  :examples:
-  - |2-
-
-    play 50 # Plays note 50
-    use_octave 1
-    play 50 # Plays note 62
-  - |2-
-
-    # You may change the transposition multiple times:
-    play 62 # Plays note 62
-    use_octave -1
-    play 62 # Plays note 50
-    use_octave 2
-    play 62 # Plays note 86
-- :name: :with_octave
-  :introduced: !ruby/struct:Sandbox::SonicPi::Version
-    x: 2
-    y: 9
-    z: 0
-  :summary: Block level octave transposition
-  :doc: Transposes your music by shifting all notes played by the specified number
-    of octaves within the specified block. To shift up by an octave use a transpose
-    of 1. To shift down use negative numbers. For transposing the notes within the
-    octave range see `with_transpose`.
-  :args:
-  - - :octave_shift
-    - :number
-  :opts: 
-  :accepts_block: true
-  :intro_fn: true
-  :examples:
-  - |2-
-
-    play 50 # Plays note 50
-    sleep 1
-    with_octave 1 do
-     play 50 # Plays note 62
-    end
-    sleep 1
-    play 50 # Plays note 50
-- :name: :use_transpose
-  :introduced: !ruby/struct:Sandbox::SonicPi::Version
-    x: 2
-    y: 0
-    z: 0
-  :summary: Note transposition
-  :doc: Transposes your music by shifting all notes played by the specified amount.
-    To shift up by a semitone use a transpose of 1. To shift down use negative numbers.
-    See `with_transpose` for setting the transpose value only for a specific `do`/`end`
-    block. To transpose entire octaves see `use_octave`.
-  :args:
-  - - :note_shift
-    - :number
-  :opts: 
-  :accepts_block: false
-  :intro_fn: true
-  :examples:
-  - |2-
-
-    play 50 # Plays note 50
-    use_transpose 1
-    play 50 # Plays note 51
-  - |2-
-
-    # You may change the transposition multiple times:
-    play 62 # Plays note 62
-    use_transpose -12
-    play 62 # Plays note 50
-    use_transpose 3
-    play 62 # Plays note 65
-- :name: :with_transpose
-  :introduced: !ruby/struct:Sandbox::SonicPi::Version
-    x: 2
-    y: 0
-    z: 0
-  :summary: Block-level note transposition
-  :doc: Similar to use_transpose except only applies to code within supplied `do`/`end`
-    block. Previous transpose value is restored after block. To transpose entire octaves
-    see `with_octave`.
-  :args:
-  - - :note_shift
-    - :number
-  :opts: 
-  :accepts_block: true
-  :requires_block: true
-  :examples:
-  - |2+
-
-    use_transpose 3
-    play 62 # Plays note 65
-
-    with_transpose 12 do
-      play 50 # Plays note 62
-      sleep 1
-      play 72 # Plays note 84
-    end
-
-    # Original transpose value is restored
-    play 80 # Plays note 83
-
-- :name: :use_tuning
-  :introduced: !ruby/struct:Sandbox::SonicPi::Version
-    x: 2
-    y: 6
-    z: 0
-  :summary: Use alternative tuning systems
-  :doc: In most music we make semitones by dividing the octave into 12 equal parts,
-    which is known as equal temperament. However there are lots of other ways to tune
-    the 12 notes. This method adjusts each midi note into the specified tuning system.
-    Because the ratios between notes aren't always equal, be careful to pick a centre
-    note that is in the key of the music you're making for the best sound. Currently
-    available tunings are `:just`, `:pythagorean`, `:meantone` and the default of
-    `:equal`
-  :args:
-  - - :tuning
-    - :symbol
-  - - :fundamental_note
-    - :symbol_or_number
-  :opts: 
-  :accepts_block: false
-  :examples:
-  - |2-
-
-    play :e4 # Plays note 64
-    use_tuning :just, :c
-    play :e4 # Plays note 63.8631
-    # transparently changes midi notes too
-    play 64 # Plays note 63.8631
-  - |2-
-
-    # You may change the tuning multiple times:
-    play 64 # Plays note 64
-    use_tuning :just
-    play 64 # Plays note 63.8631
-    use_tuning :equal
-    play 64 # Plays note 64
-- :name: :with_tuning
-  :introduced: !ruby/struct:Sandbox::SonicPi::Version
-    x: 2
-    y: 6
-    z: 0
-  :summary: Block-level tuning modification
-  :doc: Similar to use_tuning except only applies to code within supplied `do`/`end`
-    block. Previous tuning value is restored after block.
-  :args:
-  - - :tuning
-    - :symbol
-  - - :fundamental_note
-    - :symbol_or_number
-  :opts: 
-  :accepts_block: true
-  :examples:
-  - |2-
-
-    use_tuning :equal, :c
-    play :e4 # Plays note 64
-    with_tuning :just, :c do
-      play :e4 # Plays note 63.8631
-      sleep 1
-      play :c4 # Plays note 60
-    end
-    # Original tuning value is restored
-    play :e4 # Plays note 64
 - :name: :use_synth
   :introduced: !ruby/struct:Sandbox::SonicPi::Version
     x: 2
@@ -5784,7 +5515,7 @@
 
     If the synth name is `nil` behaviour is identical to that of `play` in that the `current_synth` will determine the actual synth triggered.
 
-    If a block is given, it is assumed to take one arg which will be the controllable synth node and the body of the block is run in an implicit `in_thread`. This allows for asynchronous control of the synth without interferring with time. For synchronous control capture the result of `synth` as a variable and use that.
+    If a block is given, it is assumed to take one arg which will be the controllable synth node and the body of the block is run in an implicit `in_thread`. This allows for asynchronous control of the synth without interfering with time. For synchronous control capture the result of `synth` as a variable and use that.
 
     Note that the default opts listed are only a guide to the most common opts across all the synths. Not all synths support all the default opts and each synth typically supports many more opts specific to that synth. For example, the `:tb303` synth supports 45 unique opts. For a full list of a synth's opts see its documentation in the Help system. This can be accessed directly by clicking on the name of the synth and using the shortcut `C-i`
   :args:
@@ -6419,57 +6150,6 @@
   - |-
     set_volume! 2
     puts current_volume #=> 2
-- :name: :current_transpose
-  :introduced: !ruby/struct:Sandbox::SonicPi::Version
-    x: 2
-    y: 0
-    z: 0
-  :summary: Get current transposition
-  :doc: |-
-    Returns the current transpose value.
-
-    This can be set via the fns `use_transpose` and `with_transpose`.
-  :args: []
-  :opts: 
-  :accepts_block: false
-  :examples:
-  - |2-
-
-    puts current_transpose # Print out the current transpose value
-- :name: :current_cent_tuning
-  :introduced: !ruby/struct:Sandbox::SonicPi::Version
-    x: 2
-    y: 9
-    z: 0
-  :summary: Get current cent shift
-  :doc: |-
-    Returns the cent shift value.
-
-    This can be set via the fns `use_cent_tuning` and `with_cent_tuning`.
-  :args: []
-  :opts: 
-  :accepts_block: false
-  :examples:
-  - |2-
-
-    puts current_cent_tuning # Print out the current cent shift
-- :name: :current_octave
-  :introduced: !ruby/struct:Sandbox::SonicPi::Version
-    x: 2
-    y: 9
-    z: 0
-  :summary: Get current octave shift
-  :doc: |-
-    Returns the octave shift value.
-
-    This can be set via the fns `use_octave` and `with_octave`.
-  :args: []
-  :opts: 
-  :accepts_block: false
-  :examples:
-  - |2-
-
-    puts current_octave # Print out the current octave shift
 - :name: :current_debug
   :introduced: !ruby/struct:Sandbox::SonicPi::Version
     x: 2
@@ -6859,15 +6539,22 @@
     :pre_amp: Amplitude multiplier which takes place immediately before any internal
       FX such as the low pass filter, compressor or pitch modification. Use this opt
       if you want to overload the compressor.
-    :onset: Analyse the sample with an onset detection algorithm and set the `start:`
-      and `finish:` opts to play the nth onset only. Allows you to treat a rhythm
-      sample as a palette of individual drum/synth hits. Floats are rounded to the
+    :onset: Analyse the sample with an onset detection algorithm and automatically
+      set or override the `start:` and `finish:` opts to play the nth onset only.
+      Allows you to treat a rhythm sample as a palette of individual drum/synth hits.
+      If `start:` or `finish:` opts are used in addition to `onset:` then they will
+      work within the onset rather than the whole sample. Floats are rounded to the
       nearest whole number.
-    :slice: Divides the sample duration evenly into `num_slices` sections (defaults
-      to 16) and set the `start:` and `finish:` opts to play the nth slice only. Use
-      the envelope opts to remove any clicks introduced if the slice boundary is in
-      the middle of a sound. Also consider `onset:`. Floats are rounded to the nearest
-      whole number.
+    :on: If specified and false/nil/0 will stop the sample from being played. Ensures
+      all opts are evaluated.
+    :slice: Divides the sample duration evenly into `num_slices:` sections (defaults
+      to 16) and set the `start:` and `finish:` opts to play the nth slice only. If
+      `start:` or `finish:` opts are used in addition to `slice:` then they will work
+      within the slice rather than the whole sample. Use the envelope opts to remove
+      any clicks introduced if the slice boundary is in the middle of a sound. Also
+      consider `onset:` as an alternative to `slice:`. If `onset:` is also used then
+      the slices will be within the onset rather than the whole sample. Floats are
+      rounded to the nearest whole number.
     :num_slices: Number of slices to divide the sample into when using the `slice:`
       opt. Defaults to 16. Floats are rounded to the nearest whole number.
     :norm: Normalise the audio (make quieter parts of the sample louder and louder
@@ -7142,7 +6829,7 @@
   - |2-
 
     # External samples
-    sample "/path/to/sample.wav"                          # Play any Wav, Aif or FLAC sample on your computer
+    sample "/path/to/sample.wav"                          # Play any Wav, Aif, Ogg, Oga, or FLAC sample on your computer
                                                             # by simply passing a string representing the full
                                                             # path
   - |2-
@@ -7312,6 +6999,58 @@
                                                             # unlikely you will use this frequently, but it is a powerful tool
                                                             # that's there when you need it.
 
+  - |2+
+
+    sample :loop_tabla, onset: 1                                         # Plays the 2nd onset (the first onset would have index 0)
+
+                                                                         # Will override opts with: {start: 0.0151, finish: 0.0304}
+                                                                         # (these values are specific to the :loop_tabla sample and
+                                                                         # will vary for different samples)
+
+  - |2+
+
+    sample :loop_tabla, onset: 1, slice: 0, num_slices: 1                # Plays the 2nd onset. This behaves the same as not specifying
+                                                                         # a slice as we select the first of one slices.
+
+                                                                         # Will override opts with: {start: 0.0151, finish: 0.0304}
+                                                                         # (these values are specific to the :loop_tabla sample and
+                                                                         # will vary for different samples)
+
+  - |2
+
+    sample :loop_tabla, onset: 1, slice: 0, num_slices: 2                # This plays the first half of the 2nd onset.
+                                                                         # This is because  we split that onset into two slices and
+                                                                         # play just the first slice (with index 0).
+
+                                                                         # Will override opts with: {start: 0.0151, finish: 0.0227}
+                                                                         # (these values are specific to the :loop_tabla sample and
+                                                                         # will vary for different samples)
+  - |2
+
+    sample :loop_tabla, onset: 1, slice: 0, num_slices: 4                # This plays the first quarter of the 2nd onset.
+                                                                         # This is because we split that onset into four slices and
+                                                                         # play just the first slice (with index 0).
+
+                                                                         # Will override opts with: {start: 0.0151, finish: 0.0189}
+                                                                         # (these values are specific to the :loop_tabla sample and
+                                                                         # will vary for different samples)
+
+    sample :loop_tabla, onset: 1, slice: 0, num_slices: 4, finish: 0.5   # Will play the first 1/8th of the 2nd onset.
+                                                                         # This is because we split that specific onset into 4 slices
+                                                                         # and then only play the first half of the first slice.
+
+                                                                         # Will override opts with: {start: 0.0151, finish: 0.017}
+                                                                         # (these values are specific to the :loop_tabla sample and
+                                                                         # will vary for different samples)
+
+    sample :loop_tabla, onset: 1, slice: 0, num_slices: 4, finish: 0.0, start: 0.5   # Will play the first 1/8th of the 2nd onset backwards..
+                                                                                     # This is because we split that specific onset into 4 slices
+                                                                                     # and then only play from the first half of the first slice
+                                                                                     # back to the beginning.
+
+                                                                                     # Will override opts with: {start: 0.017, finish: 0.0151}
+                                                                                     # (these values are specific to the :loop_tabla sample and
+                                                                                     # will vary for different samples)
 - :name: :status
   :introduced: !ruby/struct:Sandbox::SonicPi::Version
     x: 2
@@ -7339,418 +7078,6 @@
                 #   :audio_busses=>2,
                 #   :control_busses=>0
                 # }
-- :name: :note
-  :introduced: !ruby/struct:Sandbox::SonicPi::Version
-    x: 2
-    y: 0
-    z: 0
-  :summary: Describe note
-  :doc: Takes a midi note, a symbol (e.g. `:C`) or a string (e.g. `"C"`) and resolves
-    it to a midi note. You can also pass an optional `octave:` parameter to get the
-    midi note for a given octave. Please note - `octave:` param overrides any octave
-    specified in a symbol i.e. `:c3`. If the note is `nil`, `:r` or `:rest`, then
-    `nil` is returned (`nil` represents a rest)
-  :args:
-  - - :note
-    - :symbol_or_number
-  :opts:
-    :octave: The octave of the note. Overrides any octave declaration in the note
-      symbol such as :c2. Default is 4
-  :accepts_block: false
-  :examples:
-  - |2
-
-    # These all return 60 which is the midi number for middle C (octave 4)
-    puts note(60)
-    puts note(:C)
-    puts note(:C4)
-    puts note('C')
-  - |
-    # returns 60 - octave param has no effect if we pass in a number
-    puts note(60, octave: 2)
-
-    # These all return 36 which is the midi number for C2 (two octaves below middle C)
-    puts note(:C, octave: 2)
-    puts note(:C4, octave: 2) # note the octave param overrides any octaves specified in a symbol
-    puts note('C', octave: 2)
-- :name: :note_range
-  :introduced: !ruby/struct:Sandbox::SonicPi::Version
-    x: 2
-    y: 6
-    z: 0
-  :summary: Get a range of notes
-  :args:
-  - - :low_note
-    - :note
-  - - :high_note
-    - :note
-  :returns: :ring
-  :opts:
-    :pitches: An array of notes (symbols or ints) to filter on. Octave information
-      is ignored.
-  :accepts_block: false
-  :doc: 'Produces a ring of all the notes between a low note and a high note. By default
-    this is chromatic (all the notes) but can be filtered with a pitches: argument.
-    This opens the door to arpeggiator style sequences and other useful patterns.
-    If you try to specify only pitches which aren''t in the range it will raise an
-    error - you have been warned!'
-  :examples:
-  - "(note_range :c4, :c5) # => (ring 60,61,62,63,64,65,66,67,68,69,70,71,72)"
-  - "(note_range :c4, :c5, pitches: (chord :c, :major)) # => (ring 60,64,67,72)"
-  - "(note_range :c4, :c6, pitches: (chord :c, :major)) # => (ring 60,64,67,72,76,79,84)"
-  - "(note_range :c4, :c5, pitches: (scale :c, :major)) # => (ring 60,62,64,65,67,69,71,72)"
-  - "(note_range :c4, :c5, pitches: [:c4, :g2]) # => (ring 60,67,72)"
-  - |-
-    live_loop :arpeggiator do
-      # try changing the chord
-      play (note_range :c4, :c5, pitches: (chord :c, :major)).tick
-      sleep 0.125
-    end
-- :name: :note_info
-  :introduced: !ruby/struct:Sandbox::SonicPi::Version
-    x: 2
-    y: 0
-    z: 0
-  :summary: Get note info
-  :doc: Returns an instance of `SonicPi::Note`. Please note - `octave:` param overrides
-    any octave specified in a symbol i.e. `:c3`
-  :args:
-  - - :note
-    - :symbol_or_number
-  :opts:
-    :octave: The octave of the note. Overrides any octave declaration in the note
-      symbol such as :c2. Default is 4
-  :accepts_block: false
-  :examples:
-  - |2-
-
-    puts note_info(:C, octave: 2)
-    # returns #<SonicPi::Note :C2>
-- :name: :degree
-  :introduced: !ruby/struct:Sandbox::SonicPi::Version
-    x: 2
-    y: 1
-    z: 0
-  :summary: Convert a degree into a note
-  :doc: For a given scale and tonic it takes a symbol `:i`, `:ii`, `:iii`, `:iv`,`:v`,
-    `:vi`, `:vii` or a number `1`-`7` and resolves it to a midi note.
-  :args:
-  - - :degree
-    - :symbol_or_number
-  - - :tonic
-    - :symbol
-  - - :scale
-    - :symbol
-  :accepts_block: false
-  :examples:
-  - |2
-
-    play degree(:ii, :D3, :major)
-    play degree(2, :C3, :minor)
-- :name: :scale
-  :introduced: !ruby/struct:Sandbox::SonicPi::Version
-    x: 2
-    y: 0
-    z: 0
-  :summary: Create scale
-  :doc: Creates a ring of MIDI note numbers when given a tonic note and a scale name.
-    Also takes an optional `num_octaves:` parameter (octave `1` is the default). If
-    only passed the scale name, the tonic defaults to 0. See examples.
-  :args:
-  - - :tonic
-    - :symbol
-  - - :name
-    - :symbol
-  :returns: :ring
-  :opts:
-    :num_octaves: The number of octaves you'd like the scale to consist of. More octaves
-      means a larger scale. Default is 1.
-  :accepts_block: false
-  :intro_fn: true
-  :memoize: true
-  :examples:
-  - |2-
-
-    puts (scale :C, :major) # returns the following ring of MIDI note numbers: (ring 60, 62, 64, 65, 67, 69, 71, 72)
-  - |-
-    # anywhere you can use a list or ring of notes, you can also use scale
-    play_pattern (scale :C, :major)
-  - |-
-    # you can use the :num_octaves parameter to get more notes
-    play_pattern (scale :C, :major, num_octaves: 2)
-  - |-
-    # Scales can start with any note:
-    puts (scale 50, :minor) #=> (ring 50, 52, 53, 55, 57, 58, 60, 62)
-    puts (scale 50.1, :minor) #=> (ring 50.1, 52.1, 53.1, 55.1, 57.1, 58.1, 60.1, 62.1)
-    puts (scale :minor) #=> (ring 0, 2, 3, 5, 7, 8, 10, 12)
-  - |2-
-     # scales are also rings
-    live_loop :scale_player do
-      play (scale :Eb3, :super_locrian).tick, release: 0.1
-      sleep 0.125
-    end
-  - |2-
-     # scales starting with 0 are useful in combination with sample's rpitch:
-    live_loop :scaled_sample do
-      sample :bass_trance_c, rpitch: (scale 0, :minor).tick
-      sleep 1
-    end
-  - |
-    # Sonic Pi supports a large range of scales:
-
-    (scale :C, :diatonic)
-    (scale :C, :ionian)
-    (scale :C, :major)
-    (scale :C, :dorian)
-    (scale :C, :phrygian)
-    (scale :C, :lydian)
-    (scale :C, :mixolydian)
-    (scale :C, :aeolian)
-    (scale :C, :minor)
-    (scale :C, :locrian)
-    (scale :C, :hex_major6)
-    (scale :C, :hex_dorian)
-    (scale :C, :hex_phrygian)
-    (scale :C, :hex_major7)
-    (scale :C, :hex_sus)
-    (scale :C, :hex_aeolian)
-    (scale :C, :minor_pentatonic)
-    (scale :C, :yu)
-    (scale :C, :major_pentatonic)
-    (scale :C, :gong)
-    (scale :C, :egyptian)
-    (scale :C, :shang)
-    (scale :C, :jiao)
-    (scale :C, :zhi)
-    (scale :C, :ritusen)
-    (scale :C, :whole_tone)
-    (scale :C, :whole)
-    (scale :C, :chromatic)
-    (scale :C, :harmonic_minor)
-    (scale :C, :melodic_minor_asc)
-    (scale :C, :hungarian_minor)
-    (scale :C, :octatonic)
-    (scale :C, :messiaen1)
-    (scale :C, :messiaen2)
-    (scale :C, :messiaen3)
-    (scale :C, :messiaen4)
-    (scale :C, :messiaen5)
-    (scale :C, :messiaen6)
-    (scale :C, :messiaen7)
-    (scale :C, :super_locrian)
-    (scale :C, :hirajoshi)
-    (scale :C, :kumoi)
-    (scale :C, :neapolitan_major)
-    (scale :C, :bartok)
-    (scale :C, :bhairav)
-    (scale :C, :locrian_major)
-    (scale :C, :ahirbhairav)
-    (scale :C, :enigmatic)
-    (scale :C, :neapolitan_minor)
-    (scale :C, :pelog)
-    (scale :C, :augmented2)
-    (scale :C, :scriabin)
-    (scale :C, :harmonic_major)
-    (scale :C, :melodic_minor_desc)
-    (scale :C, :romanian_minor)
-    (scale :C, :hindu)
-    (scale :C, :iwato)
-    (scale :C, :melodic_minor)
-    (scale :C, :diminished2)
-    (scale :C, :marva)
-    (scale :C, :melodic_major)
-    (scale :C, :indian)
-    (scale :C, :spanish)
-    (scale :C, :prometheus)
-    (scale :C, :diminished)
-    (scale :C, :todi)
-    (scale :C, :leading_whole)
-    (scale :C, :augmented)
-    (scale :C, :purvi)
-    (scale :C, :chinese)
-    (scale :C, :lydian_minor)
-    (scale :C, :blues_major)
-    (scale :C, :blues_minor)
-- :name: :chord_degree
-  :introduced: !ruby/struct:Sandbox::SonicPi::Version
-    x: 2
-    y: 1
-    z: 0
-  :summary: Construct chords of stacked thirds, based on scale degrees
-  :doc: In music we build chords from scales. For example, a C major chord is made
-    by taking the 1st, 3rd and 5th notes of the C major scale (C, E and G). If you
-    do this on a piano you might notice that you play one, skip one, play one, skip
-    one etc. If we use the same spacing and start from the second note in C major
-    (which is a D), we get a D minor chord which is the 2nd, 4th and 6th notes in
-    C major (D, F and A). We can move this pattern all the way up or down the scale
-    to get different types of chords. `chord_degree` is a helper method that returns
-    a ring of midi note numbers when given a degree (starting point in a scale) which
-    is a symbol `:i`, `:ii`, `:iii`, `:iv`, `:v`, `:vi`, `:vii` or a number `1`-`7`.
-    The second argument is the tonic note of the scale, the third argument is the
-    scale type and finally the fourth argument is number of notes to stack up in the
-    chord. If we choose 4 notes from degree `:i` of the C major scale, we take the
-    1st, 3rd, 5th and 7th notes of the scale to get a C major 7 chord.
-  :args:
-  - - :degree
-    - :symbol_or_number
-  - - :tonic
-    - :symbol
-  - - :scale
-    - :symbol
-  - - :number_of_notes
-    - :number
-  :returns: :ring
-  :opts: 
-  :accepts_block: false
-  :memoize: true
-  :examples:
-  - 'puts (chord_degree :i, :A3, :major) # returns a ring of midi notes - (ring 57,
-    61, 64, 68) - an A major 7 chord'
-  - play (chord_degree :i, :A3, :major, 3)
-  - 'play (chord_degree :ii, :A3, :major, 3) # Chord ii in A major is a B minor chord'
-  - 'play (chord_degree :iii, :A3, :major, 3) # Chord iii in A major is a C# minor
-    chord'
-  - 'play (chord_degree :iv, :A3, :major, 3) # Chord iv in A major is a D major chord'
-  - 'play (chord_degree :i, :C4, :major, 4) # Taking four notes is the default. This
-    gives us 7th chords - here it plays a C major 7'
-  - 'play (chord_degree :i, :C4, :major, 5) # Taking five notes gives us 9th chords
-    - here it plays a C major 9 chord'
-- :name: :chord
-  :introduced: !ruby/struct:Sandbox::SonicPi::Version
-    x: 2
-    y: 0
-    z: 0
-  :summary: Create chord
-  :doc: Creates an immutable ring of Midi note numbers when given a tonic note and
-    a chord type. If only passed a chord type, will default the tonic to 0. See examples.
-  :args:
-  - - :tonic
-    - :symbol
-  - - :name
-    - :symbol
-  :returns: :ring
-  :opts:
-    :invert: Apply the specified num inversions to chord. See the fn `chord_invert`.
-    :num_octaves: Create an arpeggio of the chord over n octaves
-  :accepts_block: false
-  :intro_fn: true
-  :memoize: true
-  :examples:
-  - |2
-
-    puts (chord :e, :minor) # returns a ring of midi notes - (ring 64, 67, 71)
-  - |-
-    # Play all the notes together
-    play (chord :e, :minor)
-  - |2
-
-    # Chord inversions (see the fn chord_invert)
-    play (chord :e3, :minor, invert: 0) # Play the basic :e3, :minor chord - (ring 52, 55, 59)
-    play (chord :e3, :minor, invert: 1) # Play the first inversion of :e3, :minor - (ring 55, 59, 64)
-    play (chord :e3, :minor, invert: 2) # Play the first inversion of :e3, :minor - (ring 59, 64, 67)
-  - |-
-    # You can create a chord without a tonic:
-    puts (chord :minor) #=> (ring 0, 3, 7)
-  - |-
-    # chords are great for arpeggiators
-    live_loop :arp do
-      play chord(:e, :minor, num_octaves: 2).tick, release: 0.1
-      sleep 0.125
-    end
-  - |
-    # Sonic Pi supports a large range of chords
-     # Notice that the more exotic ones have to be surrounded by ' quotes
-    (chord :C, '1')
-    (chord :C, '5')
-    (chord :C, '+5')
-    (chord :C, 'm+5')
-    (chord :C, :sus2)
-    (chord :C, :sus4)
-    (chord :C, '6')
-    (chord :C, :m6)
-    (chord :C, '7sus2')
-    (chord :C, '7sus4')
-    (chord :C, '7-5')
-    (chord :C, 'm7-5')
-    (chord :C, '7+5')
-    (chord :C, 'm7+5')
-    (chord :C, '9')
-    (chord :C, :m9)
-    (chord :C, 'm7+9')
-    (chord :C, :maj9)
-    (chord :C, '9sus4')
-    (chord :C, '6*9')
-    (chord :C, 'm6*9')
-    (chord :C, '7-9')
-    (chord :C, 'm7-9')
-    (chord :C, '7-10')
-    (chord :C, '9+5')
-    (chord :C, 'm9+5')
-    (chord :C, '7+5-9')
-    (chord :C, 'm7+5-9')
-    (chord :C, '11')
-    (chord :C, :m11)
-    (chord :C, :maj11)
-    (chord :C, '11+')
-    (chord :C, 'm11+')
-    (chord :C, '13')
-    (chord :C, :m13)
-    (chord :C, :add2)
-    (chord :C, :add4)
-    (chord :C, :add9)
-    (chord :C, :add11)
-    (chord :C, :add13)
-    (chord :C, :madd2)
-    (chord :C, :madd4)
-    (chord :C, :madd9)
-    (chord :C, :madd11)
-    (chord :C, :madd13)
-    (chord :C, :major)
-    (chord :C, :M)
-    (chord :C, :minor)
-    (chord :C, :m)
-    (chord :C, :major7)
-    (chord :C, :dom7)
-    (chord :C, '7')
-    (chord :C, :M7)
-    (chord :C, :minor7)
-    (chord :C, :m7)
-    (chord :C, :augmented)
-    (chord :C, :a)
-    (chord :C, :diminished)
-    (chord :C, :dim)
-    (chord :C, :i)
-    (chord :C, :diminished7)
-    (chord :C, :dim7)
-    (chord :C, :i7)
-- :name: :chord_invert
-  :introduced: !ruby/struct:Sandbox::SonicPi::Version
-    x: 2
-    y: 6
-    z: 0
-  :summary: Chord inversion
-  :doc: |-
-    Given a set of notes, apply a number of inversions indicated by the `shift` parameter. Inversions being an increase to notes if `shift` is positive or decreasing the notes if `shift` is negative.
-
-    An inversion is simply rotating the chord and shifting the wrapped notes up or down an octave. For example, consider the chord :e3, :minor - `(ring 52, 55, 59)`. When we invert it once, we rotate the notes around to `(ring 55, 59, 52)`. However, because note 52 is wrapped round, it's shifted up an octave (12 semitones) so the actual first inversion of the chord :e3, :minor is `(ring 55, 59, 52 + 12)` or `(ring 55, 59, 64)`.
-
-    Note that it's also possible to directly invert chords on creation with the `invert:` opt - `(chord :e3, :minor, invert: 2)`
-  :args:
-  - - :notes
-    - :list
-  - - :shift
-    - :number
-  :returns: :ring
-  :opts: 
-  :accepts_block: false
-  :examples:
-  - |2
-
-    play (chord_invert (chord :A3, "M"), 0) #No inversion     - (ring 57, 61, 64)
-    sleep 1
-    play (chord_invert (chord :A3, "M"), 1) #First inversion  - (ring 61, 64, 69)
-    sleep 1
-    play (chord_invert (chord :A3, "M"), 2) #Second inversion - (ring 64, 69, 73)
 - :name: :control
   :introduced: !ruby/struct:Sandbox::SonicPi::Version
     x: 2
@@ -7991,41 +7318,874 @@
   :accepts_block: false
   :examples:
   - 'load_synthdefs "~/Desktop/my_noises" # Load all synthdefs in my_noises folder'
-- :name: :scale_names
+- :name: :octs
   :introduced: !ruby/struct:Sandbox::SonicPi::Version
     x: 2
-    y: 6
+    y: 8
     z: 0
-  :summary: All scale names
-  :doc: Returns a ring containing all scale names known to Sonic Pi
-  :args: []
-  :opts: 
-  :accepts_block: false
-  :memoize: true
-  :examples:
-  - 'puts scale_names #=>  prints a list of all the scales'
-- :name: :chord_names
-  :introduced: !ruby/struct:Sandbox::SonicPi::Version
-    x: 2
-    y: 6
-    z: 0
-  :summary: All chord names
-  :doc: Returns a ring containing all chord names known to Sonic Pi
-  :args: []
-  :opts: 
-  :accepts_block: false
-  :memoize: true
-  :examples:
-  - 'puts chord_names #=>  prints a list of all the chords'
-* Line.kr(1, 0, 5, amp, doneAction:
-    2))}\n    ).writeDefFile(\"/Users/sam/Desktop/\")\n    )\n\n\n    "
+  :summary: Create a ring of octaves
   :args:
-  - - :path
-    - :string
+  - - :start
+    - :note
+  - - :num_octaves
+    - :pos_int
+  :returns: :ring
+  :opts: 
+  :accepts_block: false
+  :doc: 'Create a ring of successive octaves starting at `start` for `num_octaves`. '
+  :examples:
+  - "(octs 60, 2)  #=> (ring 60, 72)"
+  - "(octs :e3, 3) #=> (ring 52, 64, 76)"
+- :name: :midi_notes
+  :introduced: !ruby/struct:Sandbox::SonicPi::Version
+    x: 2
+    y: 7
+    z: 0
+  :summary: Create a ring buffer of midi note numbers
+  :args:
+  - - :list
+    - :array
+  :returns: :ring
+  :opts: 
+  :accepts_block: false
+  :memoize: true
+  :doc: Create a new immutable ring buffer of notes from args. Indexes wrap around
+    positively and negatively. Final ring consists only of MIDI numbers and nil.
+  :examples:
+  - "(midi_notes :d3, :d4, :d5) #=> (ring 50, 62, 74)"
+  - "(midi_notes :d3, 62,  nil) #=> (ring 50, 62, nil)"
+- :name: :rest?
+  :introduced: !ruby/struct:Sandbox::SonicPi::Version
+    x: 2
+    y: 1
+    z: 0
+  :summary: Determine if note or args is a rest
+  :doc: Given a note or an args map, returns true if it represents a rest and false
+    if otherwise
+  :args:
+  - - :note_or_args
+    - :number_symbol_or_map
+  :accepts_block: false
+  :examples:
+  - 'puts rest? nil # true'
+  - 'puts rest? :r # true'
+  - 'puts rest? :rest # true'
+  - 'puts rest? 60 # false'
+  - 'puts rest? {} # false'
+  - 'puts rest? {note: :rest} # true'
+  - 'puts rest? {note: nil} # true'
+  - 'puts rest? {note: 50} # false'
+- :name: :pitch_to_ratio
+  :introduced: !ruby/struct:Sandbox::SonicPi::Version
+    x: 2
+    y: 5
+    z: 0
+  :summary: relative MIDI pitch to frequency ratio
+  :doc: Convert a midi note to a ratio which when applied to a frequency will scale
+    the frequency by the number of semitones. Useful for changing the pitch of a sample
+    by using it as a way of generating the rate.
+  :args:
+  - - :pitch
+    - :midi_number
   :opts: 
   :accepts_block: false
   :examples:
-  - 'load_synthdefs "~/Desktop/my_noises" # Load all synthdefs in my_noises folder'
+  - 'pitch_to_ratio 12 #=> 2.0'
+  - 'pitch_to_ratio 1 #=> 1.05946'
+  - 'pitch_to_ratio -12 #=> 0.5'
+  - 'sample :ambi_choir, rate: pitch_to_ratio(3) # Plays :ambi_choir 3 semitones above
+    default.'
+  - |2-
+
+    # Play a chromatic scale of semitones
+    (range 0, 16).each do |n|                  # For each note in the range 0->16
+      sample :ambi_choir, rate: pitch_to_ratio(n) # play :ambi_choir at the relative pitch
+      sleep 0.5                                # and wait between notes
+    end
+- :name: :ratio_to_pitch
+  :introduced: !ruby/struct:Sandbox::SonicPi::Version
+    x: 2
+    y: 7
+    z: 0
+  :summary: relative frequency ratio to MIDI pitch
+  :doc: Convert a frequency ratio to a midi note which when added to a note will transpose
+    the note to match the frequency ratio.
+  :args:
+  - - :ratio
+    - :number
+  :opts: 
+  :accepts_block: false
+  :examples:
+  - 'ratio_to_pitch 2 #=> 12.0'
+  - 'ratio_to_pitch 0.5 #=> -12.0'
+- :name: :midi_to_hz
+  :introduced: !ruby/struct:Sandbox::SonicPi::Version
+    x: 2
+    y: 0
+    z: 0
+  :summary: MIDI to Hz conversion
+  :doc: Convert a midi note to hz
+  :args:
+  - - :note
+    - :symbol_or_number
+  :opts: 
+  :accepts_block: false
+  :examples:
+  - 'midi_to_hz(60) #=> 261.6256'
+- :name: :hz_to_midi
+  :introduced: !ruby/struct:Sandbox::SonicPi::Version
+    x: 2
+    y: 0
+    z: 0
+  :summary: Hz to MIDI conversion
+  :doc: Convert a frequency in hz to a midi note. Note that the result isn't an integer
+    and there is a potential for some very minor rounding errors.
+  :args:
+  - - :freq
+    - :number
+  :opts: 
+  :accepts_block: false
+  :examples:
+  - 'hz_to_midi(261.63) #=> 60.0003'
+- :name: :set_cent_tuning!
+  :introduced: !ruby/struct:Sandbox::SonicPi::Version
+    x: 2
+    y: 10
+    z: 0
+  :summary: Global Cent tuning
+  :doc: "Globally tune Sonic Pi to play with another external instrument.\n\nUniformly
+    tunes your music by shifting all notes played by the specified number of cents.
+    To shift up by a cent use a cent tuning of 1. To shift down use negative numbers.
+    One semitone consists of 100 cents.\n\nSee `use_cent_tuning` for setting the cent
+    tuning value locally for a specific thread or `live_loop`. This is a global value
+    and will shift the tuning for *all* notes. It will also persist for the entire
+    session.\n\nImportant note: the cent tuning set by `set_cent_tuning!` is independent
+    of any thread-local cent tuning values set by `use_cent_tuning` or `with_cent_tuning`. "
+  :args:
+  - - :cent_shift
+    - :number
+  :opts: 
+  :accepts_block: false
+  :intro_fn: false
+  :examples:
+  - |2-
+
+    play 50 # Plays note 50
+    set_cent_tuning! 1
+    play 50 # Plays note 50.01
+- :name: :use_cent_tuning
+  :introduced: !ruby/struct:Sandbox::SonicPi::Version
+    x: 2
+    y: 9
+    z: 0
+  :summary: Cent tuning
+  :doc: |-
+    Uniformly tunes your music by shifting all notes played by the specified number of cents. To shift up by a cent use a cent tuning of 1. To shift down use negative numbers. One semitone consists of 100 cents.
+
+    See `with_cent_tuning` for setting the cent tuning value only for a specific `do`/`end` block. To transpose entire semitones see `use_transpose`.
+  :args:
+  - - :cent_shift
+    - :number
+  :opts: 
+  :accepts_block: false
+  :intro_fn: true
+  :examples:
+  - |2-
+
+    play 50 # Plays note 50
+    use_cent_tuning 1
+    play 50 # Plays note 50.01
+- :name: :with_cent_tuning
+  :introduced: !ruby/struct:Sandbox::SonicPi::Version
+    x: 2
+    y: 9
+    z: 0
+  :summary: Block-level cent tuning
+  :doc: Similar to `use_cent_tuning` except only applies cent shift to code within
+    supplied `do`/`end` block. Previous cent tuning value is restored after block.
+    One semitone consists of 100 cents. To transpose entire semitones see `with_transpose`.
+  :args:
+  - - :cent_shift
+    - :number
+  :opts: 
+  :accepts_block: true
+  :requires_block: true
+  :examples:
+  - |2+
+
+    use_cent_tuning 1
+    play 50 # Plays note 50.01
+
+    with_cent_tuning 2 do
+      play 50 # Plays note 50.02
+    end
+
+    # Original cent tuning value is restored
+    play 50 # Plays note 50.01
+
+- :name: :use_octave
+  :introduced: !ruby/struct:Sandbox::SonicPi::Version
+    x: 2
+    y: 9
+    z: 0
+  :summary: Note octave transposition
+  :doc: Transposes your music by shifting all notes played by the specified number
+    of octaves. To shift up by an octave use a transpose of 1. To shift down use negative
+    numbers. See `with_octave` for setting the octave shift only for a specific `do`/`end`
+    block. For transposing the notes within the octave range see `use_transpose`.
+  :args:
+  - - :octave_shift
+    - :number
+  :opts: 
+  :accepts_block: false
+  :intro_fn: true
+  :examples:
+  - |2-
+
+    play 50 # Plays note 50
+    use_octave 1
+    play 50 # Plays note 62
+  - |2-
+
+    # You may change the transposition multiple times:
+    play 62 # Plays note 62
+    use_octave -1
+    play 62 # Plays note 50
+    use_octave 2
+    play 62 # Plays note 86
+- :name: :with_octave
+  :introduced: !ruby/struct:Sandbox::SonicPi::Version
+    x: 2
+    y: 9
+    z: 0
+  :summary: Block level octave transposition
+  :doc: Transposes your music by shifting all notes played by the specified number
+    of octaves within the specified block. To shift up by an octave use a transpose
+    of 1. To shift down use negative numbers. For transposing the notes within the
+    octave range see `with_transpose`.
+  :args:
+  - - :octave_shift
+    - :number
+  :opts: 
+  :accepts_block: true
+  :intro_fn: true
+  :examples:
+  - |2-
+
+    play 50 # Plays note 50
+    sleep 1
+    with_octave 1 do
+     play 50 # Plays note 62
+    end
+    sleep 1
+    play 50 # Plays note 50
+- :name: :use_transpose
+  :introduced: !ruby/struct:Sandbox::SonicPi::Version
+    x: 2
+    y: 0
+    z: 0
+  :summary: Note transposition
+  :doc: Transposes your music by shifting all notes played by the specified amount.
+    To shift up by a semitone use a transpose of 1. To shift down use negative numbers.
+    See `with_transpose` for setting the transpose value only for a specific `do`/`end`
+    block. To transpose entire octaves see `use_octave`.
+  :args:
+  - - :note_shift
+    - :number
+  :opts: 
+  :accepts_block: false
+  :intro_fn: true
+  :examples:
+  - |2-
+
+    play 50 # Plays note 50
+    use_transpose 1
+    play 50 # Plays note 51
+  - |2-
+
+    # You may change the transposition multiple times:
+    play 62 # Plays note 62
+    use_transpose -12
+    play 62 # Plays note 50
+    use_transpose 3
+    play 62 # Plays note 65
+- :name: :with_transpose
+  :introduced: !ruby/struct:Sandbox::SonicPi::Version
+    x: 2
+    y: 0
+    z: 0
+  :summary: Block-level note transposition
+  :doc: Similar to use_transpose except only applies to code within supplied `do`/`end`
+    block. Previous transpose value is restored after block. To transpose entire octaves
+    see `with_octave`.
+  :args:
+  - - :note_shift
+    - :number
+  :opts: 
+  :accepts_block: true
+  :requires_block: true
+  :examples:
+  - |2+
+
+    use_transpose 3
+    play 62 # Plays note 65
+
+    with_transpose 12 do
+      play 50 # Plays note 62
+      sleep 1
+      play 72 # Plays note 84
+    end
+
+    # Original transpose value is restored
+    play 80 # Plays note 83
+
+- :name: :use_tuning
+  :introduced: !ruby/struct:Sandbox::SonicPi::Version
+    x: 2
+    y: 6
+    z: 0
+  :summary: Use alternative tuning systems
+  :doc: In most music we make semitones by dividing the octave into 12 equal parts,
+    which is known as equal temperament. However there are lots of other ways to tune
+    the 12 notes. This method adjusts each midi note into the specified tuning system.
+    Because the ratios between notes aren't always equal, be careful to pick a centre
+    note that is in the key of the music you're making for the best sound. Currently
+    available tunings are `:just`, `:pythagorean`, `:meantone` and the default of
+    `:equal`
+  :args:
+  - - :tuning
+    - :symbol
+  - - :fundamental_note
+    - :symbol_or_number
+  :opts: 
+  :accepts_block: false
+  :examples:
+  - |2-
+
+    play :e4 # Plays note 64
+    use_tuning :just, :c
+    play :e4 # Plays note 63.8631
+    # transparently changes midi notes too
+    play 64 # Plays note 63.8631
+  - |2-
+
+    # You may change the tuning multiple times:
+    play 64 # Plays note 64
+    use_tuning :just
+    play 64 # Plays note 63.8631
+    use_tuning :equal
+    play 64 # Plays note 64
+- :name: :with_tuning
+  :introduced: !ruby/struct:Sandbox::SonicPi::Version
+    x: 2
+    y: 6
+    z: 0
+  :summary: Block-level tuning modification
+  :doc: Similar to use_tuning except only applies to code within supplied `do`/`end`
+    block. Previous tuning value is restored after block.
+  :args:
+  - - :tuning
+    - :symbol
+  - - :fundamental_note
+    - :symbol_or_number
+  :opts: 
+  :accepts_block: true
+  :examples:
+  - |2-
+
+    use_tuning :equal, :c
+    play :e4 # Plays note 64
+    with_tuning :just, :c do
+      play :e4 # Plays note 63.8631
+      sleep 1
+      play :c4 # Plays note 60
+    end
+    # Original tuning value is restored
+    play :e4 # Plays note 64
+- :name: :current_transpose
+  :introduced: !ruby/struct:Sandbox::SonicPi::Version
+    x: 2
+    y: 0
+    z: 0
+  :summary: Get current transposition
+  :doc: |-
+    Returns the current transpose value.
+
+    This can be set via the fns `use_transpose` and `with_transpose`.
+  :args: []
+  :opts: 
+  :accepts_block: false
+  :examples:
+  - |2-
+
+    puts current_transpose # Print out the current transpose value
+- :name: :current_cent_tuning
+  :introduced: !ruby/struct:Sandbox::SonicPi::Version
+    x: 2
+    y: 9
+    z: 0
+  :summary: Get current cent shift
+  :doc: |-
+    Returns the cent shift value.
+
+    This can be set via the fns `use_cent_tuning` and `with_cent_tuning`.
+  :args: []
+  :opts: 
+  :accepts_block: false
+  :examples:
+  - |2-
+
+    puts current_cent_tuning # Print out the current cent shift
+- :name: :current_octave
+  :introduced: !ruby/struct:Sandbox::SonicPi::Version
+    x: 2
+    y: 9
+    z: 0
+  :summary: Get current octave shift
+  :doc: |-
+    Returns the octave shift value.
+
+    This can be set via the fns `use_octave` and `with_octave`.
+  :args: []
+  :opts: 
+  :accepts_block: false
+  :examples:
+  - |2-
+
+    puts current_octave # Print out the current octave shift
+- :name: :note
+  :introduced: !ruby/struct:Sandbox::SonicPi::Version
+    x: 2
+    y: 0
+    z: 0
+  :summary: Describe note
+  :doc: Takes a midi note, a symbol (e.g. `:C`) or a string (e.g. `"C"`) and resolves
+    it to a midi note. You can also pass an optional `octave:` parameter to get the
+    midi note for a given octave. Please note - `octave:` param overrides any octave
+    specified in a symbol i.e. `:c3`. If the note is `nil`, `:r` or `:rest`, then
+    `nil` is returned (`nil` represents a rest)
+  :args:
+  - - :note
+    - :symbol_or_number
+  :opts:
+    :octave: The octave of the note. Overrides any octave declaration in the note
+      symbol such as :c2. Default is 4
+  :accepts_block: false
+  :examples:
+  - |2
+
+    # These all return 60 which is the midi number for middle C (octave 4)
+    puts note(60)
+    puts note(:C)
+    puts note(:C4)
+    puts note('C')
+  - |
+    # returns 60 - octave param has no effect if we pass in a number
+    puts note(60, octave: 2)
+
+    # These all return 36 which is the midi number for C2 (two octaves below middle C)
+    puts note(:C, octave: 2)
+    puts note(:C4, octave: 2) # note the octave param overrides any octaves specified in a symbol
+    puts note('C', octave: 2)
+- :name: :note_range
+  :introduced: !ruby/struct:Sandbox::SonicPi::Version
+    x: 2
+    y: 6
+    z: 0
+  :summary: Get a range of notes
+  :args:
+  - - :low_note
+    - :note
+  - - :high_note
+    - :note
+  :returns: :ring
+  :opts:
+    :pitches: An array of notes (symbols or ints) to filter on. Octave information
+      is ignored.
+  :accepts_block: false
+  :doc: 'Produces a ring of all the notes between a low note and a high note. By default
+    this is chromatic (all the notes) but can be filtered with a pitches: argument.
+    This opens the door to arpeggiator style sequences and other useful patterns.
+    If you try to specify only pitches which aren''t in the range it will raise an
+    error - you have been warned!'
+  :examples:
+  - "(note_range :c4, :c5) # => (ring 60,61,62,63,64,65,66,67,68,69,70,71,72)"
+  - "(note_range :c4, :c5, pitches: (chord :c, :major)) # => (ring 60,64,67,72)"
+  - "(note_range :c4, :c6, pitches: (chord :c, :major)) # => (ring 60,64,67,72,76,79,84)"
+  - "(note_range :c4, :c5, pitches: (scale :c, :major)) # => (ring 60,62,64,65,67,69,71,72)"
+  - "(note_range :c4, :c5, pitches: [:c4, :g2]) # => (ring 60,67,72)"
+  - |-
+    live_loop :arpeggiator do
+      # try changing the chord
+      play (note_range :c4, :c5, pitches: (chord :c, :major)).tick
+      sleep 0.125
+    end
+- :name: :note_info
+  :introduced: !ruby/struct:Sandbox::SonicPi::Version
+    x: 2
+    y: 0
+    z: 0
+  :summary: Get note info
+  :doc: Returns an instance of `SonicPi::Note`. Please note - `octave:` param overrides
+    any octave specified in a symbol i.e. `:c3`
+  :args:
+  - - :note
+    - :symbol_or_number
+  :opts:
+    :octave: The octave of the note. Overrides any octave declaration in the note
+      symbol such as :c2. Default is 4
+  :accepts_block: false
+  :examples:
+  - |2-
+
+    puts note_info(:C, octave: 2)
+    # returns #<SonicPi::Note :C2>
+- :name: :degree
+  :introduced: !ruby/struct:Sandbox::SonicPi::Version
+    x: 2
+    y: 1
+    z: 0
+  :summary: Convert a degree into a note
+  :doc: For a given scale and tonic it takes a symbol/string/number and resolves it
+    to a midi note. The degree can be either a decimal number or a roman numeral (if
+    it's a string or symbol), and may optionally be prefixed an augmentation (`a`/`d`
+    for an augmented/diminished interval, `aa`/`dd` for double augmented/diminished
+    or `p` for a perfect (unchanged) interval).
+  :args:
+  - - :degree
+    - :symbol_or_number
+  - - :tonic
+    - :symbol
+  - - :scale
+    - :symbol
+  :accepts_block: false
+  :examples:
+  - |2
+
+    play degree(:iii, :D3, :major) # major third up from :D3
+    play degree(3, :C3, :minor) # minor third up from :C3
+    play degree('d5', :B3, :major) # diminished fifth up from :B3
+  - |2
+
+    chrd = []
+    [:i, :iii, :v, :dvii, :dix, :Axi, :xiii].each do |d|  # for each degree in the chord
+      chrd.append (degree d, :Fs, :major)  # add the corresponding note
+    end
+    play chrd  # play an F# 13+11-9 chord, using roman numeral symbols
+  - |2
+
+    chrd = []
+    ['1', '3', '5', 'd7', 'd9', 'A11', '13'].each do |d|
+      chrd.append (degree d, :Fs, :major)
+    end
+    play chrd  # the same chord as above, but using decimal number strings
+- :name: :scale
+  :introduced: !ruby/struct:Sandbox::SonicPi::Version
+    x: 2
+    y: 0
+    z: 0
+  :summary: Create scale
+  :doc: Creates a ring of MIDI note numbers when given a tonic note and a scale name.
+    Also takes an optional `num_octaves:` parameter (octave `1` is the default). If
+    only passed the scale name, the tonic defaults to 0. See examples.
+  :args:
+  - - :tonic
+    - :symbol
+  - - :name
+    - :symbol
+  :returns: :ring
+  :opts:
+    :num_octaves: The number of octaves you'd like the scale to consist of. More octaves
+      means a larger scale. Default is 1.
+  :accepts_block: false
+  :intro_fn: true
+  :memoize: true
+  :examples:
+  - |2-
+
+    puts (scale :C, :major) # returns the following ring of MIDI note numbers: (ring 60, 62, 64, 65, 67, 69, 71, 72)
+  - |-
+    # anywhere you can use a list or ring of notes, you can also use scale
+    play_pattern (scale :C, :major)
+  - |-
+    # you can use the :num_octaves parameter to get more notes
+    play_pattern (scale :C, :major, num_octaves: 2)
+  - |-
+    # Scales can start with any note:
+    puts (scale 50, :minor) #=> (ring 50, 52, 53, 55, 57, 58, 60, 62)
+    puts (scale 50.1, :minor) #=> (ring 50.1, 52.1, 53.1, 55.1, 57.1, 58.1, 60.1, 62.1)
+    puts (scale :minor) #=> (ring 0, 2, 3, 5, 7, 8, 10, 12)
+  - |2-
+     # scales are also rings
+    live_loop :scale_player do
+      play (scale :Eb3, :super_locrian).tick, release: 0.1
+      sleep 0.125
+    end
+  - |2-
+     # scales starting with 0 are useful in combination with sample's rpitch:
+    live_loop :scaled_sample do
+      sample :bass_trance_c, rpitch: (scale 0, :minor).tick
+      sleep 1
+    end
+  - |
+    # Sonic Pi supports a large range of scales:
+
+    (scale :C, :diatonic)
+    (scale :C, :ionian)
+    (scale :C, :major)
+    (scale :C, :dorian)
+    (scale :C, :phrygian)
+    (scale :C, :lydian)
+    (scale :C, :mixolydian)
+    (scale :C, :aeolian)
+    (scale :C, :minor)
+    (scale :C, :locrian)
+    (scale :C, :hex_major6)
+    (scale :C, :hex_dorian)
+    (scale :C, :hex_phrygian)
+    (scale :C, :hex_major7)
+    (scale :C, :hex_sus)
+    (scale :C, :hex_aeolian)
+    (scale :C, :minor_pentatonic)
+    (scale :C, :yu)
+    (scale :C, :major_pentatonic)
+    (scale :C, :gong)
+    (scale :C, :egyptian)
+    (scale :C, :shang)
+    (scale :C, :jiao)
+    (scale :C, :zhi)
+    (scale :C, :ritusen)
+    (scale :C, :whole_tone)
+    (scale :C, :whole)
+    (scale :C, :chromatic)
+    (scale :C, :harmonic_minor)
+    (scale :C, :melodic_minor_asc)
+    (scale :C, :hungarian_minor)
+    (scale :C, :octatonic)
+    (scale :C, :messiaen1)
+    (scale :C, :messiaen2)
+    (scale :C, :messiaen3)
+    (scale :C, :messiaen4)
+    (scale :C, :messiaen5)
+    (scale :C, :messiaen6)
+    (scale :C, :messiaen7)
+    (scale :C, :super_locrian)
+    (scale :C, :hirajoshi)
+    (scale :C, :kumoi)
+    (scale :C, :neapolitan_major)
+    (scale :C, :bartok)
+    (scale :C, :bhairav)
+    (scale :C, :locrian_major)
+    (scale :C, :ahirbhairav)
+    (scale :C, :enigmatic)
+    (scale :C, :neapolitan_minor)
+    (scale :C, :pelog)
+    (scale :C, :augmented2)
+    (scale :C, :scriabin)
+    (scale :C, :harmonic_major)
+    (scale :C, :melodic_minor_desc)
+    (scale :C, :romanian_minor)
+    (scale :C, :hindu)
+    (scale :C, :iwato)
+    (scale :C, :melodic_minor)
+    (scale :C, :diminished2)
+    (scale :C, :marva)
+    (scale :C, :melodic_major)
+    (scale :C, :indian)
+    (scale :C, :spanish)
+    (scale :C, :prometheus)
+    (scale :C, :diminished)
+    (scale :C, :todi)
+    (scale :C, :leading_whole)
+    (scale :C, :augmented)
+    (scale :C, :purvi)
+    (scale :C, :chinese)
+    (scale :C, :lydian_minor)
+    (scale :C, :blues_major)
+    (scale :C, :blues_minor)
+- :name: :chord_degree
+  :introduced: !ruby/struct:Sandbox::SonicPi::Version
+    x: 2
+    y: 1
+    z: 0
+  :summary: Construct chords of stacked thirds, based on scale degrees
+  :doc: In music we build chords from scales. For example, a C major chord is made
+    by taking the 1st, 3rd and 5th notes of the C major scale (C, E and G). If you
+    do this on a piano you might notice that you play one, skip one, play one, skip
+    one etc. If we use the same spacing and start from the second note in C major
+    (which is a D), we get a D minor chord which is the 2nd, 4th and 6th notes in
+    C major (D, F and A). We can move this pattern all the way up or down the scale
+    to get different types of chords. `chord_degree` is a helper method that returns
+    a ring of midi note numbers when given a degree (starting point in a scale) which
+    is a symbol `:i`, `:ii`, `:iii`, `:iv`, `:v`, `:vi`, `:vii` or a number `1`-`7`.
+    The second argument is the tonic note of the scale, the third argument is the
+    scale type and finally the fourth argument is number of notes to stack up in the
+    chord. If we choose 4 notes from degree `:i` of the C major scale, we take the
+    1st, 3rd, 5th and 7th notes of the scale to get a C major 7 chord.
+  :args:
+  - - :degree
+    - :symbol_or_number
+  - - :tonic
+    - :symbol
+  - - :scale
+    - :symbol
+  - - :number_of_notes
+    - :number
+  :returns: :ring
+  :opts:
+    :invert: Apply the specified num inversions to chord. See the fn `chord_invert`.
+  :accepts_block: false
+  :memoize: true
+  :examples:
+  - 'puts (chord_degree :i, :A3, :major) # returns a ring of midi notes - (ring 57,
+    61, 64, 68) - an A major 7 chord'
+  - play (chord_degree :i, :A3, :major, 3)
+  - 'play (chord_degree :ii, :A3, :major, 3) # Chord ii in A major is a B minor chord'
+  - 'play (chord_degree :iii, :A3, :major, 3) # Chord iii in A major is a C# minor
+    chord'
+  - 'play (chord_degree :iv, :A3, :major, 3) # Chord iv in A major is a D major chord'
+  - 'play (chord_degree :i, :C4, :major, 4) # Taking four notes is the default. This
+    gives us 7th chords - here it plays a C major 7'
+  - 'play (chord_degree :i, :C4, :major, 5) # Taking five notes gives us 9th chords
+    - here it plays a C major 9 chord'
+  - 'play (chord_degree :i, :C4, :major, 3, invert: 1) # Play the first inversion
+    of chord i in C major - (ring 64, 67, 72)'
+- :name: :chord
+  :introduced: !ruby/struct:Sandbox::SonicPi::Version
+    x: 2
+    y: 0
+    z: 0
+  :summary: Create chord
+  :doc: Creates an immutable ring of Midi note numbers when given a tonic note and
+    a chord type. If only passed a chord type, will default the tonic to 0. See examples.
+  :args:
+  - - :tonic
+    - :symbol
+  - - :name
+    - :symbol
+  :returns: :ring
+  :opts:
+    :invert: Apply the specified num inversions to chord. See the fn `chord_invert`.
+    :num_octaves: Create an arpeggio of the chord over n octaves
+  :accepts_block: false
+  :intro_fn: true
+  :memoize: true
+  :examples:
+  - |2
+
+    puts (chord :e, :minor) # returns a ring of midi notes - (ring 64, 67, 71)
+  - |-
+    # Play all the notes together
+    play (chord :e, :minor)
+  - |2
+
+    # Chord inversions (see the fn chord_invert)
+    play (chord :e3, :minor, invert: 0) # Play the basic :e3, :minor chord - (ring 52, 55, 59)
+    play (chord :e3, :minor, invert: 1) # Play the first inversion of :e3, :minor - (ring 55, 59, 64)
+    play (chord :e3, :minor, invert: 2) # Play the first inversion of :e3, :minor - (ring 59, 64, 67)
+  - |-
+    # You can create a chord without a tonic:
+    puts (chord :minor) #=> (ring 0, 3, 7)
+  - |-
+    # chords are great for arpeggiators
+    live_loop :arp do
+      play chord(:e, :minor, num_octaves: 2).tick, release: 0.1
+      sleep 0.125
+    end
+  - |
+    # Sonic Pi supports a large range of chords
+     # Notice that the more exotic ones have to be surrounded by ' quotes
+    (chord :C, '1')
+    (chord :C, '5')
+    (chord :C, '+5')
+    (chord :C, 'm+5')
+    (chord :C, :sus2)
+    (chord :C, :sus4)
+    (chord :C, '6')
+    (chord :C, :m6)
+    (chord :C, '7sus2')
+    (chord :C, '7sus4')
+    (chord :C, '7-5')
+    (chord :C, 'm7-5')
+    (chord :C, '7+5')
+    (chord :C, 'm7+5')
+    (chord :C, '9')
+    (chord :C, :m9)
+    (chord :C, 'm7+9')
+    (chord :C, :maj9)
+    (chord :C, '9sus4')
+    (chord :C, '6*9')
+    (chord :C, 'm6*9')
+    (chord :C, '7-9')
+    (chord :C, 'm7-9')
+    (chord :C, '7-10')
+    (chord :C, '9+5')
+    (chord :C, 'm9+5')
+    (chord :C, '7+5-9')
+    (chord :C, 'm7+5-9')
+    (chord :C, '11')
+    (chord :C, :m11)
+    (chord :C, :maj11)
+    (chord :C, '11+')
+    (chord :C, 'm11+')
+    (chord :C, '13')
+    (chord :C, :m13)
+    (chord :C, :add2)
+    (chord :C, :add4)
+    (chord :C, :add9)
+    (chord :C, :add11)
+    (chord :C, :add13)
+    (chord :C, :madd2)
+    (chord :C, :madd4)
+    (chord :C, :madd9)
+    (chord :C, :madd11)
+    (chord :C, :madd13)
+    (chord :C, :major)
+    (chord :C, :M)
+    (chord :C, :minor)
+    (chord :C, :m)
+    (chord :C, :major7)
+    (chord :C, :dom7)
+    (chord :C, '7')
+    (chord :C, :M7)
+    (chord :C, :minor7)
+    (chord :C, :m7)
+    (chord :C, :augmented)
+    (chord :C, :a)
+    (chord :C, :diminished)
+    (chord :C, :dim)
+    (chord :C, :i)
+    (chord :C, :diminished7)
+    (chord :C, :dim7)
+    (chord :C, :i7)
+- :name: :chord_invert
+  :introduced: !ruby/struct:Sandbox::SonicPi::Version
+    x: 2
+    y: 6
+    z: 0
+  :summary: Chord inversion
+  :doc: |-
+    Given a set of notes, apply a number of inversions indicated by the `shift` parameter. Inversions being an increase to notes if `shift` is positive or decreasing the notes if `shift` is negative.
+
+    An inversion is simply rotating the chord and shifting the wrapped notes up or down an octave. For example, consider the chord :e3, :minor - `(ring 52, 55, 59)`. When we invert it once, we rotate the notes around to `(ring 55, 59, 52)`. However, because note 52 is wrapped round, it's shifted up an octave (12 semitones) so the actual first inversion of the chord :e3, :minor is `(ring 55, 59, 52 + 12)` or `(ring 55, 59, 64)`.
+
+    Note that it's also possible to directly invert chords on creation with the `invert:` opt - `(chord :e3, :minor, invert: 2)`
+  :args:
+  - - :notes
+    - :list
+  - - :shift
+    - :number
+  :returns: :ring
+  :opts: 
+  :accepts_block: false
+  :examples:
+  - |2
+
+    play (chord_invert (chord :A3, "M"), 0) #No inversion     - (ring 57, 61, 64)
+    sleep 1
+    play (chord_invert (chord :A3, "M"), 1) #First inversion  - (ring 61, 64, 69)
+    sleep 1
+    play (chord_invert (chord :A3, "M"), 2) #Second inversion - (ring 64, 69, 73)
 - :name: :scale_names
   :introduced: !ruby/struct:Sandbox::SonicPi::Version
     x: 2

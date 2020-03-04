@@ -307,6 +307,8 @@ end
 # Intialise or return named buffer
 # Initialise or return a named buffer with a specific duration (defaults to 8 beats). Useful for working with the `:record` FX. If the buffer is requested with a different duration, then a new buffer will be initialised and the old one recycled.
 # @accepts_block false
+# @param _symbol [name]
+# @param _number [duration]
 # @since 3.0.0
 # @example
 #   buffer(:foo) # load a 8s buffer and name it :foo
@@ -330,7 +332,7 @@ end
 #   buffer(:foo)     # init a 8s buffer and name it :foo
 #   buffer(:foo)     # return cached 8s buffer (has the same duration)
 #
-def buffer
+def buffer(_symbol = nil, _number = nil)
   #This is a stub, used for indexing
 end
 
@@ -472,6 +474,7 @@ end
 # @param _tonic [symbol]
 # @param _scale [symbol]
 # @param _number_of_notes [number]
+# @param invert Apply the specified num inversions to chord. See the fn `chord_invert`.
 # @since 2.1.0
 # @example
 #   puts (chord_degree :i, :A3, :major) # returns a ring of midi notes - (ring 57, 61, 64, 68) - an A major 7 chord
@@ -494,7 +497,10 @@ end
 # @example
 #   play (chord_degree :i, :C4, :major, 5) # Taking five notes gives us 9th chords - here it plays a C major 9 chord
 #
-def chord_degree(_degree = nil, _tonic = nil, _scale = nil, _number_of_notes = nil)
+# @example
+#   play (chord_degree :i, :C4, :major, 3, invert: 1) # Play the first inversion of chord i in C major - (ring 64, 67, 72)
+#
+def chord_degree(_degree = nil, _tonic = nil, _scale = nil, _number_of_notes = nil, invert: nil)
   #This is a stub, used for indexing
 end
 
@@ -1123,15 +1129,30 @@ def defonce(_name = nil, override: nil)
 end
 
 # Convert a degree into a note
-# For a given scale and tonic it takes a symbol `:i`, `:ii`, `:iii`, `:iv`,`:v`, `:vi`, `:vii` or a number `1`-`7` and resolves it to a midi note.
+# For a given scale and tonic it takes a symbol/string/number and resolves it to a midi note. The degree can be either a decimal number or a roman numeral (if it's a string or symbol), and may optionally be prefixed an augmentation (`a`/`d` for an augmented/diminished interval, `aa`/`dd` for double augmented/diminished or `p` for a perfect (unchanged) interval).
 # @accepts_block false
 # @param _degree [symbol_or_number]
 # @param _tonic [symbol]
 # @param _scale [symbol]
 # @since 2.1.0
 # @example
-#   play degree(:ii, :D3, :major)
-#   play degree(2, :C3, :minor)
+#   play degree(:iii, :D3, :major) # major third up from :D3
+#   play degree(3, :C3, :minor) # minor third up from :C3
+#   play degree('d5', :B3, :major) # diminished fifth up from :B3
+#
+# @example
+#   chrd = []
+#   [:i, :iii, :v, :dvii, :dix, :Axi, :xiii].each do |d|  # for each degree in the chord
+#     chrd.append (degree d, :Fs, :major)  # add the corresponding note
+#   end
+#   play chrd  # play an F# 13+11-9 chord, using roman numeral symbols
+#
+# @example
+#   chrd = []
+#   ['1', '3', '5', 'd7', 'd9', 'A11', '13'].each do |d|
+#     chrd.append (degree d, :Fs, :major)
+#   end
+#   play chrd  # the same chord as above, but using decimal number strings
 #
 def degree(_degree = nil, _tonic = nil, _scale = nil)
   #This is a stub, used for indexing
@@ -1207,6 +1228,18 @@ def doubles(_start = nil, _num_doubles = nil)
   #This is a stub, used for indexing
 end
 
+# Evaluate the contents of the file inline in the current thread like a function.
+# Reads the full contents of the file with `path` and executes within the current thread like a function call.
+# @accepts_block false
+# @param _filename [path]
+# @since 3.2.0
+# @example
+#   eval_file "~/path/to/sonic-pi-code.rb" #=> will run the contents of this file
+#
+def eval_file(_filename = nil)
+  #This is a stub, used for indexing
+end
+
 # Factor test
 # Test to see if factor is indeed a factor of `val`. In other words, can `val` be divided exactly by factor.
 # @accepts_block false
@@ -1235,7 +1268,7 @@ def fx_names
 end
 
 # Get information from the Time State
-# Retrieve information from Time State set prior to the current time from either the current or any other thread. If called multiple times will always return the same value unless a call to `sleep`, `sync`, `set` or `cue` is interleaved. Also, calls to `get` will always return the same value across Runs for deterministic behaviour - which means you may safely use it in your compositions for repeatable music.
+# Retrieve information from Time State set prior to the current time from either the current or any other thread. If called multiple times will always return the same value unless a call to `sleep`, `sync`, `set` or `cue` is interleaved. Also, calls to `get` will always return the same value across Runs for deterministic behaviour - which means you may safely use it in your compositions for repeatable music. If no value is stored with the relevant key, will return `nil`.
 # 
 # May be used within a `time_warp` to retrieve past events. If in a time warp, `get` can not be called from a future position. Does not advance time.
 # @accepts_block false
@@ -1456,7 +1489,7 @@ def knit(_value = nil, _count = nil)
 end
 
 # Create a ring buffer representing a straight line
-# Create a ring buffer representing a straight line between start and finish of num_slices elements. Num slices defaults to `8`. Indexes wrap around positively and negatively. Similar to `range`.
+# Create a ring buffer representing a straight line between start and finish of steps elements. Steps defaults to `4`. Indexes wrap around positively and negatively. Similar to `range`.
 # @accepts_block false
 # @param _start [number]
 # @param _finish [number]
@@ -1488,6 +1521,9 @@ end
 # To stop a `live_audio` synth, use the `:stop` arg: `live_audio :foo, :stop`.
 # .
 # @accepts_block false
+# @param _name [symbol]
+# @param input The audio card input to read audio from.
+# @param stereo If set to truthy value (true, 1) will read from two consecutive audio card inputs.
 # @since 3.0.0
 # @example
 #   # Basic usage
@@ -1537,7 +1573,7 @@ end
 #   live_audio :foo, :stop     #=> stop playing audio from input 1
 #                              #=> (live_audio :bar is still playing)
 #
-def live_audio
+def live_audio(_name = nil, input: nil, stereo: nil)
   #This is a stub, used for indexing
 end
 
@@ -1857,6 +1893,25 @@ end
 #   (map foo: 1, bar: 2)[:quux] #=> nil
 #
 def map(_list = nil)
+  #This is a stub, used for indexing
+end
+
+# Linear scaling algorithm
+# 
+#   Scales a given input value within the specified input range to a
+#   corresponding value in the specified output range using the formula:
+# 
+#            (out_max - out_min) (val - in_min)
+#    f (x) = --------------------------------  + out_min
+#                     in_max - in_min
+# 
+# 
+# @accepts_block false
+# @since 3.0.0
+# @example
+#   math_scale 0.5, 0, 1, 10, 20 #=> 15
+#
+def math_scale
   #This is a stub, used for indexing
 end
 
@@ -2741,6 +2796,25 @@ def midi_stop(port: nil)
   #This is a stub, used for indexing
 end
 
+# Send MIDI System Exclusive (SysEx) message
+# Sends the MIDI SysEx message to *all* connected MIDI devices.
+# 
+# MIDI SysEx messages, unlike all other MIDI messages, are variable in length. They allow MIDI device manufacturers to define device-specific messages, for example loading/saving patches, or programming device features such as illuminated buttons.
+# 
+# Floats will be rounded up or down to the nearest whole number e.g. 176.1 -> 176, 120.5 -> 121, 0.49 -> 0.
+# 
+# Non-number values will be automatically turned into numbers prior to sending the event if possible (if this conversion does not work an Error will be thrown).
+# @accepts_block false
+# @param port Port(s) to send the MIDI SysEx message events to
+# @param on If specified and false/nil/0 will stop the midi SysEx message from being sent out. (Ensures all opts are evaluated in this call to `midi_sysex` regardless of value).
+# @since 3.2.0
+# @example
+#   midi_sysex 0xf0, 0x00, 0x20, 0x6b, 0x7f, 0x42, 0x02, 0x00, 0x10, 0x77, 0x11, 0xf7  #=> Program an Arturia Beatstep controller to turn the eighth pad pink
+#
+def midi_sysex(port: nil, on: nil)
+  #This is a stub, used for indexing
+end
+
 # MIDI to Hz conversion
 # Convert a midi note to hz
 # @accepts_block false
@@ -2942,7 +3016,7 @@ end
 # `osc "/set/filter", "lowpass", 80, 0.5`
 # 
 # 
-# Note, by default, Sonic Pi listens for OSC messages on port `4559`, so you may send messages to an external machine running Sonic Pi if you know the IP address of that external machine. Any OSC messages received on port `4559` are automatically converted to standard cue events and displayed in the GUI's cue log. This also means that you can use `sync` to wait for the next incoming OSC message with a given path (see example).
+# Note, by default, Sonic Pi listens for OSC messages on port `4560`, so you may send messages to an external machine running Sonic Pi if you know the IP address of that external machine. Any OSC messages received on port `4559` are automatically converted to standard cue events and displayed in the GUI's cue log. This also means that you can use `sync` to wait for the next incoming OSC message with a given path (see example).
 # 
 # Finally, it is also very useful to send OSC messages to aother programs on the same computer. This can be achieved by specifying "localhost" as the hostname and the port as normal (depending on which port the other program is listening on).
 # 
@@ -3044,7 +3118,7 @@ end
 # Randomly pick from list (with duplicates)
 # Pick n elements from list or ring. Unlike shuffle, after each element has been picked, it is 'returned' to the list so it may be picked again. This means there may be duplicates in the result. If n is greater than the size of the ring/list then duplicates are guaranteed to be in the result.
 # 
-# If `n` isn't supplied it defaults to the size of the list/ring.
+# If `n` isn't supplied it defaults to a size of 1.
 # 
 # If no arguments are given, will return a lambda function which when called takes an argument which will be a list to be picked from. This is useful for choosing random `onset:` vals for samples.
 # 
@@ -3064,7 +3138,7 @@ end
 #   puts (ring 1, 2).pick(5) #=> (ring 2, 2, 1, 1, 1)
 #
 # @example
-#   puts (ring 1, 2, 3).pick #=> (ring 3, 3, 2)
+#   puts (ring 1, 2, 3).pick #=> (ring 3)
 #
 # @example
 #   # Using pick for random sample onsets
@@ -3602,8 +3676,8 @@ end
 #   print rand_look(0.5) #=> will print a number like 0.375030517578125 to the output pane
 #     print rand_look(0.5) #=> will print the same number again
 #     print rand_look(0.5) #=> will print the same number again
-#     print rand_(0.5) #=> will print a different random number
-#     print rand_look(0.5) #=> will print the same number as the prevoius line again.
+#     print rand(0.5) #=> will print a different random number
+#     print rand_look(0.5) #=> will print the same number as the previous line again.
 #
 def rand_look(_max = nil)
   #This is a stub, used for indexing
@@ -3961,7 +4035,7 @@ end
 #   run_code "8.times do
 #   play 60
 #   sleep 1
-#   end # will play 60 8 times
+#   end" # will play 60 8 times
 #
 def run_code(_code = nil)
   #This is a stub, used for indexing
@@ -4016,8 +4090,9 @@ end
 # @param pan Stereo position of audio. -1 is left ear only, 1 is right ear only, and values in between position the sound accordingly. Default is 0.
 # @param amp Amplitude of playback.
 # @param pre_amp Amplitude multiplier which takes place immediately before any internal FX such as the low pass filter, compressor or pitch modification. Use this opt if you want to overload the compressor.
-# @param onset Analyse the sample with an onset detection algorithm and set the `start:` and `finish:` opts to play the nth onset only. Allows you to treat a rhythm sample as a palette of individual drum/synth hits. Floats are rounded to the nearest whole number.
-# @param slice Divides the sample duration evenly into `num_slices` sections (defaults to 16) and set the `start:` and `finish:` opts to play the nth slice only. Use the envelope opts to remove any clicks introduced if the slice boundary is in the middle of a sound. Also consider `onset:`. Floats are rounded to the nearest whole number.
+# @param onset Analyse the sample with an onset detection algorithm and automatically set or override the `start:` and `finish:` opts to play the nth onset only. Allows you to treat a rhythm sample as a palette of individual drum/synth hits. If `start:` or `finish:` opts are used in addition to `onset:` then they will work within the onset rather than the whole sample. Floats are rounded to the nearest whole number.
+# @param on If specified and false/nil/0 will stop the sample from being played. Ensures all opts are evaluated.
+# @param slice Divides the sample duration evenly into `num_slices:` sections (defaults to 16) and set the `start:` and `finish:` opts to play the nth slice only. If `start:` or `finish:` opts are used in addition to `slice:` then they will work within the slice rather than the whole sample. Use the envelope opts to remove any clicks introduced if the slice boundary is in the middle of a sound. Also consider `onset:` as an alternative to `slice:`. If `onset:` is also used then the slices will be within the onset rather than the whole sample. Floats are rounded to the nearest whole number.
 # @param num_slices Number of slices to divide the sample into when using the `slice:` opt. Defaults to 16. Floats are rounded to the nearest whole number.
 # @param norm Normalise the audio (make quieter parts of the sample louder and louder parts quieter) - this is similar to the normaliser FX. This may emphasise any clicks caused by clipping.
 # @param lpf Cutoff value of the built-in low pass filter (lpf) in MIDI notes. Unless specified, the lpf is *not* added to the signal chain.
@@ -4209,7 +4284,7 @@ end
 #
 # @example
 #   # External samples
-#   sample "/path/to/sample.wav"                          # Play any Wav, Aif or FLAC sample on your computer
+#   sample "/path/to/sample.wav"                          # Play any Wav, Aif, Ogg, Oga, or FLAC sample on your computer
 #                                                           # by simply passing a string representing the full
 #                                                           # path
 #
@@ -4380,7 +4455,57 @@ end
 #                                                           # unlikely you will use this frequently, but it is a powerful tool
 #                                                           # that's there when you need it.
 #
-def sample(_name_or_path = nil, rate: nil, beat_stretch: nil, pitch_stretch: nil, attack: nil, sustain: nil, release: nil, start: nil, finish: nil, pan: nil, amp: nil, pre_amp: nil, onset: nil, slice: nil, num_slices: nil, norm: nil, lpf: nil, lpf_init_level: nil, lpf_attack_level: nil, lpf_decay_level: nil, lpf_sustain_level: nil, lpf_release_level: nil, lpf_attack: nil, lpf_decay: nil, lpf_sustain: nil, lpf_release: nil, lpf_min: nil, lpf_env_curve: nil, hpf: nil, hpf_init_level: nil, hpf_attack_level: nil, hpf_decay_level: nil, hpf_sustain_level: nil, hpf_release_level: nil, hpf_attack: nil, hpf_decay: nil, hpf_sustain: nil, hpf_release: nil, hpf_env_curve: nil, hpf_max: nil, rpitch: nil, pitch: nil, window_size: nil, pitch_dis: nil, time_dis: nil, compress: nil, threshold: nil, slope_below: nil, slope_above: nil, clamp_time: nil, relax_time: nil, slide: nil, path: nil)
+# @example
+#   sample :loop_tabla, onset: 1                                         # Plays the 2nd onset (the first onset would have index 0)
+#   
+#                                                                        # Will override opts with: {start: 0.0151, finish: 0.0304}
+#                                                                        # (these values are specific to the :loop_tabla sample and
+#                                                                        # will vary for different samples)
+#
+# @example
+#   sample :loop_tabla, onset: 1, slice: 0, num_slices: 1                # Plays the 2nd onset. This behaves the same as not specifying
+#                                                                        # a slice as we select the first of one slices.
+#   
+#                                                                        # Will override opts with: {start: 0.0151, finish: 0.0304}
+#                                                                        # (these values are specific to the :loop_tabla sample and
+#                                                                        # will vary for different samples)
+#
+# @example
+#   sample :loop_tabla, onset: 1, slice: 0, num_slices: 2                # This plays the first half of the 2nd onset.
+#                                                                        # This is because  we split that onset into two slices and
+#                                                                        # play just the first slice (with index 0).
+#   
+#                                                                        # Will override opts with: {start: 0.0151, finish: 0.0227}
+#                                                                        # (these values are specific to the :loop_tabla sample and
+#                                                                        # will vary for different samples)
+#
+# @example
+#   sample :loop_tabla, onset: 1, slice: 0, num_slices: 4                # This plays the first quarter of the 2nd onset.
+#                                                                        # This is because we split that onset into four slices and
+#                                                                        # play just the first slice (with index 0).
+#   
+#                                                                        # Will override opts with: {start: 0.0151, finish: 0.0189}
+#                                                                        # (these values are specific to the :loop_tabla sample and
+#                                                                        # will vary for different samples)
+#   
+#   sample :loop_tabla, onset: 1, slice: 0, num_slices: 4, finish: 0.5   # Will play the first 1/8th of the 2nd onset.
+#                                                                        # This is because we split that specific onset into 4 slices
+#                                                                        # and then only play the first half of the first slice.
+#   
+#                                                                        # Will override opts with: {start: 0.0151, finish: 0.017}
+#                                                                        # (these values are specific to the :loop_tabla sample and
+#                                                                        # will vary for different samples)
+#   
+#   sample :loop_tabla, onset: 1, slice: 0, num_slices: 4, finish: 0.0, start: 0.5   # Will play the first 1/8th of the 2nd onset backwards..
+#                                                                                    # This is because we split that specific onset into 4 slices
+#                                                                                    # and then only play from the first half of the first slice
+#                                                                                    # back to the beginning.
+#   
+#                                                                                    # Will override opts with: {start: 0.017, finish: 0.0151}
+#                                                                                    # (these values are specific to the :loop_tabla sample and
+#                                                                                    # will vary for different samples)
+#
+def sample(_name_or_path = nil, rate: nil, beat_stretch: nil, pitch_stretch: nil, attack: nil, sustain: nil, release: nil, start: nil, finish: nil, pan: nil, amp: nil, pre_amp: nil, onset: nil, on: nil, slice: nil, num_slices: nil, norm: nil, lpf: nil, lpf_init_level: nil, lpf_attack_level: nil, lpf_decay_level: nil, lpf_sustain_level: nil, lpf_release_level: nil, lpf_attack: nil, lpf_decay: nil, lpf_sustain: nil, lpf_release: nil, lpf_min: nil, lpf_env_curve: nil, hpf: nil, hpf_init_level: nil, hpf_attack_level: nil, hpf_decay_level: nil, hpf_sustain_level: nil, hpf_release_level: nil, hpf_attack: nil, hpf_decay: nil, hpf_sustain: nil, hpf_release: nil, hpf_env_curve: nil, hpf_max: nil, rpitch: nil, pitch: nil, window_size: nil, pitch_dis: nil, time_dis: nil, compress: nil, threshold: nil, slope_below: nil, slope_above: nil, clamp_time: nil, relax_time: nil, slide: nil, path: nil)
   #This is a stub, used for indexing
 end
 
@@ -4802,6 +4927,34 @@ end
 #                               #         num_buffers: 4096.0)
 #
 def scsynth_info
+  #This is a stub, used for indexing
+end
+
+# Store information in the Time State
+# Store information in the Time State for the current time for either the current or any other thread. If called multiple times without an intervening call to `sleep`, `sync`, `set` or `cue`, the last value set will prevail. The value will remain in the Time State until overwritten by another call to `set`, or until Sonic Pi quits.
+# 
+# May be used within a `time_warp` to set past/future events. Does not affect time.
+# @accepts_block false
+# @param _time_state_key [default]
+# @param _value [anything]
+# @since 3.0.0
+# @example
+#   set :foo, 1 #=> Stores the value 1 with key :foo
+#
+# @example
+#   set :foo, 3  # Set :foo to 3
+#   get[:foo] #=> returns 3
+#
+# @example
+#   in_thread do
+#     set :foo, 3  # Set :foo to 3
+#   end
+#   
+#   in_thread do
+#     puts get[:foo]  #=> always returns 3 (no race conditions here!)
+#   end
+#
+def set(_time_state_key = nil, _value = nil)
   #This is a stub, used for indexing
 end
 
@@ -5253,7 +5406,7 @@ end
 # 
 # If the synth name is `nil` behaviour is identical to that of `play` in that the `current_synth` will determine the actual synth triggered.
 # 
-# If a block is given, it is assumed to take one arg which will be the controllable synth node and the body of the block is run in an implicit `in_thread`. This allows for asynchronous control of the synth without interferring with time. For synchronous control capture the result of `synth` as a variable and use that.
+# If a block is given, it is assumed to take one arg which will be the controllable synth node and the body of the block is run in an implicit `in_thread`. This allows for asynchronous control of the synth without interfering with time. For synchronous control capture the result of `synth` as a variable and use that.
 # 
 # Note that the default opts listed are only a guide to the most common opts across all the synths. Not all synths support all the default opts and each synth typically supports many more opts specific to that synth. For example, the `:tb303` synth supports 45 unique opts. For a full list of a synth's opts see its documentation in the Help system. This can be accessed directly by clicking on the name of the synth and using the shortcut `C-i`
 # @accepts_block true
@@ -5365,6 +5518,18 @@ end
 #     puts tick(:foo) #=> 1
 #     puts tick(:foo) #=> 2
 #     puts tick(:bar) #=> 0 # tick :bar is independent of tick :foo
+#
+# @example
+#   # You can tick by more than increments of 1
+#     # using the step: opt
+#   
+#     puts tick             #=> 0
+#     puts tick             #=> 1
+#     puts tick             #=> 2
+#     puts tick(step: 2)    #=> 4
+#     puts tick(step: 2)    #=> 6
+#     puts tick(step: 10)   #=> 16
+#     puts tick             #=> 17
 #
 # @example
 #   # Each_live loop has its own separate ticks
@@ -5527,13 +5692,14 @@ end
 #     play 80          #=> plays at 1.1
 #     sleep 0.5
 #     play 80          #=> plays at 1.6
-#                      # time shifts back by 0.1 beats
-#                      # however, the sleep 0.5 is still accounted for
-#   end
+#   
+#   end                # time shifts back by 0.6 beats
+#   
 #                      # we now honour the original sleep 1 and the
-#                      # sleep 0.5 within the time_warp block, but
-#                      # any time shift delta has been removed
-#   play 70            #=> plays at 1.5
+#                      # sleep 0.5 within the time_warp block is
+#                      # ignored including the 0.1 shift offset
+#   
+#   play 70            #=> plays at 1
 #
 # @example
 #   # shift backwards in time
@@ -5548,12 +5714,11 @@ end
 #     sleep 0.5
 #     play 80          #=> plays at 1.4
 #                      # time shifts forward by 0.1 beats
-#                      # however, the sleep 0.5 is still accounted for
 #   end
 #                      # we now honour the original sleep 1 and the
-#                      # sleep 0.5 within the time_warp block, but
-#                      # any time shift delta has been removed
-#   play 70            #=> plays at 1.5
+#                      # sleep 0.5 within the time_warp block is
+#                      # ignored, including the -0.1 offset
+#   play 70            #=> plays at 1
 #
 # @example
 #   # Ticks count linearly through time_warp
@@ -5974,7 +6139,7 @@ def use_octave(_octave_shift = nil)
 end
 
 # Set the default hostname and port number for outgoing OSC messages.
-# Sets the destination host and port that `osc` will send messages to. If no port number is specified - will default to port 4559 (Sonic Pi's default OSC listening port).
+# Sets the destination host and port that `osc` will send messages to. If no port number is specified - will default to port 4560 (Sonic Pi's default OSC listening port).
 # 
 # OSC (Open Sound Control) is a simple way of passing messages between two separate programs on the same computer or even on different computers via a local network or even the internet. `use_osc` allows you to specify which computer (`hostname`) and program (`port`) to send messages to.
 # 
@@ -7075,12 +7240,12 @@ end
 # @param _bool [true_or_false]
 # @since 2.10.0
 # @example
-#   with_timing_guarantees true
+#   with_timing_guarantees true do
 #     sample :loop_amen  #=> if time is behind by any margin, this will not trigger
 #   end
 #
 # @example
-#   with_timing_guarantees false
+#   with_timing_guarantees false do
 #     sample :loop_amen  #=> unless time is too far behind, this will trigger even when late.
 #   end
 #
