@@ -8,8 +8,9 @@ require 'logger'
 
 # @example in order to control remote host, expose the port
 #   while :; do socat -T1 UDP-LISTEN:4557,bind=192.168.2.4 UDP:localhost:4557; done
+# @see "Listen port" in ~/.sonic-pi/log/server-output.log
 logger = Logger.new($stdout)
-server = URI.parse(ENV['SONIC_PI_URL'] || 'udp://localhost:4557')
+server = URI.parse(ENV['SONIC_PI_URL'] || 'udp://localhost:51235')
 logger.debug "Connecting to #{server.inspect}"
 client = OSC::Client.new(server.host, server.port)
 
@@ -19,18 +20,22 @@ workspace = (ENV['SONIC_PI_HOME'] || Dir.home) + '/.sonic-pi/store/default'
 dest      = "#{workspace}/#{buffer_id}.spi"
 
 on_change = ->(*args) {
-  src = args[0][0]
-  logger.info "Reloading #{src}"
-  client.send(OSC::Message.new('/stop-all-jobs'))
-  sleep 0.5
-  if server.host == 'localhost'
-    logger.debug "Reloading buffer #{gui_id}:#{buffer_id} from #{dest}"
-    # FileUtils.ln_s src, dest, force: true
-    FileUtils.rm_f dest
-    FileUtils.cp src, dest
-    client.send(OSC::Message.new('/load-buffer', gui_id, buffer_id))
+  begin
+    src = args[0][0]
+    logger.info "Reloading #{src}"
+    client.send(OSC::Message.new('/stop-all-jobs'))
+    sleep 0.5
+    if server.host == 'localhost'
+      logger.debug "Reloading buffer #{gui_id}:#{buffer_id} from #{dest}"
+      # FileUtils.ln_s src, dest, force: true
+      FileUtils.rm_f dest
+      FileUtils.cp src, dest
+      client.send(OSC::Message.new('/load-buffer', gui_id, buffer_id))
+    end
+    client.send(OSC::Message.new('/run-code', gui_id, File.read(src)))
+  rescue => ex
+    logger.error ex.inspect
   end
-  client.send(OSC::Message.new('/run-code', gui_id, File.read(src)))
 }
 
 Listen.to(
