@@ -3,10 +3,12 @@
 $LOAD_PATH.unshift('/Users/alex/A/Music/SonicPi/vendor/bundle/ruby/2.7.0/gems/midilib-2.0.5/lib')
 require 'midilib'
 
-# fuse-zip -r ~/A/Music/MIDI/kunstderfuge-com_complete_collection.zip ~/Music/MIDI
-MIDI_DIR   = '/Users/alex/Music/MIDI/'
+MIDI_DIR = '/Users/alex/Music/MIDI/'
+if Dir[MIDI_DIR + '*'].empty?
+  system %(fuse-zip -r /Users/alex/A/Music/MIDI/kunstderfuge-com_complete_collection.zip #{MIDI_DIR})
+end
 MIDI_FILES = Dir[MIDI_DIR + '**/*.mid']
-MIDI_FILES.shuffle!
+MIDI_FILES.__orig_shuffle_bang__
 
 Note = Struct.new(:note, :velocity, :duration, :position, :duration_normalized)
 
@@ -38,9 +40,9 @@ def each_track_notes
       puts "ignoring #{notes_size - notes.size} notes without duration"
       notes.sort_by!(&:position) # probably redundant
 
-      duration_median = notes.sort_by(&:duration)[notes.size / 2].duration
+      duration_median = notes.sort_by(&:duration)[notes.size / 2].duration.to_f
       notes.each do |note|
-        note.duration_normalized = note.duration / duration_median
+        note.duration_normalized = (note.duration / duration_median).round(3)
       end
 
       yield notes
@@ -114,20 +116,21 @@ def loading(in_progress = true, eta: 2)
 end
 
 
-MIDI_PORT = 'iac_driver_bus_1'
+MIDI_PORT    = 'network_away' # 'iac_driver_bus_1'
 MIDI_CHANNEL = 1
 use_midi_defaults port: MIDI_PORT, channel: MIDI_CHANNEL
 use_bpm 60
 
-quantize = 0
+quantize = 10
 loading
 each_track_notes do |notes|
   quantize = (quantize + 15) % 100
   chain    = chords_chain(notes, quantize: quantize)
-  sustain  = (1 / 32r) * [4, 8, 16].sample
+  sustain  = (1 / 32r) * [8, 16].sample
   loading false
   generate(rand(21..84), chain) do |chord_notes|
-    midi_play_chord chord_notes, sustain_factor: sustain, channel_map: ->(_) { rand_i(4) + 1 }
+    midi_play_chord chord_notes, sustain_factor: sustain, channel_map: ->(_) { rand_i(8) + 1 }
   end
+  midi_all_notes_off port: MIDI_PORT
   loading
 end
