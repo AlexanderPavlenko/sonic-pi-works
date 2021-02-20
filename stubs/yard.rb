@@ -85,6 +85,46 @@ def assert_error(_class = nil)
   #This is a stub, used for indexing
 end
 
+# Ensure arg is not valid
+# Raises an exception if the argument is not either nil or false.
+# @accepts_block false
+# @param _arg [anything]
+# @since 3.3.0
+# @example
+#   # Simple assertions
+#   assert_not false   # As false is either nil or false, this assertion passes
+#   assert_not nil     # As nil is either nil or false, this assertion passes
+#   assert_not 1 == 5  # These numbers are not equal
+#   assert true  # This will raise an exception
+#
+# @example
+#   # Communicating error messages
+#   assert_not true , "oops" # This will raise an exception containing the message "oops"
+#
+def assert_not(_arg = nil)
+  #This is a stub, used for indexing
+end
+
+# Ensure args are not equal
+# Raises an exception if both arguments are qual. 
+# @accepts_block false
+# @param _arg1 [anything]
+# @param _arg2 [anything]
+# @since 3.3.0
+# @example
+#   # Simple assertions
+#   assert_not_equal 1, 3
+#   assert_not_equal 1, -1
+#   assert_not_equal 1, :foo
+#
+# @example
+#   # Add messages to the exceptions
+#   assert_not_equal 3, 3, "something is seriously wrong!"
+#
+def assert_not_equal(_arg1 = nil, _arg2 = nil)
+  #This is a stub, used for indexing
+end
+
 # Ensure args are similar
 # Raises an exception if both arguments aren't similar.
 # 
@@ -304,7 +344,7 @@ def bt(_seconds = nil)
   #This is a stub, used for indexing
 end
 
-# Intialise or return named buffer
+# Initialise or return named buffer
 # Initialise or return a named buffer with a specific duration (defaults to 8 beats). Useful for working with the `:record` FX. If the buffer is requested with a different duration, then a new buffer will be initialised and the old one recycled.
 # @accepts_block false
 # @param _symbol [name]
@@ -2689,19 +2729,12 @@ def midi_poly_pressure(_note = nil, _value = nil, channel: nil, port: nil, value
 end
 
 # Send raw MIDI message
-# Sends the raw MIDI message to *all* connected MIDI devices. Gives you direct access to the individual bytes of a MIDI message. Typically this should be rarely used - prefer the other `midi_` fns where possible.
+# Sends the raw MIDI message to *all* connected MIDI devices. Gives you direct access to sending the individual bytes of a MIDI message. Typically this should be rarely used - prefer the other `midi_` fns where possible.
 # 
-# A raw MIDI message consists of 3 separate bytes - the Status Byte and two Data Bytes. These may be passed as base 10 decimal integers between 0 and 255, in hex form by prefixing `0x` such as `0xb0` which in decimal is 176 or binary form by prefixing `0b` such as `0b01111001` which represents 121 in decimal.
-# 
-# Floats will be rounded up or down to the nearest whole number e.g. 176.1 -> 176, 120.5 -> 121, 0.49 -> 0.
-# 
-# Non-number values will be automatically turned into numbers prior to sending the event if possible (if this conversion does not work an Error will be thrown).
+# A raw MIDI message consists of multiple bytes as numbers in decimal notation (i.e. 176), hex (0xb0) or binary (0b10110000).
 # 
 # See https://www.midi.org/specifications/item/table-1-summary-of-midi-message for a summary of MIDI messages and their corresponding byte structures.
 # @accepts_block false
-# @param _a [byte]
-# @param _b [byte]
-# @param _c [byte]
 # @param port Port(s) to send the raw MIDI message events to
 # @param on If specified and false/nil/0 will stop the raw midi message from being sent out. (Ensures all opts are evaluated in this call to `midi_raw` regardless of value).
 # @since 3.0.0
@@ -2717,7 +2750,7 @@ end
 # @example
 #   midi_raw 0b10110000, 0b01111001, 0b00000000  #=> Sends the MIDI reset command
 #
-def midi_raw(_a = nil, _b = nil, _c = nil, port: nil, on: nil)
+def midi_raw(port: nil, on: nil)
   #This is a stub, used for indexing
 end
 
@@ -3897,12 +3930,12 @@ def reset
   #This is a stub, used for indexing
 end
 
-# Reset master mixer
-# The master mixer is the final mixer that all sound passes through. This fn resets it to its default set - undoing any changes made via set_mixer_control!
+# Reset main mixer
+# The main mixer is the final mixer that all sound passes through. This fn resets it to its default set - undoing any changes made via set_mixer_control!
 # @accepts_block false
 # @since 2.9.0
 # @example
-#   set_mixer_control! lpf: 70 # LPF cutoff value of master mixer is now 70
+#   set_mixer_control! lpf: 70 # LPF cutoff value of main mixer is now 70
 #   sample :loop_amen          # :loop_amen sample is played with low cutoff
 #   sleep 3
 #   reset_mixer!               # mixer is now reset to default values
@@ -4893,6 +4926,84 @@ end
 #   (scale :C, :lydian_minor)
 #   (scale :C, :blues_major)
 #   (scale :C, :blues_minor)
+#   (scale :C, :cargah)
+#   (scale :C, :buselik)
+#   (scale :C, :buselik_2)
+#   (scale :C, :kurdi)
+#   (scale :C, :rast)
+#   (scale :C, :acemli_rast)
+#   (scale :C, :ussak)
+#   (scale :C, :bayati)
+#   (scale :C, :bayati_2)
+#   (scale :C, :isfahan)
+#   (scale :C, :isfahan_2)
+#   (scale :C, :hicaz_humayun)
+#   (scale :C, :hicaz_humayun_2)
+#   (scale :C, :hicaz)
+#   (scale :C, :hicaz_2)
+#   (scale :C, :uzzal)
+#   (scale :C, :uzzal_2)
+#   (scale :C, :zirguleli_hicaz)
+#   (scale :C, :zirguleli_hicaz_2)
+#   (scale :C, :huseyni)
+#   (scale :C, :huseyni_2)
+#   (scale :C, :muhayyer)
+#   (scale :C, :gulizar)
+#   (scale :C, :neva)
+#   (scale :C, :neva_2)
+#   (scale :C, :tahir)
+#   (scale :C, :tahir_2)
+#   (scale :C, :karcigar)
+#   (scale :C, :suznak)
+#   (scale :C, :suznak_2)
+#   (scale :C, :mahur)
+#   (scale :C, :acem_asiran)
+#   (scale :C, :nihavend)
+#   (scale :C, :nihavend_2)
+#   (scale :C, :sultani_yegah)
+#   (scale :C, :sultani_yegah_2)
+#   (scale :C, :kurdili_hicazkar)
+#   (scale :C, :kurdili_hicazkar_2)
+#   (scale :C, :kurdili_hicazkar_3)
+#   (scale :C, :kurdili_hicazkar_4)
+#   (scale :C, :kurdili_hicazkar_5)
+#   (scale :C, :zirguleli_suznak)
+#   (scale :C, :zirguleli_suznak_2)
+#   (scale :C, :zirguleli_suznak_3)
+#   (scale :C, :hicazkar)
+#   (scale :C, :hicazkar_2)
+#   (scale :C, :evcara)
+#   (scale :C, :evcara_2)
+#   (scale :C, :evcara_3)
+#   (scale :C, :evcara_4)
+#   (scale :C, :suzidil)
+#   (scale :C, :suzidil_2)
+#   (scale :C, :sedaraban)
+#   (scale :C, :sedaraban_2)
+#   (scale :C, :segah)
+#   (scale :C, :segah_2)
+#   (scale :C, :huzzam)
+#   (scale :C, :huzzam_2)
+#   (scale :C, :bayati_araban)
+#   (scale :C, :acem_kurdi)
+#   (scale :C, :sehnaz)
+#   (scale :C, :sehnaz_2)
+#   (scale :C, :sehnaz_3)
+#   (scale :C, :sehnaz_4)
+#   (scale :C, :saba)
+#   (scale :C, :dugah)
+#   (scale :C, :dugah_2)
+#   (scale :C, :evic)
+#   (scale :C, :evic_2)
+#   (scale :C, :bestenigar)
+#   (scale :C, :ferahnak)
+#   (scale :C, :sevkefza)
+#   (scale :C, :sevkefza_2)
+#   (scale :C, :sevkefza_3)
+#   (scale :C, :ferahfeza)
+#   (scale :C, :ferahfeza_2)
+#   (scale :C, :yegah)
+#   (scale :C, :yegah_2)
 #
 def scale(_tonic = nil, _name = nil, num_octaves: nil)
   #This is a stub, used for indexing
@@ -5017,8 +5128,8 @@ def set_control_delta!(_time = nil)
   #This is a stub, used for indexing
 end
 
-# Control master mixer
-# The master mixer is the final mixer that all sound passes through. This fn gives you control over the master mixer allowing you to manipulate all the sound playing through Sonic Pi at once. For example, you can sweep a lpf or hpf over the entire sound. You can reset the controls back to their defaults with `reset_mixer!`.
+# Control main mixer
+# The main mixer is the final mixer that all sound passes through. This fn gives you control over the main mixer allowing you to manipulate all the sound playing through Sonic Pi at once. For example, you can sweep a lpf or hpf over the entire sound. You can reset the controls back to their defaults with `reset_mixer!`.
 # @accepts_block false
 # @param pre_amp Controls the amplitude of the signal prior to the FX stage of the mixer (prior to lpf/hpf stages). Has slide opts. Default 1.
 # @param amp Controls the amplitude of the signal after the FX stage. Has slide opts. Default 1.
@@ -6020,6 +6131,11 @@ end
 # Merge MIDI defaults
 # Specify new default values to be used by all subsequent calls to `midi_*` fns. Merges the specified values with any previous defaults, rather than replacing them
 # @accepts_block false
+# @param channel MIDI channel(s) to send event on
+# @param port MIDI port(s) to send to
+# @param velocity Note velocity as a MIDI number.
+# @param vel_f Velocity as a value between 0 and 1 (will be converted to a MIDI velocity between 0 and 127)
+# @param on If specified and false/nil/0 will stop the midi note on message from being sent out. (Ensures all opts are evaluated in this call to `midi_note_on` regardless of value).
 # @since 3.0.0
 # @example
 #   midi_note_on :e1 # Sends MIDI :e1 note_on with default opts
@@ -6034,7 +6150,7 @@ end
 #                    # This is because the call to use_merged_midi_defaults overrode the
 #                    # channel but not the port which got merged in.
 #
-def use_merged_midi_defaults
+def use_merged_midi_defaults(channel: nil, port: nil, velocity: nil, vel_f: nil, on: nil)
   #This is a stub, used for indexing
 end
 
@@ -6085,6 +6201,11 @@ end
 # Use new MIDI defaults
 # Specify new default values to be used by all subsequent calls to `midi_*` fns. Will remove and override any previous defaults.
 # @accepts_block false
+# @param channel MIDI channel(s) to send event on
+# @param port MIDI port(s) to send to
+# @param velocity Note velocity as a MIDI number.
+# @param vel_f Velocity as a value between 0 and 1 (will be converted to a MIDI velocity between 0 and 127)
+# @param on If specified and false/nil/0 will stop the midi note on message from being sent out. (Ensures all opts are evaluated in this call to `midi_note_on` regardless of value).
 # @since 3.0.0
 # @example
 #   midi_note_on :e1 # Sends MIDI :e1 note_on with default opts
@@ -6097,7 +6218,7 @@ end
 #   
 #   midi_note_on :e2 # Sends MIDI :e2 note_on to channel 1. Note that the port is back to the default and no longer "foo".
 #
-def use_midi_defaults
+def use_midi_defaults(channel: nil, port: nil, velocity: nil, vel_f: nil, on: nil)
   #This is a stub, used for indexing
 end
 
@@ -6276,6 +6397,58 @@ end
 #     end
 #
 def use_random_seed(_seed = nil)
+  #This is a stub, used for indexing
+end
+
+# Change how random numbers are chosen
+# Sets the random number source to be one of `:white`, `:pink`, `:light_pink`, `:dark_pink` or `:perlin`.
+# 
+# `:white` is totally random - between 0 and 1, you can expect an even spread of values around 0.1, 0.2, 0.3 etc. This means that jumping around within the range (including large jumps) is expected.
+# 
+# `:pink` is more likely to produce values in the middle of the range and less likely to produce values at the extremes. Between 0 and 1 you expect to see a concentration of values around 0.5. This can make random melodies a little bit more smooth.
+# 
+# `:perlin` is a special kind of noise which produces gradients, a bit like a mountain landscape. Large jumps are much less likely and you will tend to see lots of smooth motion going either up or down
+# 
+# `:light_pink` is halfway between white noise and pink noise - more random and jumpy
+# 
+# `:dark_pink` is halfway between pink noise and brown noise - less jumpy with smoother slopes
+# 
+# You can see the 'buckets' that the numbers between 0 and 1 fall into with the following code:
+# 
+#         rand_type :white
+#         puts 10000.times.collect { rand.round(1) }.tally.sort
+#         rand_type :pink
+#         puts 10000.times.collect { rand.round(1) }.tally.sort
+#         rand_type :perlin
+#         puts 10000.times.collect { rand.round(1) }.tally.sort
+# 
+#       
+# @accepts_block false
+# @param _noise_type [symbol]
+# @since 3.3.0
+# @example
+#   use_random_source :white # use white noise as the distribution (default)
+#     rand_reset # reset random seed
+#     puts rand # => 0.75006103515625
+#     puts rand # => 0.733917236328125
+#     puts rand # => 0.464202880859375
+#     rand_reset # reset it again
+#     use_random_source :pink # use pink noise as the distribution
+#     puts rand # => 0.47808837890625
+#     puts rand # => 0.56011962890625
+#     rand_reset # reset it
+#     use_random_source :perlin # use perlin noise as the distribution
+#     puts rand # => 0.546478271484375
+#     puts rand # => 0.573150634765625
+#   
+#     with_random_source :white do # use white noise just for this block
+#       puts rand # => 0.464202880859375
+#     end
+#   
+#     puts rand # => 0.597015380859375
+#               # notice how the last generator (perlin) is restored
+#
+def use_random_source(_noise_type = nil)
   #This is a stub, used for indexing
 end
 
@@ -6797,6 +6970,11 @@ end
 # Block-level merge midi defaults
 # Specify opt values to be used by any following call to the `midi_*` fns within the specified `do`/`end` block. Merges the specified values with any previous midi defaults, rather than replacing them. After the `do`/`end` block has completed, previous defaults (if any) are restored.
 # @accepts_block true
+# @param channel MIDI channel(s) to send event on
+# @param port MIDI port(s) to send to
+# @param velocity Note velocity as a MIDI number.
+# @param vel_f Velocity as a value between 0 and 1 (will be converted to a MIDI velocity between 0 and 127)
+# @param on If specified and false/nil/0 will stop the midi note on message from being sent out. (Ensures all opts are evaluated in this call to `midi_note_on` regardless of value).
 # @since 3.0.0
 # @example
 #   midi_note_on :e1 # Sends MIDI :e1 note_on with default opts
@@ -6816,7 +6994,7 @@ end
 #                    # This is because the previous defaults were restored after
 #                    # the call to with_merged_midi_defaults.
 #
-def with_merged_midi_defaults
+def with_merged_midi_defaults(channel: nil, port: nil, velocity: nil, vel_f: nil, on: nil)
   #This is a stub, used for indexing
 end
 
@@ -6870,6 +7048,11 @@ end
 # Block-level use new MIDI defaults
 # Specify new default values to be used by all calls to `midi_*` fns within the `do`/`end` block. After the `do`/`end` block has completed the previous MIDI defaults (if any) are restored.
 # @accepts_block true
+# @param channel MIDI channel(s) to send event on
+# @param port MIDI port(s) to send to
+# @param velocity Note velocity as a MIDI number.
+# @param vel_f Velocity as a value between 0 and 1 (will be converted to a MIDI velocity between 0 and 127)
+# @param on If specified and false/nil/0 will stop the midi note on message from being sent out. (Ensures all opts are evaluated in this call to `midi_note_on` regardless of value).
 # @since 3.0.0
 # @example
 #   midi_note_on :e1 # Sends MIDI :e1 note on with default opts
@@ -6888,7 +7071,7 @@ end
 #     midi_note_on :e4 # Sends MIDI :e4 note on to channel 1
 #                      # Note that the call to use_midi_defaults is now honoured.
 #
-def with_midi_defaults
+def with_midi_defaults(channel: nil, port: nil, velocity: nil, vel_f: nil, on: nil)
   #This is a stub, used for indexing
 end
 
@@ -7031,6 +7214,37 @@ end
 #     end
 #
 def with_random_seed(_seed = nil)
+  #This is a stub, used for indexing
+end
+
+# Specify random distribution for code block
+# Resets the random number generator to the specified noise type for the specified code block. All generated random numbers and randomisation functions such as `shuffle` and `choose` within the code block will use this new generator. Once the code block has completed, the original generator is restored and the code block generator is discarded. Use this to change the sequence of random numbers in your piece in a way that can be reproduced. Especially useful if combined with iteration. See examples.
+# @accepts_block true
+# @param _noise_type [symbol]
+# @since 3.3.0
+# @example
+#   use_random_source :white # use white noise as the distribution (default)
+#     rand_reset # reset random seed
+#     puts rand # => 0.75006103515625
+#     puts rand # => 0.733917236328125
+#     puts rand # => 0.464202880859375
+#     rand_reset # reset it again
+#     use_random_source :pink # use pink noise as the distribution
+#     puts rand # => 0.47808837890625
+#     puts rand # => 0.56011962890625
+#     rand_reset # reset it
+#     use_random_source :perlin # use perlin noise as the distribution
+#     puts rand # => 0.546478271484375
+#     puts rand # => 0.573150634765625
+#   
+#     with_random_source :white do # use white noise just for this block
+#       puts rand # => 0.464202880859375
+#     end
+#   
+#     puts rand # => 0.597015380859375
+#               # notice how the last generator (perlin) is restored
+#
+def with_random_source(_noise_type = nil)
   #This is a stub, used for indexing
 end
 

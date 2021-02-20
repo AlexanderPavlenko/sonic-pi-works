@@ -168,7 +168,7 @@
     - :number
   - - :tick
     - :symbol
-  :returns: 
+  :returns:
   :opts:
     :shift: How much time to delay/forward the block. Greater values produce more
       emphasised swing. Defaults to 0.1 beats.
@@ -247,8 +247,8 @@
   :args:
   - - :filename
     - :path
-  :returns: 
-  :opts: 
+  :returns:
+  :opts:
   :accepts_block: false
   :doc: Reads the full contents of the file with `path` and executes it in a new Run.
     This works as if the code in the file was in a buffer and Run button was pressed.
@@ -265,8 +265,8 @@
   :args:
   - - :code
     - :string
-  :returns: 
-  :opts: 
+  :returns:
+  :opts:
   :accepts_block: false
   :doc: Executes the code passed as a string in a new Run. This works as if the code
     was in a buffer and Run button was pressed.
@@ -290,8 +290,8 @@
   :args:
   - - :filename
     - :path
-  :returns: 
-  :opts: 
+  :returns:
+  :opts:
   :accepts_block: false
   :doc: Reads the full contents of the file with `path` and executes within the current
     thread like a function call.
@@ -310,7 +310,7 @@
   :args:
   - - :true_or_false
     - :boolean
-  :opts: 
+  :opts:
   :accepts_block: false
   :examples:
   - 'use_osc_logging true # Turn on OSC logging'
@@ -326,7 +326,7 @@
   :args:
   - - :true_or_false
     - :boolean
-  :opts: 
+  :opts:
   :accepts_block: true
   :requires_block: true
   :examples:
@@ -345,8 +345,8 @@
     - :string
   - - :port
     - :number
-  :returns: 
-  :opts: 
+  :returns:
+  :opts:
   :accepts_block: false
   :doc: |+
     Sets the destination host and port that `osc` will send messages to. If no port number is specified - will default to port 4560 (Sonic Pi's default OSC listening port).
@@ -432,8 +432,8 @@
     - :string
   - - :port
     - :number
-  :returns: 
-  :opts: 
+  :returns:
+  :opts:
   :accepts_block: true
   :doc: Sets the destination host and port that `osc` will send messages to for the
     given do/end block.
@@ -466,8 +466,8 @@
     - :osc_path
   - - :args
     - :list
-  :returns: 
-  :opts: 
+  :returns:
+  :opts:
   :accepts_block: true
   :doc: |-
     Similar to `osc` except ignores any `use_osc` settings and sends the OSC message directly to the specified `hostname` and `port`.
@@ -494,8 +494,8 @@
   :args:
   - - :path
     - :arguments
-  :returns: 
-  :opts: 
+  :returns:
+  :opts:
   :accepts_block: false
   :doc: |
     Sends an OSC message to the current host and port specified by `use_osc` or `with_osc`.
@@ -592,8 +592,8 @@
   :summary: Reset all thread locals
   :args:
   - []
-  :returns: 
-  :opts: 
+  :returns:
+  :opts:
   :accepts_block: false
   :doc: All settings such as the current synth, BPM, random stream and tick values
     will be reset to the values inherited from the parent thread. Consider using `clear`
@@ -659,8 +659,8 @@
   :summary: Clear all thread locals to defaults
   :args:
   - []
-  :returns: 
-  :opts: 
+  :returns:
+  :opts:
   :accepts_block: false
   :doc: All settings such as the current synth, BPM, random stream and tick values
     will be reset to their defaults. Consider using `reset` to reset all these values
@@ -707,8 +707,8 @@
   :args:
   - - :delta_time
     - :number
-  :returns: 
-  :opts: 
+  :returns:
+  :opts:
   :accepts_block: true
   :doc: |-
     The code within the given block is executed with the specified delta time shift specified in beats. For example, if the delta value is 0.1 then all code within the block is executed with a 0.1 beat delay. Negative values are allowed which means you can move a block of code *backwards in time*. For example a delta value of -0.1 will execute the code in the block 0.1 beats ahead of time. The time before the block started is restored after the execution of the block.
@@ -879,7 +879,7 @@
     - - :value
       - :number
   :returns: :number
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: Set the default tick to the specified `value`. If a `key` is referenced, set
     that tick to `value` instead. Next call to `look` will return `value`.
@@ -901,7 +901,7 @@
   - - - :key
       - :symbol
   :returns: :number
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: Reset default tick to 0. If a `key` is referenced, set that tick to 0 instead.
     Same as calling tick_set(0)
@@ -928,7 +928,7 @@
   :summary: Reset all ticks
   :args: []
   :returns: :nil
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: Reset all ticks - default and keyed
   :examples:
@@ -1045,8 +1045,8 @@
     z: 0
   :summary: Stop current thread or run
   :args: []
-  :returns: 
-  :opts: 
+  :returns:
+  :opts:
   :accepts_block: false
   :doc: Stops the current thread or if not in a thread, stops the current run. Does
     not stop any running synths triggered previously in the run/thread or kill any
@@ -1087,8 +1087,8 @@
   :args:
   - - :condition
     - :truthy
-  :returns: 
-  :opts: 
+  :returns:
+  :opts:
   :accepts_block: false
   :doc: 'Optionally evaluate the block depending on the truthiness of the supplied
     condition. The truthiness rules are as follows: all values are seen as true except
@@ -1145,7 +1145,7 @@
   - - :list
     - :array
   :returns: :ring
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: Create a new ring of booleans values from 1s and 0s, which can be easier to
     write and manipulate in a live setting.
@@ -1164,7 +1164,7 @@
   - - :count
     - :number
   :returns: :ring
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: 'Stretches a list of values each value repeated count times. Always returns
     a ring regardless of the type of the list that is stretched. To preserve type,
@@ -1185,7 +1185,7 @@
   - - :count
     - :number
   :returns: :ring
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: Knits a series of value, count pairs to create a ring buffer where each value
     is repeated count times.
@@ -1310,7 +1310,7 @@
   - - :num_halves
     - :int
   :returns: :ring
-  :opts: 
+  :opts:
   :accepts_block: false
   :memoize: true
   :doc: Create a ring containing the results of successive halving of the `start`
@@ -1332,7 +1332,7 @@
   - - :num_doubles
     - :int
   :returns: :ring
-  :opts: 
+  :opts:
   :accepts_block: false
   :memoize: true
   :doc: Create a ring containing the results of successive doubling of the `start`
@@ -1352,7 +1352,7 @@
   - - :list
     - :array
   :returns: :vector
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: Create a new immutable vector from args. Out of range indexes return nil.
   :examples:
@@ -1373,7 +1373,7 @@
   - - :list
     - :array
   :returns: :ring
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: Create a new immutable ring buffer from args. Indexes wrap around positively
     and negatively
@@ -1392,7 +1392,7 @@
   - - :list
     - :array
   :returns: :map
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: 'Create a new immutable key/value map from args. '
   :examples:
@@ -1409,7 +1409,7 @@
   - - :list
     - :array
   :returns: :ramp
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: Create a new immutable ramp vector from args. Indexes always return first
     or last value if out of bounds.
@@ -1430,7 +1430,7 @@
   :args:
   - - :list
     - :array
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: |-
     Choose an element at random from a list (array).
@@ -1540,7 +1540,7 @@
     For a more powerful, flexible loop built for live coding see `live_loop`.
   :args:
   - []
-  :opts: 
+  :opts:
   :accepts_block: true
   :requires_block: true
   :async_block: false
@@ -1690,7 +1690,7 @@
     the block are not accounted for.
   :args:
   - []
-  :opts: 
+  :opts:
   :accepts_block: true
   :requires_block: true
   :async_block: false
@@ -1726,7 +1726,7 @@
     or syncs
   :args:
   - []
-  :opts: 
+  :opts:
   :accepts_block: true
   :requires_block: true
   :async_block: false
@@ -1779,7 +1779,7 @@
     - :list
   - - :params
     - :list
-  :opts: 
+  :opts:
   :accepts_block: true
   :requires_block: true
   :async_block: true
@@ -1835,7 +1835,7 @@
     z: 0
   :summary: Get current version information
   :args: []
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: Return information representing the current version of Sonic Pi. This information
     may be further inspected with `version.major`, `version.minor`, `version.patch`
@@ -1861,7 +1861,7 @@
   :summary: Returns a string representing a list of numeric values as a spark graph/bar
     chart
   :args: []
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: Given a list of numeric values, this method turns them into a string of bar
     heights. Useful for quickly graphing the shape of an array. Remember to use puts
@@ -1878,7 +1878,7 @@
   :summary: Print a string representing a list of numeric values as a spark graph/bar
     chart
   :args: []
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: Given a list of numeric values, this method turns them into a string of bar
     heights and prints them out. Useful for quickly graphing the shape of an array.
@@ -1964,7 +1964,7 @@
   :args:
   - - :name
     - :symbol
-  :opts: 
+  :opts:
   :accepts_block: true
   :requires_block: true
   :doc: Does nothing. Use to stop a define from actually defining. Simpler than wrapping
@@ -1979,7 +1979,7 @@
   :args:
   - - :name
     - :symbol
-  :opts: 
+  :opts:
   :accepts_block: true
   :requires_block: true
   :intro_fn: true
@@ -2011,7 +2011,7 @@
     z: 0
   :summary: Block level commenting
   :args: []
-  :opts: 
+  :opts:
   :accepts_block: true
   :requires_block: true
   :doc: Does not evaluate any of the code within the block. However, any optional
@@ -2033,7 +2033,7 @@
     z: 0
   :summary: Block level comment ignoring
   :args: []
-  :opts: 
+  :opts:
   :accepts_block: true
   :requires_block: true
   :doc: Evaluates all of the code within the block. Use to reverse the effect of the
@@ -2055,7 +2055,7 @@
   :args:
   - - :output
     - :anything
-  :opts: 
+  :opts:
   :accepts_block: false
   :intro_fn: true
   :doc: Displays the information you specify as a string inside the output pane. This
@@ -2074,7 +2074,7 @@
   :args:
   - - :output
     - :anything
-  :opts: 
+  :opts:
   :accepts_block: false
   :intro_fn: true
   :doc: Displays the information you specify as a string inside the output pane. This
@@ -2091,7 +2091,7 @@
     z: 0
   :summary: Get virtual time
   :args: []
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: Get the virtual time of the current thread.
   :examples:
@@ -2111,7 +2111,7 @@
     - :number
   - - :factor
     - :number
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: Test to see if factor is indeed a factor of `val`. In other words, can `val`
     be divided exactly by factor.
@@ -2130,7 +2130,7 @@
     - :number
   - - :step
     - :positive_number
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: Round value to the nearest multiple of step resolution.
   :examples:
@@ -2161,7 +2161,7 @@
   :args:
   - - :num_sides
     - :number
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: Throws a dice with the specified num_sides (defaults to `6`) and returns the
     score as a number between `1` and `num_sides`.
@@ -2182,7 +2182,7 @@
   :args:
   - - :num
     - :number
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: Returns `true` or `false` with a specified probability - it will return true
     every one in num times where num is the param you specify
@@ -2264,7 +2264,7 @@
     - :number
   - - :max
     - :number
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: Given two numbers, this produces a whole number between the min and max you
     supplied inclusively. Both min and max need to be supplied. For random floats,
@@ -2288,7 +2288,7 @@
   :args:
   - - :max
     - :number_or_range
-  :opts: 
+  :opts:
   :accepts_block: false
   :intro_fn: true
   :doc: Given a max number, produces a float between `0` and the supplied max value.
@@ -2307,7 +2307,7 @@
   :args:
   - - :max
     - :number_or_range
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: Given a max number, produces a whole number between `0` and the supplied max
     value exclusively. If max is a range produces an int within the range. With no
@@ -2325,7 +2325,7 @@
   :args:
   - - :max
     - :number_or_range
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: |-
     Given a max number, produces a number between `0` and the supplied max value exclusively. If max is a range produces an int within the range. With no args returns a value between `0` and `1`.
@@ -2351,7 +2351,7 @@
   :args:
   - - :max
     - :number_or_range
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: |-
     Given a max number, produces a whole number between `0` and the supplied max value exclusively. If max is a range produces an int within the range. With no args returns either `0` or `1`.
@@ -2377,7 +2377,7 @@
   :args:
   - - :amount
     - :number
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: Roll the random generator back essentially 'undoing' the last call to `rand`.
     You may specify an amount to roll back allowing you to skip back n calls to `rand`.
@@ -2419,7 +2419,7 @@
   :args:
   - - :amount
     - :number
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: Jump the random generator forward essentially skipping the next call to `rand`.
     You may specify an amount to jump allowing you to skip n calls to `rand`.
@@ -2461,7 +2461,7 @@
   :summary: Reset rand generator to last seed
   :args:
   - []
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: Resets the random stream to the last specified seed. See `use_random_seed`
     for changing the seed.
@@ -2479,7 +2479,7 @@
   :args:
   - - :list
     - :array
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: Returns a new list with the same elements as the original but with their order
     shuffled. Also works for strings
@@ -2502,7 +2502,7 @@
   :args:
   - - :seed
     - :number
-  :opts: 
+  :opts:
   :accepts_block: false
   :examples:
   - "\n  ## Basic usage\n\n  use_random_seed 1 # reset random seed to 1\n  puts rand
@@ -2541,7 +2541,7 @@
   :args:
   - - :seed
     - :number
-  :opts: 
+  :opts:
   :accepts_block: true
   :requires_block: true
   :examples:
@@ -2579,6 +2579,98 @@
     block and therefore\n                                                # the randomisation
     never gets reset and this\n                                                # part
     of the melody never repeats.\n    end\n  end\n  "
+- :name: :use_random_source
+  :introduced: !ruby/struct:Sandbox::SonicPi::Version
+    x: 3
+    y: 3
+    z: 0
+  :summary: Change how random numbers are chosen
+  :args:
+  - - :noise_type
+    - :symbol
+  :opts:
+  :accepts_block: false
+  :doc: "Sets the random number source to be one of `:white`, `:pink`, `:light_pink`,
+    `:dark_pink` or `:perlin`.\n\n`:white` is totally random - between 0 and 1, you
+    can expect an even spread of values around 0.1, 0.2, 0.3 etc. This means that
+    jumping around within the range (including large jumps) is expected.\n\n`:pink`
+    is more likely to produce values in the middle of the range and less likely to
+    produce values at the extremes. Between 0 and 1 you expect to see a concentration
+    of values around 0.5. This can make random melodies a little bit more smooth.\n\n`:perlin`
+    is a special kind of noise which produces gradients, a bit like a mountain landscape.
+    Large jumps are much less likely and you will tend to see lots of smooth motion
+    going either up or down\n\n`:light_pink` is halfway between white noise and pink
+    noise - more random and jumpy\n\n`:dark_pink` is halfway between pink noise and
+    brown noise - less jumpy with smoother slopes\n\nYou can see the 'buckets' that
+    the numbers between 0 and 1 fall into with the following code:\n\n        rand_type
+    :white\n        puts 10000.times.collect { rand.round(1) }.tally.sort\n        rand_type
+    :pink\n        puts 10000.times.collect { rand.round(1) }.tally.sort\n        rand_type
+    :perlin\n        puts 10000.times.collect { rand.round(1) }.tally.sort\n\n      "
+  :examples:
+  - |2-
+
+      use_random_source :white # use white noise as the distribution (default)
+      rand_reset # reset random seed
+      puts rand # => 0.75006103515625
+      puts rand # => 0.733917236328125
+      puts rand # => 0.464202880859375
+      rand_reset # reset it again
+      use_random_source :pink # use pink noise as the distribution
+      puts rand # => 0.47808837890625
+      puts rand # => 0.56011962890625
+      rand_reset # reset it
+      use_random_source :perlin # use perlin noise as the distribution
+      puts rand # => 0.546478271484375
+      puts rand # => 0.573150634765625
+
+      with_random_source :white do # use white noise just for this block
+        puts rand # => 0.464202880859375
+      end
+
+      puts rand # => 0.597015380859375
+                # notice how the last generator (perlin) is restored
+- :name: :with_random_source
+  :introduced: !ruby/struct:Sandbox::SonicPi::Version
+    x: 3
+    y: 3
+    z: 0
+  :summary: Specify random distribution for code block
+  :doc: Resets the random number generator to the specified noise type for the specified
+    code block. All generated random numbers and randomisation functions such as `shuffle`
+    and `choose` within the code block will use this new generator. Once the code
+    block has completed, the original generator is restored and the code block generator
+    is discarded. Use this to change the sequence of random numbers in your piece
+    in a way that can be reproduced. Especially useful if combined with iteration.
+    See examples.
+  :args:
+  - - :noise_type
+    - :symbol
+  :opts:
+  :accepts_block: true
+  :requires_block: true
+  :examples:
+  - |2-
+
+      use_random_source :white # use white noise as the distribution (default)
+      rand_reset # reset random seed
+      puts rand # => 0.75006103515625
+      puts rand # => 0.733917236328125
+      puts rand # => 0.464202880859375
+      rand_reset # reset it again
+      use_random_source :pink # use pink noise as the distribution
+      puts rand # => 0.47808837890625
+      puts rand # => 0.56011962890625
+      rand_reset # reset it
+      use_random_source :perlin # use perlin noise as the distribution
+      puts rand # => 0.546478271484375
+      puts rand # => 0.573150634765625
+
+      with_random_source :white do # use white noise just for this block
+        puts rand # => 0.464202880859375
+      end
+
+      puts rand # => 0.597015380859375
+                # notice how the last generator (perlin) is restored
 - :name: :use_cue_logging
   :introduced: !ruby/struct:Sandbox::SonicPi::Version
     x: 2
@@ -2590,7 +2682,7 @@
   :args:
   - - :true_or_false
     - :boolean
-  :opts: 
+  :opts:
   :accepts_block: false
   :examples:
   - 'use_cue_logging true # Turn on cue messages'
@@ -2606,7 +2698,7 @@
   :args:
   - - :true_or_false
     - :boolean
-  :opts: 
+  :opts:
   :accepts_block: true
   :requires_block: true
   :examples:
@@ -2635,7 +2727,7 @@
   :args:
   - - :bpm
     - :number
-  :opts: 
+  :opts:
   :accepts_block: false
   :intro_fn: true
   :examples:
@@ -2664,7 +2756,7 @@
   :args:
   - - :bpm
     - :number
-  :opts: 
+  :opts:
   :accepts_block: true
   :requires_block: true
   :examples:
@@ -2707,7 +2799,7 @@
   :args:
   - - :mul
     - :number
-  :opts: 
+  :opts:
   :accepts_block: true
   :requires_block: true
   :examples:
@@ -2728,7 +2820,7 @@
   :args:
   - - :mul
     - :number
-  :opts: 
+  :opts:
   :accepts_block: false
   :examples:
   - "\n  use_bpm 60   # Set the BPM to 60\n  play 50\n  sleep 1      # Sleeps for
@@ -2748,7 +2840,7 @@
   :args:
   - - :d
     - :density
-  :opts: 
+  :opts:
   :accepts_block: true
   :examples:
   - |2-
@@ -2779,7 +2871,7 @@
 
     Unlike `Time.now`, Multiple calls to `current_time` with no interleaved calls to `sleep` or `sync` will return the same value.
   :args: []
-  :opts: 
+  :opts:
   :accepts_block: false
   :examples:
   - |2-
@@ -2808,7 +2900,7 @@
 
     This can be set via the fns `use_random_seed` and `with_random_seed`. It is incremented every time you use the random number generator via fns such as `choose` and `rand`.
   :args: []
-  :opts: 
+  :opts:
   :accepts_block: false
   :examples:
   - |2-
@@ -2837,7 +2929,7 @@
 
     This can be set via the fns `use_bpm`, `with_bpm`, `use_sample_bpm` and `with_sample_bpm`.
   :args: []
-  :opts: 
+  :opts:
   :accepts_block: false
   :examples:
   - |2-
@@ -2854,7 +2946,7 @@
 
     Affected by calls to `use_bpm`, `with_bpm`, `use_sample_bpm` and `with_sample_bpm`.
   :args: []
-  :opts: 
+  :opts:
   :accepts_block: false
   :examples:
   - |2-
@@ -2877,7 +2969,7 @@
     from the thread which called `cue`. '
   :args:
   - []
-  :opts: 
+  :opts:
   :accepts_block: false
   :examples:
   - |2-
@@ -2900,7 +2992,7 @@
   :args:
   - - :seconds
     - :number
-  :opts: 
+  :opts:
   :accepts_block: false
   :examples:
   - |2-
@@ -2922,7 +3014,7 @@
   :args:
   - - :seconds
     - :number
-  :opts: 
+  :opts:
   :accepts_block: false
   :examples:
   - |2
@@ -2947,7 +3039,7 @@
   :args:
   - - :time
     - :number
-  :opts: 
+  :opts:
   :modifies_env: true
   :accepts_block: false
   :examples:
@@ -2967,7 +3059,7 @@
   :args:
   - - :time
     - :number
-  :opts: 
+  :opts:
   :modifies_env: true
   :accepts_block: false
   :examples:
@@ -2999,7 +3091,7 @@
 
   :args:
   - []
-  :opts: 
+  :opts:
   :modifies_env: true
   :accepts_block: false
   :examples:
@@ -3019,7 +3111,7 @@
 
   :args:
   - []
-  :opts: 
+  :opts:
   :modifies_env: true
   :accepts_block: false
   :examples:
@@ -3039,7 +3131,7 @@
   :args:
   - - :time
     - :number
-  :opts: 
+  :opts:
   :modifies_env: true
   :accepts_block: false
   :examples:
@@ -3061,7 +3153,7 @@
 
     This can be set via the fn `set_sched_ahead_time!`.
   :args: []
-  :opts: 
+  :opts:
   :accepts_block: false
   :examples:
   - |2-
@@ -3079,7 +3171,7 @@
   :args:
   - - :beats
     - :number
-  :opts: 
+  :opts:
   :accepts_block: false
   :advances_time: true
   :examples:
@@ -3114,7 +3206,7 @@
   :args:
   - - :beats
     - :number
-  :opts: 
+  :opts:
   :accepts_block: false
   :advances_time: true
   :examples: []
@@ -3312,7 +3404,7 @@
   :args:
   - - :class
     - :Exception
-  :opts: 
+  :opts:
   :accepts_block: true
   :examples:
   - |2
@@ -3337,6 +3429,35 @@
       1 / 0
     end                         # Will throw an exception as the block contains a ZeroDivisionError rather than
                                 # a ThreadError.
+- :name: :assert_not
+  :introduced: !ruby/struct:Sandbox::SonicPi::Version
+    x: 3
+    y: 3
+    z: 0
+  :summary: Ensure arg is not valid
+  :doc: Raises an exception if the argument is not either nil or false.
+  :args:
+  - - :arg
+    - :anything
+  :alt_args:
+  - - :arg
+    - :anything
+  - - :error_msg
+    - :string
+  :opts:
+  :accepts_block: false
+  :examples:
+  - |2
+
+    # Simple assertions
+    assert_not false   # As false is either nil or false, this assertion passes
+    assert_not nil     # As nil is either nil or false, this assertion passes
+    assert_not 1 == 5  # These numbers are not equal
+    assert true  # This will raise an exception
+  - |2
+
+    # Communicating error messages
+    assert_not true , "oops" # This will raise an exception containing the message "oops"
 - :name: :assert
   :introduced: !ruby/struct:Sandbox::SonicPi::Version
     x: 2
@@ -3352,7 +3473,7 @@
     - :anything
   - - :error_msg
     - :string
-  :opts: 
+  :opts:
   :accepts_block: false
   :examples:
   - |2
@@ -3371,6 +3492,38 @@
     # More interesting assertions
     assert (1 + 1) == 2 # Ensure that arithmetic is sane!
     assert [:a, :b, :c].size == 3 # ensure lists can be correctly counted
+- :name: :assert_not_equal
+  :introduced: !ruby/struct:Sandbox::SonicPi::Version
+    x: 3
+    y: 3
+    z: 0
+  :summary: Ensure args are not equal
+  :doc: 'Raises an exception if both arguments are qual. '
+  :args:
+  - - :arg1
+    - :anything
+  - - :arg2
+    - :anything
+  :alt_args:
+  - - :arg1
+    - :anything
+  - - :arg2
+    - :anything
+  - - :error_msg
+    - :string
+  :opts:
+  :accepts_block: false
+  :examples:
+  - |2
+
+    # Simple assertions
+    assert_not_equal 1, 3
+    assert_not_equal 1, -1
+    assert_not_equal 1, :foo
+  - |2
+
+    # Add messages to the exceptions
+    assert_not_equal 3, 3, "something is seriously wrong!"
 - :name: :assert_equal
   :introduced: !ruby/struct:Sandbox::SonicPi::Version
     x: 2
@@ -3390,7 +3543,7 @@
     - :anything
   - - :error_msg
     - :string
-  :opts: 
+  :opts:
   :accepts_block: false
   :examples:
   - |2
@@ -3428,7 +3581,7 @@
     - :anything
   - - :error_msg
     - :string
-  :opts: 
+  :opts:
   :accepts_block: false
   :examples:
   - |2
@@ -3450,7 +3603,7 @@
   :args:
   - - :path
     - :string
-  :opts: 
+  :opts:
   :accepts_block: false
   :examples:
   - |2-
@@ -3467,7 +3620,7 @@
   :args:
   - - :path
     - :string
-  :opts: 
+  :opts:
   :accepts_block: false
   :examples:
   - |2-
@@ -3482,7 +3635,7 @@
   :args:
   - []
   :returns: :nil
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: |2+
 
@@ -3507,7 +3660,7 @@
   :args:
   - - :true_or_false
     - :boolean
-  :opts: 
+  :opts:
   :accepts_block: false
   :examples:
   - 'use_midi_logging true # Turn on MIDI logging'
@@ -3523,7 +3676,7 @@
   :args:
   - - :true_or_false
     - :boolean
-  :opts: 
+  :opts:
   :accepts_block: true
   :requires_block: true
   :examples:
@@ -3540,7 +3693,15 @@
   :doc: Specify new default values to be used by all subsequent calls to `midi_*`
     fns. Will remove and override any previous defaults.
   :args: []
-  :opts: {}
+  :opts:
+    :channel: MIDI channel(s) to send event on
+    :port: MIDI port(s) to send to
+    :velocity: Note velocity as a MIDI number.
+    :vel_f: Velocity as a value between 0 and 1 (will be converted to a MIDI velocity
+      between 0 and 127)
+    :on: If specified and false/nil/0 will stop the midi note on message from being
+      sent out. (Ensures all opts are evaluated in this call to `midi_note_on` regardless
+      of value).
   :accepts_block: false
   :examples:
   - |2
@@ -3564,7 +3725,15 @@
     the `do`/`end` block. After the `do`/`end` block has completed the previous MIDI
     defaults (if any) are restored.
   :args: []
-  :opts: {}
+  :opts:
+    :channel: MIDI channel(s) to send event on
+    :port: MIDI port(s) to send to
+    :velocity: Note velocity as a MIDI number.
+    :vel_f: Velocity as a value between 0 and 1 (will be converted to a MIDI velocity
+      between 0 and 127)
+    :on: If specified and false/nil/0 will stop the midi note on message from being
+      sent out. (Ensures all opts are evaluated in this call to `midi_note_on` regardless
+      of value).
   :accepts_block: true
   :requires_block: true
   :examples:
@@ -3595,7 +3764,15 @@
     fns. Merges the specified values with any previous defaults, rather than replacing
     them
   :args: []
-  :opts: {}
+  :opts:
+    :channel: MIDI channel(s) to send event on
+    :port: MIDI port(s) to send to
+    :velocity: Note velocity as a MIDI number.
+    :vel_f: Velocity as a value between 0 and 1 (will be converted to a MIDI velocity
+      between 0 and 127)
+    :on: If specified and false/nil/0 will stop the midi note on message from being
+      sent out. (Ensures all opts are evaluated in this call to `midi_note_on` regardless
+      of value).
   :accepts_block: false
   :examples:
   - |2
@@ -3622,7 +3799,15 @@
     midi defaults, rather than replacing them. After the `do`/`end` block has completed,
     previous defaults (if any) are restored.
   :args: []
-  :opts: {}
+  :opts:
+    :channel: MIDI channel(s) to send event on
+    :port: MIDI port(s) to send to
+    :velocity: Note velocity as a MIDI number.
+    :vel_f: Velocity as a value between 0 and 1 (will be converted to a MIDI velocity
+      between 0 and 127)
+    :on: If specified and false/nil/0 will stop the midi note on message from being
+      sent out. (Ensures all opts are evaluated in this call to `midi_note_on` regardless
+      of value).
   :accepts_block: true
   :requires_block: true
   :examples:
@@ -3656,7 +3841,7 @@
 
     This can be set via the fns `use_midi_defaults`, `with_midi_defaults`, `use_merged_midi_defaults` and `with_merged_midi_defaults`.
   :args: []
-  :opts: 
+  :opts:
   :accepts_block: false
   :examples:
   - |2-
@@ -3970,13 +4155,7 @@
     y: 0
     z: 0
   :summary: Send raw MIDI message
-  :args:
-  - - :a
-    - :byte
-  - - :b
-    - :byte
-  - - :c
-    - :byte
+  :args: []
   :returns: :nil
   :opts:
     :port: Port(s) to send the raw MIDI message events to
@@ -3985,13 +4164,9 @@
       value).
   :accepts_block: false
   :doc: |
-    Sends the raw MIDI message to *all* connected MIDI devices. Gives you direct access to the individual bytes of a MIDI message. Typically this should be rarely used - prefer the other `midi_` fns where possible.
+    Sends the raw MIDI message to *all* connected MIDI devices. Gives you direct access to sending the individual bytes of a MIDI message. Typically this should be rarely used - prefer the other `midi_` fns where possible.
 
-    A raw MIDI message consists of 3 separate bytes - the Status Byte and two Data Bytes. These may be passed as base 10 decimal integers between 0 and 255, in hex form by prefixing `0x` such as `0xb0` which in decimal is 176 or binary form by prefixing `0b` such as `0b01111001` which represents 121 in decimal.
-
-    Floats will be rounded up or down to the nearest whole number e.g. 176.1 -> 176, 120.5 -> 121, 0.49 -> 0.
-
-    Non-number values will be automatically turned into numbers prior to sending the event if possible (if this conversion does not work an Error will be thrown).
+    A raw MIDI message consists of multiple bytes as numbers in decimal notation (i.e. 176), hex (0xb0) or binary (0b10110000).
 
     See https://www.midi.org/specifications/item/table-1-summary-of-midi-message for a summary of MIDI messages and their corresponding byte structures.
   :examples:
@@ -4225,7 +4400,7 @@
   :args:
   - []
   :returns: :nil
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: |
     Sends the MIDI start system message to *all* connected MIDI devices on *all* ports.  Use the `port:` opt to restrict which MIDI ports are used.
@@ -4352,7 +4527,7 @@
     z: 0
   :summary: Minecraft Pi - get current location
   :args: []
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: Returns a list of floats `[x, y, z]` coords of the current location for Steve.
     The coordinates are finer grained than raw block coordinates but may be used anywhere
@@ -4374,7 +4549,7 @@
     - :number
   - - :z
     - :number
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: Magically teleport the player to the location specified by the `x`, `y`, `z`
     coordinates. Use this for automatically moving the player either small or large
@@ -4389,7 +4564,7 @@
     z: 0
   :summary: Minecraft Pi - synonym for mc_location
   :args: []
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: See `mc_location`
   :examples: []
@@ -4400,7 +4575,7 @@
     z: 0
   :summary: Minecraft Pi - synonym for mc_teleport
   :args: []
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: See `mc_teleport`
   :examples: []
@@ -4417,7 +4592,7 @@
     - :number
   - - :z
     - :number
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: ''
   :examples:
@@ -4429,7 +4604,7 @@
     z: 0
   :summary: Minecraft Pi - get location of current tile/block
   :args: []
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: Returns the coordinates of the nearest block that the player is next to. This
     is more course grained than `mc_location` as it only returns whole number coordinates.
@@ -4446,7 +4621,7 @@
     - :number
   - - :z
     - :number
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: Teleports you to the specified x and z coordinates with the y automatically
     set to place you on the surface of the world. For example, if the x and z coords
@@ -4465,7 +4640,7 @@
   :args:
   - - :msg
     - :string
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: Post contents of `msg` on the Minecraft chat display. You may pass multiple
     arguments and all will be joined to form a single message (with spaces).
@@ -4479,7 +4654,7 @@
     z: 0
   :summary: Minecraft Pi - synonym for mc_message
   :args: []
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: See mc_message
   :examples: []
@@ -4494,7 +4669,7 @@
     - :number
   - - :z
     - :number
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: Returns the height of the ground at the specified `x` and `z` coords.
   :examples:
@@ -4506,7 +4681,7 @@
     z: 0
   :summary: Minecraft Pi - synonym for mc_ground_height
   :args: []
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: See `mc_ground_height`
   :examples: []
@@ -4523,7 +4698,7 @@
     - :number
   - - :z
     - :number
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: Returns the type of the block at the coords `x`, `y`, `z` as a symbol.
   :examples:
@@ -4543,7 +4718,7 @@
     - :number
   - - :block_name
     - :symbol_or_number
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: Change the block type of the block at coords `x`, `y`, `z` to `block_type`.
     The block type may be specified either as a symbol such as `:air` or a number.
@@ -4571,7 +4746,7 @@
     - :number
   - - :z2
     - :number
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: Set an area/box of blocks of type `block_name` defined by two distinct sets
     of coordinates.
@@ -4585,7 +4760,7 @@
   :args:
   - - :name
     - :symbol_or_number
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: Given a block name or id will return a number representing the id of the block
     or throw an exception if the name or id isn't valid
@@ -4605,7 +4780,7 @@
   :args:
   - - :id
     - :number_or_symbol
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: Given a block id or a block name will return a symbol representing the block
     name or throw an exception if the id or name isn't valid.
@@ -4623,7 +4798,7 @@
     z: 0
   :summary: Minecraft Pi - list all block ids
   :args: []
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: Returns a list of all the valid block ids as numbers. Note not all numbers
     are valid block ids. For example, 19 is not a valid block id.
@@ -4636,7 +4811,7 @@
     z: 0
   :summary: Minecraft Pi - list all block names
   :args: []
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: Returns a list of all the valid block names as symbols
   :examples:
@@ -4648,7 +4823,7 @@
     z: 0
   :summary: Minecraft Pi - save checkpoint
   :args: []
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: Take a snapshot of the world and save it. Restore back with `mc_checkpoint_restore`
   :examples:
@@ -4660,7 +4835,7 @@
     z: 0
   :summary: Minecraft Pi - restore checkpoint
   :args: []
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: Restore the world to the last snapshot taken with `mc_checkpoint_save`.
   :examples:
@@ -4672,7 +4847,7 @@
     z: 0
   :summary: Minecraft Pi - normal camera mode
   :args: []
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: Set the camera mode to normal.
   :examples:
@@ -4684,7 +4859,7 @@
     z: 0
   :summary: Minecraft Pi - third person camera mode
   :args: []
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: Set the camera mode to third person
   :examples:
@@ -4696,7 +4871,7 @@
     z: 0
   :summary: Minecraft Pi - fixed camera mode
   :args: []
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: Set the camera mode to fixed.
   :examples:
@@ -4708,7 +4883,7 @@
     z: 0
   :summary: Minecraft Pi - move camera
   :args: []
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: Move the camera to a new location.
   :examples:
@@ -4872,7 +5047,7 @@
   :args:
   - []
   :returns: :SPMap
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: 'Create a map of information about the running audio synthesiser SuperCollider. '
   :examples:
@@ -4897,8 +5072,8 @@
   :args:
   - - :path
     - :string
-  :returns: 
-  :opts: 
+  :returns:
+  :opts:
   :accepts_block: false
   :doc: |-
     Frees the memory and resources consumed by loading the sample on the server. Subsequent calls to `sample` and friends will re-load the sample on the server.
@@ -4941,7 +5116,7 @@
     x: 3
     y: 0
     z: 0
-  :summary: Intialise or return named buffer
+  :summary: Initialise or return named buffer
   :args:
   - - :symbol
     - :name
@@ -4951,7 +5126,7 @@
   - - :symbol
     - :name
   :returns: :buffer
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: Initialise or return a named buffer with a specific duration (defaults to
     8 beats). Useful for working with the `:record` FX. If the buffer is requested
@@ -4988,8 +5163,8 @@
   :summary: Free all loaded samples on the synth server
   :args:
   - []
-  :returns: 
-  :opts: 
+  :returns:
+  :opts:
   :accepts_block: false
   :doc: Unloads all samples therefore freeing the memory and resources consumed. Subsequent
     calls to `sample` and friends will re-load the sample on the server.
@@ -5012,7 +5187,7 @@
   :args:
   - - :bool
     - :true_or_false
-  :opts: 
+  :opts:
   :accepts_block: true
   :examples:
   - |2-
@@ -5037,7 +5212,7 @@
   :args:
   - - :bool
     - :true_or_false
-  :opts: 
+  :opts:
   :accepts_block: true
   :examples:
   - |2-
@@ -5134,7 +5309,7 @@
   :args:
   - - :bool
     - :boolean
-  :opts: 
+  :opts:
   :accepts_block: false
   :examples:
   - |2-
@@ -5162,7 +5337,7 @@
   :doc: Turn synth argument bpm scaling on or off for the supplied block. Note, using
     `rt` for args will result in incorrect times when used within this block.
   :args: []
-  :opts: 
+  :opts:
   :accepts_block: true
   :requires_block: true
   :examples:
@@ -5194,7 +5369,7 @@
   :args:
   - - :milliseconds
     - :number
-  :opts: 
+  :opts:
   :modifies_env: true
   :accepts_block: false
   :examples:
@@ -5219,7 +5394,7 @@
   :args:
   - - :bit_depth
     - :number
-  :opts: 
+  :opts:
   :modifies_env: true
   :accepts_block: false
   :examples:
@@ -5238,7 +5413,7 @@
   :args:
   - - :time
     - :number
-  :opts: 
+  :opts:
   :modifies_env: true
   :accepts_block: false
   :examples:
@@ -5266,7 +5441,7 @@
   :args:
   - - :true_or_false
     - :boolean
-  :opts: 
+  :opts:
   :accepts_block: false
   :examples:
   - 'use_debug true # Turn on debug messages'
@@ -5282,7 +5457,7 @@
   :args:
   - - :true_or_false
     - :boolean
-  :opts: 
+  :opts:
   :accepts_block: true
   :requires_block: true
   :examples:
@@ -5317,7 +5492,7 @@
   :args:
   - - :true_or_false
     - :boolean
-  :opts: 
+  :opts:
   :accepts_block: false
   :examples:
   - |2-
@@ -5336,7 +5511,7 @@
   :args:
   - - :true_or_false
     - :boolean
-  :opts: 
+  :opts:
   :accepts_block: true
   :requires_block: true
   :examples:
@@ -5369,7 +5544,7 @@
   :args:
   - - :synth_name
     - :symbol
-  :opts: 
+  :opts:
   :accepts_block: false
   :intro_fn: true
   :examples:
@@ -5390,7 +5565,7 @@
   :args:
   - - :synth_name
     - :symbol
-  :opts: 
+  :opts:
   :accepts_block: true
   :requires_block: true
   :examples:
@@ -5415,7 +5590,7 @@
   :summary: Start recording
   :doc: Start recording all sound to a `.wav` file stored in a temporary directory.
   :args: []
-  :opts: 
+  :opts:
   :accepts_block: false
   :examples: []
   :hide: true
@@ -5427,7 +5602,7 @@
   :summary: Stop recording
   :doc: Stop current recording.
   :args: []
-  :opts: 
+  :opts:
   :accepts_block: false
   :examples: []
   :hide: true
@@ -5441,7 +5616,7 @@
   :args:
   - - :path
     - :string
-  :opts: 
+  :opts:
   :accepts_block: false
   :examples: []
   :hide: true
@@ -5451,7 +5626,7 @@
     save it you can use this method to delete the temporary file straight away, otherwise
     the operating system will take care of deleting it later.
   :args: []
-  :opts: 
+  :opts:
   :accepts_block: false
   :examples: []
   :hide: true
@@ -5460,16 +5635,16 @@
     x: 2
     y: 9
     z: 0
-  :summary: Reset master mixer
-  :doc: The master mixer is the final mixer that all sound passes through. This fn
-    resets it to its default set - undoing any changes made via set_mixer_control!
+  :summary: Reset main mixer
+  :doc: The main mixer is the final mixer that all sound passes through. This fn resets
+    it to its default set - undoing any changes made via set_mixer_control!
   :args: []
   :opts: {}
   :accepts_block: false
   :examples:
   - |2-
 
-    set_mixer_control! lpf: 70 # LPF cutoff value of master mixer is now 70
+    set_mixer_control! lpf: 70 # LPF cutoff value of main mixer is now 70
     sample :loop_amen          # :loop_amen sample is played with low cutoff
     sleep 3
     reset_mixer!               # mixer is now reset to default values
@@ -5479,11 +5654,11 @@
     x: 2
     y: 7
     z: 0
-  :summary: Control master mixer
-  :doc: The master mixer is the final mixer that all sound passes through. This fn
-    gives you control over the master mixer allowing you to manipulate all the sound
-    playing through Sonic Pi at once. For example, you can sweep a lpf or hpf over
-    the entire sound. You can reset the controls back to their defaults with `reset_mixer!`.
+  :summary: Control main mixer
+  :doc: The main mixer is the final mixer that all sound passes through. This fn gives
+    you control over the main mixer allowing you to manipulate all the sound playing
+    through Sonic Pi at once. For example, you can sweep a lpf or hpf over the entire
+    sound. You can reset the controls back to their defaults with `reset_mixer!`.
   :args: []
   :opts:
     :pre_amp: Controls the amplitude of the signal prior to the FX stage of the mixer
@@ -6086,7 +6261,7 @@
 
     This can be set via the fns `use_synth` and `with_synth`.
   :args: []
-  :opts: 
+  :opts:
   :accepts_block: false
   :examples:
   - |2-
@@ -6103,7 +6278,7 @@
 
     This can be set via the fns `use_synth_defaults`, `with_synth_defaults`, `use_merged_synth_defaults` and `with_merged_synth_defaults`.
   :args: []
-  :opts: 
+  :opts:
   :accepts_block: false
   :examples:
   - |2-
@@ -6122,7 +6297,7 @@
 
     This can be set via the fns `use_sample_defaults`, `with_sample_defaults`, `use_merged_sample_defaults` and `with_merged_sample_defaults`.
   :args: []
-  :opts: 
+  :opts:
   :accepts_block: false
   :examples:
   - |2-
@@ -6141,7 +6316,7 @@
 
     This can be set via the fn `set_volume!`.
   :args: []
-  :opts: 
+  :opts:
   :accepts_block: false
   :examples:
   - |2-
@@ -6161,7 +6336,7 @@
 
     This can be set via the fns `use_debug` and `with_debug`.
   :args: []
-  :opts: 
+  :opts:
   :accepts_block: false
   :examples:
   - |2-
@@ -6178,7 +6353,7 @@
 
     This can be set via the fns `use_arg_checks` and `with_arg_checks`.
   :args: []
-  :opts: 
+  :opts:
   :accepts_block: false
   :examples:
   - |2-
@@ -6196,7 +6371,7 @@
   :args:
   - - :vol
     - :number
-  :opts: 
+  :opts:
   :accepts_block: false
   :modifies_env: true
   :examples:
@@ -6216,7 +6391,7 @@
   :args:
   - - :path
     - :string
-  :opts: 
+  :opts:
   :accepts_block: false
   :examples:
   - |2-
@@ -6237,7 +6412,7 @@
   :args:
   - - :path
     - :string
-  :opts: 
+  :opts:
   :accepts_block: false
   :examples:
   - |2-
@@ -6265,7 +6440,7 @@
   :args:
   - - :paths
     - :list
-  :opts: 
+  :opts:
   :accepts_block: false
   :examples:
   - |2-
@@ -6289,7 +6464,7 @@
   :args:
   - - :path
     - :string
-  :opts: 
+  :opts:
   :accepts_block: false
   :examples:
   - see load_sample
@@ -6304,7 +6479,7 @@
   :args:
   - - :path
     - :string
-  :opts: 
+  :opts:
   :accepts_block: false
   :examples:
   - see load_sample
@@ -6467,7 +6642,7 @@
   - - :pre_args
     - :source_and_filter_types
   :returns: :ring
-  :opts: 
+  :opts:
   :accepts_block: false
   :examples:
   - |2-
@@ -7060,7 +7235,7 @@
   :doc: This returns a Hash of information about the synthesis environment. Mostly
     used for debugging purposes.
   :args: []
-  :opts: 
+  :opts:
   :accepts_block: false
   :examples:
   - |2
@@ -7241,7 +7416,7 @@
   - - :group
     - :symbol
   :returns: :ring
-  :opts: 
+  :opts:
   :accepts_block: false
   :memoize: true
   :examples: []
@@ -7253,7 +7428,7 @@
   :summary: Get all sample names
   :doc: Return a list of all the sample names available
   :args: []
-  :opts: 
+  :opts:
   :accepts_block: false
   :memoize: true
   :examples: []
@@ -7265,7 +7440,7 @@
   :summary: Get all sample groups
   :doc: Return a list of all the sample groups available
   :args: []
-  :opts: 
+  :opts:
   :accepts_block: false
   :memoize: true
   :examples: []
@@ -7277,7 +7452,7 @@
   :summary: Get all synth names
   :doc: Return a list of all the synths available
   :args: []
-  :opts: 
+  :opts:
   :accepts_block: false
   :memoize: true
   :examples: []
@@ -7289,7 +7464,7 @@
   :summary: Get all FX names
   :doc: Return a list of all the FX available
   :args: []
-  :opts: 
+  :opts:
   :accepts_block: false
   :memoize: true
   :examples: []
@@ -7314,7 +7489,7 @@
   :args:
   - - :path
     - :string
-  :opts: 
+  :opts:
   :accepts_block: false
   :examples:
   - 'load_synthdefs "~/Desktop/my_noises" # Load all synthdefs in my_noises folder'
@@ -7330,7 +7505,7 @@
   - - :num_octaves
     - :pos_int
   :returns: :ring
-  :opts: 
+  :opts:
   :accepts_block: false
   :doc: 'Create a ring of successive octaves starting at `start` for `num_octaves`. '
   :examples:
@@ -7346,7 +7521,7 @@
   - - :list
     - :array
   :returns: :ring
-  :opts: 
+  :opts:
   :accepts_block: false
   :memoize: true
   :doc: Create a new immutable ring buffer of notes from args. Indexes wrap around
@@ -7387,7 +7562,7 @@
   :args:
   - - :pitch
     - :midi_number
-  :opts: 
+  :opts:
   :accepts_block: false
   :examples:
   - 'pitch_to_ratio 12 #=> 2.0'
@@ -7413,7 +7588,7 @@
   :args:
   - - :ratio
     - :number
-  :opts: 
+  :opts:
   :accepts_block: false
   :examples:
   - 'ratio_to_pitch 2 #=> 12.0'
@@ -7428,7 +7603,7 @@
   :args:
   - - :note
     - :symbol_or_number
-  :opts: 
+  :opts:
   :accepts_block: false
   :examples:
   - 'midi_to_hz(60) #=> 261.6256'
@@ -7443,7 +7618,7 @@
   :args:
   - - :freq
     - :number
-  :opts: 
+  :opts:
   :accepts_block: false
   :examples:
   - 'hz_to_midi(261.63) #=> 60.0003'
@@ -7464,7 +7639,7 @@
   :args:
   - - :cent_shift
     - :number
-  :opts: 
+  :opts:
   :accepts_block: false
   :intro_fn: false
   :examples:
@@ -7486,7 +7661,7 @@
   :args:
   - - :cent_shift
     - :number
-  :opts: 
+  :opts:
   :accepts_block: false
   :intro_fn: true
   :examples:
@@ -7507,7 +7682,7 @@
   :args:
   - - :cent_shift
     - :number
-  :opts: 
+  :opts:
   :accepts_block: true
   :requires_block: true
   :examples:
@@ -7536,7 +7711,7 @@
   :args:
   - - :octave_shift
     - :number
-  :opts: 
+  :opts:
   :accepts_block: false
   :intro_fn: true
   :examples:
@@ -7566,7 +7741,7 @@
   :args:
   - - :octave_shift
     - :number
-  :opts: 
+  :opts:
   :accepts_block: true
   :intro_fn: true
   :examples:
@@ -7592,7 +7767,7 @@
   :args:
   - - :note_shift
     - :number
-  :opts: 
+  :opts:
   :accepts_block: false
   :intro_fn: true
   :examples:
@@ -7621,7 +7796,7 @@
   :args:
   - - :note_shift
     - :number
-  :opts: 
+  :opts:
   :accepts_block: true
   :requires_block: true
   :examples:
@@ -7657,7 +7832,7 @@
     - :symbol
   - - :fundamental_note
     - :symbol_or_number
-  :opts: 
+  :opts:
   :accepts_block: false
   :examples:
   - |2-
@@ -7688,7 +7863,7 @@
     - :symbol
   - - :fundamental_note
     - :symbol_or_number
-  :opts: 
+  :opts:
   :accepts_block: true
   :examples:
   - |2-
@@ -7713,7 +7888,7 @@
 
     This can be set via the fns `use_transpose` and `with_transpose`.
   :args: []
-  :opts: 
+  :opts:
   :accepts_block: false
   :examples:
   - |2-
@@ -7730,7 +7905,7 @@
 
     This can be set via the fns `use_cent_tuning` and `with_cent_tuning`.
   :args: []
-  :opts: 
+  :opts:
   :accepts_block: false
   :examples:
   - |2-
@@ -7747,7 +7922,7 @@
 
     This can be set via the fns `use_octave` and `with_octave`.
   :args: []
-  :opts: 
+  :opts:
   :accepts_block: false
   :examples:
   - |2-
@@ -8003,6 +8178,84 @@
     (scale :C, :lydian_minor)
     (scale :C, :blues_major)
     (scale :C, :blues_minor)
+    (scale :C, :cargah)
+    (scale :C, :buselik)
+    (scale :C, :buselik_2)
+    (scale :C, :kurdi)
+    (scale :C, :rast)
+    (scale :C, :acemli_rast)
+    (scale :C, :ussak)
+    (scale :C, :bayati)
+    (scale :C, :bayati_2)
+    (scale :C, :isfahan)
+    (scale :C, :isfahan_2)
+    (scale :C, :hicaz_humayun)
+    (scale :C, :hicaz_humayun_2)
+    (scale :C, :hicaz)
+    (scale :C, :hicaz_2)
+    (scale :C, :uzzal)
+    (scale :C, :uzzal_2)
+    (scale :C, :zirguleli_hicaz)
+    (scale :C, :zirguleli_hicaz_2)
+    (scale :C, :huseyni)
+    (scale :C, :huseyni_2)
+    (scale :C, :muhayyer)
+    (scale :C, :gulizar)
+    (scale :C, :neva)
+    (scale :C, :neva_2)
+    (scale :C, :tahir)
+    (scale :C, :tahir_2)
+    (scale :C, :karcigar)
+    (scale :C, :suznak)
+    (scale :C, :suznak_2)
+    (scale :C, :mahur)
+    (scale :C, :acem_asiran)
+    (scale :C, :nihavend)
+    (scale :C, :nihavend_2)
+    (scale :C, :sultani_yegah)
+    (scale :C, :sultani_yegah_2)
+    (scale :C, :kurdili_hicazkar)
+    (scale :C, :kurdili_hicazkar_2)
+    (scale :C, :kurdili_hicazkar_3)
+    (scale :C, :kurdili_hicazkar_4)
+    (scale :C, :kurdili_hicazkar_5)
+    (scale :C, :zirguleli_suznak)
+    (scale :C, :zirguleli_suznak_2)
+    (scale :C, :zirguleli_suznak_3)
+    (scale :C, :hicazkar)
+    (scale :C, :hicazkar_2)
+    (scale :C, :evcara)
+    (scale :C, :evcara_2)
+    (scale :C, :evcara_3)
+    (scale :C, :evcara_4)
+    (scale :C, :suzidil)
+    (scale :C, :suzidil_2)
+    (scale :C, :sedaraban)
+    (scale :C, :sedaraban_2)
+    (scale :C, :segah)
+    (scale :C, :segah_2)
+    (scale :C, :huzzam)
+    (scale :C, :huzzam_2)
+    (scale :C, :bayati_araban)
+    (scale :C, :acem_kurdi)
+    (scale :C, :sehnaz)
+    (scale :C, :sehnaz_2)
+    (scale :C, :sehnaz_3)
+    (scale :C, :sehnaz_4)
+    (scale :C, :saba)
+    (scale :C, :dugah)
+    (scale :C, :dugah_2)
+    (scale :C, :evic)
+    (scale :C, :evic_2)
+    (scale :C, :bestenigar)
+    (scale :C, :ferahnak)
+    (scale :C, :sevkefza)
+    (scale :C, :sevkefza_2)
+    (scale :C, :sevkefza_3)
+    (scale :C, :ferahfeza)
+    (scale :C, :ferahfeza_2)
+    (scale :C, :yegah)
+    (scale :C, :yegah_2)
 - :name: :chord_degree
   :introduced: !ruby/struct:Sandbox::SonicPi::Version
     x: 2
@@ -8176,7 +8429,7 @@
   - - :shift
     - :number
   :returns: :ring
-  :opts: 
+  :opts:
   :accepts_block: false
   :examples:
   - |2
@@ -8194,7 +8447,7 @@
   :summary: All scale names
   :doc: Returns a ring containing all scale names known to Sonic Pi
   :args: []
-  :opts: 
+  :opts:
   :accepts_block: false
   :memoize: true
   :examples:
@@ -8207,7 +8460,7 @@
   :summary: All chord names
   :doc: Returns a ring containing all chord names known to Sonic Pi
   :args: []
-  :opts: 
+  :opts:
   :accepts_block: false
   :memoize: true
   :examples:
