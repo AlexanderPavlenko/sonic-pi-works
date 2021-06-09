@@ -1,4 +1,4 @@
-MIDI_PORT = 'iac_driver_bus_1'
+MIDI_PORT = 'network_away'
 use_midi_defaults port: MIDI_PORT, channel: 1
 use_bpm 60
 

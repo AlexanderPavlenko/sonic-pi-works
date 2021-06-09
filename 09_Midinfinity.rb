@@ -1,6 +1,6 @@
 # inspired by https://github.com/bettinson/markov_midi
 
-$LOAD_PATH.unshift('/Users/alex/A/Music/SonicPi/vendor/bundle/ruby/2.7.0/gems/midilib-2.0.5/lib')
+$LOAD_PATH.unshift('/Users/alex/A/Music/SonicPi/vendor/bundle/ruby/3.0.0/gems/midilib-2.0.5/lib')
 require 'midilib'
 
 MIDI_DIR = '/Users/alex/Music/MIDI/'
@@ -116,21 +116,25 @@ def loading(in_progress = true, eta: 2)
 end
 
 
-MIDI_PORT    = 'network_away' # 'iac_driver_bus_1'
+MIDI_PORT    = 'network_away'
+# MIDI_PORT    = 'iac_driver_bus_1'
 MIDI_CHANNEL = 1
 use_midi_defaults port: MIDI_PORT, channel: MIDI_CHANNEL
 use_bpm 60
 
-quantize = 10
+quantize = 10 # false # 100
 loading
 each_track_notes do |notes|
-  quantize = (quantize + 15) % 100
+  quantize = (quantize + 30) % 200
   chain    = chords_chain(notes, quantize: quantize)
   sustain  = (1 / 32r) * [8, 16].sample
   loading false
   generate(rand(21..84), chain) do |chord_notes|
-    midi_play_chord chord_notes, sustain_factor: sustain, channel_map: ->(_) { rand_i(8) + 1 }
+    midi_play_chord chord_notes, sustain_factor: sustain, channel_map: ->(_) { 1 } # rand_i(8) + 1 }
   end
   midi_all_notes_off port: MIDI_PORT
   loading
 end
+
+# TODO: synth preset change via midi command
+# TODO: headless radio
