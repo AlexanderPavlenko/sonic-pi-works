@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-src  = '/Users/Shared/sonic-pi'
+src  = '/Users/lexi/Sources/sonic-pi'
 lang = "#{src}/app/server/ruby/lib/sonicpi/lang"
 
 # %w[kramdown activesupport fast_osc* rubame websocket-ruby* hamster* ruby-aubio*].each do |lib|

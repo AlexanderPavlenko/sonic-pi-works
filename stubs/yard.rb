@@ -231,13 +231,13 @@ end
 # @accepts_block false
 # @since 2.10.0
 # @example
-#   use_bpm 120  # The current BPM makes no difference
-#     puts beat    #=> 0
-#     sleep 1
-#     puts beat    #=> 1
-#     use_bpm 2000
-#     sleep 2
-#     puts beat    #=> 3
+#   use_bpm 120  #=> The initial beat does not start at 0
+#   puts beat    #=> 109252.703125
+#   sleep 1
+#   puts beat    #=> 109253.703125
+#   use_bpm 2000 # Changing the BPM makes no difference
+#   sleep 2
+#   puts beat    #=> 109255.703125
 #
 def beat
   #This is a stub, used for indexing
@@ -867,15 +867,42 @@ def current_beat_duration
 end
 
 # Get current tempo
-# Returns the current tempo as a bpm value.
+# Returns the current tempo as a bpm value. If the thread is in :link bpm mode, this will return the latest bpm value of the shared Link network metronome (note that this value may change after reading if the Link bpm isn't static).
+# 
+# To know if this thread is in :link or standard bpm mode see `current_bpm_mode`.
 # 
 # This can be set via the fns `use_bpm`, `with_bpm`, `use_sample_bpm` and `with_sample_bpm`.
 # @accepts_block false
 # @since 2.0.0
 # @example
-#   puts current_bpm # Print out the current bpm
+#   use_bpm 60
+#     puts current_bpm_mode    # => 60
+#     use_bpm 70
+#     puts current_bpm_mode    # => 70
+#     use_bpm :link
+#     puts current_bpm_mode    # => 120 (or whatever the current Link BPM value is)
 #
 def current_bpm
+  #This is a stub, used for indexing
+end
+
+# Get current tempo mode
+# Returns the current tempo mode - either a bpm value or :link.
+# 
+# To know the current BPM value when this thread is in :link mode see `current_bpm`.
+# 
+# This can be set via the fns `use_bpm`, `with_bpm`, `use_sample_bpm` and `with_sample_bpm`.
+# @accepts_block false
+# @since 4.0.0
+# @example
+#   use_bpm 60
+#     puts current_bpm_mode    # => 60
+#     use_bpm 70
+#     puts current_bpm_mode    # => 70
+#     use_bpm :link
+#     puts current_bpm_mode    # => :link
+#
+def current_bpm_mode
   #This is a stub, used for indexing
 end
 
@@ -958,6 +985,32 @@ def current_random_seed
   #This is a stub, used for indexing
 end
 
+# Get current random source
+# Returns the source of the current random number generator (what kind of noise is generating the random numbers).
+# 
+# This can be set via the fns `use_random_source` and `with_random_source`. Each source will provide a different pattern of random numbers.
+# @accepts_block false
+# @since 4.0.0
+# @example
+#   puts current_random_source # Print out the current random source
+#
+# @example
+#   use_random_source :white # Use white noise as the distribution (default)
+#   puts rand # => 0.75006103515625
+#   puts rand # => 0.733917236328125
+#   a = current_random_source # Grab the current random number source (:white)
+#   use_random_source :perlin # Use perlin noise as the distribution
+#   puts rand # => 0.58526611328125
+#   puts rand # => 0.597015380859375
+#   use_random_source a # Restore the previous random number source (:white)
+#                       # The numbers will again be generated from a white noise distribution
+#   puts rand # => 0.10821533203125
+#   puts rand # => 0.54010009765625
+#
+def current_random_source
+  #This is a stub, used for indexing
+end
+
 # Get current sample defaults
 # Returns the current sample defaults. This is a map of synth arg names to either values or functions.
 # 
@@ -1030,10 +1083,10 @@ end
 #   #
 #   # {run: 19, time: 0.0}
 #   puts "A", Time.now.to_f # ├─ "A" 1489966042.761211
-#   puts "B", __system_thread_locals.get(:sonic_pi_spider_time).to_f # ├─ "B" 1489966042.760181
+#   puts "B", current_time.to_f # ├─ "B" 1489966042.760181
 #   puts "C", Time.now.to_f # ├─ "C" 1489966042.761235
-#   puts "D", __system_thread_locals.get(:sonic_pi_spider_time).to_f # ├─ "D" 1489966042.760181
-#   puts "E", __system_thread_locals.get(:sonic_pi_spider_time).to_f # └─ "E" 1489966042.760181
+#   puts "D", current_time.to_f # ├─ "D" 1489966042.760181
+#   puts "E", current_time.to_f # └─ "E" 1489966042.760181
 #
 def current_time
   #This is a stub, used for indexing
@@ -1086,6 +1139,8 @@ end
 
 # Define a new function
 # Allows you to group a bunch of code and give it your own name for future re-use. Functions are very useful for structuring your code. They are also the gateway into live coding as you may redefine a function whilst a thread is calling it, and the next time the thread calls your function, it will use the latest definition.
+# 
+# Note, it is not recommended to start a function name with a capital letter if it takes no parameters.
 # @accepts_block true
 # @param _name [symbol]
 # @since 2.0.0
@@ -1104,6 +1159,15 @@ end
 #     3.times do
 #       foo
 #     end
+#
+# @example
+#   # Define a new function called play2, taking one parameter
+#     define :play2 do |x|
+#       play x, release: 2
+#     end
+#   
+#     # Call play2, passing in a value for the parameter
+#     play2 42
 #
 def define(_name = nil)
   #This is a stub, used for indexing
@@ -1376,7 +1440,7 @@ end
 # @param name Make this thread a named thread with name. If a thread with this name already exists, a new thread will not be created.
 # @param delay Initial delay in beats before the thread starts. Default is 0.
 # @param sync Initial sync symbol. Will sync with this symbol before the thread starts.
-# @param sync_bpm Initial sync symbol. Will sync with this symbol before the live_loop starts. Live loop will also inherit the BPM of the thread which cued the symbol.
+# @param sync_bpm Initial sync symbol. Will sync with this symbol before the thread starts. Thread will also inherit the BPM of the thread which cued the symbol.
 # @since 2.0.0
 # @example
 #   loop do      # If you write two loops one after another like this,
@@ -1546,6 +1610,56 @@ end
 #   (line 0, 3, inclusive: true) #=> (ring 0.0, 1.0, 2.0, 3.0)
 #
 def line(_start = nil, _finish = nil, steps: nil, inclusive: nil)
+  #This is a stub, used for indexing
+end
+
+# Use Ableton Link network metronome with automatic phase syncing.
+# By default link waits for the start of the next bar of the shared network metronome link. You can choose how many beats there are in a bar by setting the quantum option and/or which beat to wait for by setting the phase option.
+# 
+# By default, the phase to sync on is 0 and the quantum (max number of beats) is 4.
+# 
+# Also switches BPM to :link mode so there is no explicit need to call use_bpm :link.  The time and beat set to match the network Link metronome.
+# 
+# This function will block the current thread until the next matching phase as if `sleep` had been called with the exact sleep time
+# 
+# If the quantum is 4 (the default) this suggests there are 4 beats in each bar. If the phase is set to 0 (also the default) this means that calling link will sleep until the very start of the next bar before continuing.
+# 
+# This can be used to sync multiple instances of Sonic Pi running on different computers connected to the same network (via wifi or ethernet). It can also be used to share and coordinate time with other apps and devices. For a full list of link-compatible apps and devices see:  [https://www.ableton.com/en/link/products/](https://www.ableton.com/en/link/products/)
+# 
+# For other related link functions see link_sync, use_bpm :link, set_link_bpm!
+# @accepts_block false
+# @param _quantum [number]
+# @param _phase [number]
+# @since 4.0.0
+# @example
+#   use_bpm 120      # bpm is at 120
+#   link             # wait for the start of the next bar before continuing
+#                    # (where each bar has 4 beats)
+#   puts current_bpm #=> :link (not 120)
+#
+# @example
+#   link 8 # wait for the start of the next bar
+#          # (where each bar has 8 beats)
+#
+# @example
+#   link 7, 2 # wait for the 2nd beat of the next bar
+#             # (where each bar has 7 beats)
+#
+def link(_quantum = nil, _phase = nil)
+  #This is a stub, used for indexing
+end
+
+# Use Ableton Link network metronome with automatic session and phase syncing.
+# Similar to link except it also waits for the link session to be playing. If it is, then it behaves identially to link. If the session is not playing, then link_sync will first wait until the session has started before then continuing as if just link had been called.
+# 
+# See link for further details and usage.
+# @accepts_block false
+# @param _quantum [number]
+# @param _phase [number]
+# @since 4.0.0
+# @example
+#
+def link_sync(_quantum = nil, _phase = nil)
   #This is a stub, used for indexing
 end
 
@@ -1810,10 +1924,12 @@ def load_samples(_paths = nil)
   #This is a stub, used for indexing
 end
 
-# Load external synthdefs
-# Load all pre-compiled synth designs in the specified directory. The binary files containing synth designs need to have the extension `.scsyndef`. This is useful if you wish to use your own SuperCollider synthesiser designs within Sonic Pi.
+# Load a single external synthdef
+# Load a pre-compiled synth design from the specified file. This is useful if you wish to use your own SuperCollider synthesiser designs within Sonic Pi.
 # 
 # ## Important notes
+# 
+# The binary file containing the synth design must have the extension `.scsyndef`.
 # 
 # You may not trigger external synthdefs unless you enable the following GUI preference:
 # 
@@ -1821,7 +1937,43 @@ end
 # Studio -> Synths and FX -> Enable external synths and FX
 # ```
 # 
-# Also, if you wish your synth to work with Sonic Pi's automatic stereo sound infrastructure *you need to ensure your synth outputs a stereo signal* to an audio bus with an index specified by a synth arg named `out_bus`. For example, the following synth would work nicely:
+# If you wish your synth to work with Sonic Pi's automatic stereo sound infrastructure *you need to ensure your synth outputs a stereo signal* to an audio bus with an index specified by a synth arg named `out_bus`. Also, Sonic Pi makes no automatic attempt to free a synth once triggered, so to behave like the built-in synths, your synth needs to automatically free itself. For example, the following synth would work nicely:
+# 
+# 
+#     (
+#     SynthDef(\piTest,
+#              {|freq = 200, amp = 1, out_bus = 0 |
+#                Out.ar(out_bus,
+#                       SinOsc.ar([freq,freq],0,0.5)* Line.kr(1, 0, 5, amp, doneAction: 2))}
+#     ).writeDefFile("/Users/sam/Desktop/")
+#     )
+# 
+# 
+#     
+# @accepts_block false
+# @param _path [string]
+# @since 4.0.0
+# @example
+#   load_synthdef "~/Desktop/my_noises/whoosh.scsyndef" # Load whoosh synthdef design.
+#
+def load_synthdef(_path = nil)
+  #This is a stub, used for indexing
+end
+
+# Load external synthdefs
+# Load all pre-compiled synth designs in the specified directory. This is useful if you wish to use your own SuperCollider synthesiser designs within Sonic Pi.
+# 
+# ## Important notes
+# 
+# Only files with the extension `.scsyndef` within the specified directory will be loaded.
+# 
+# You may not trigger external synthdefs unless you enable the following GUI preference:
+# 
+# ```
+# Studio -> Synths and FX -> Enable external synths and FX
+# ```
+# 
+# If you wish your synth to work with Sonic Pi's automatic stereo sound infrastructure *you need to ensure your synth outputs a stereo signal* to an audio bus with an index specified by a synth arg named `out_bus`. Also, Sonic Pi makes no automatic attempt to free a synth once triggered, so to behave like the built-in synths, your synth needs to automatically free itself. For example, the following synth would work nicely:
 # 
 # 
 #     (
@@ -1955,296 +2107,6 @@ def math_scale
   #This is a stub, used for indexing
 end
 
-# Minecraft Pi - normalise block code
-# Given a block name or id will return a number representing the id of the block or throw an exception if the name or id isn't valid
-# @accepts_block false
-# @param _name [symbol_or_number]
-# @since 2.5.0
-# @example
-#   puts mc_block_id :air #=> 0
-#
-# @example
-#   puts mc_block_id 0  #=> 0
-#
-# @example
-#   puts mc_block_id 19 #=> Throws an invalid block id exception
-#
-# @example
-#   puts mc_block_id :foo #=> Throws an invalid block name exception
-#
-def mc_block_id(_name = nil)
-  #This is a stub, used for indexing
-end
-
-# Minecraft Pi - list all block ids
-# Returns a list of all the valid block ids as numbers. Note not all numbers are valid block ids. For example, 19 is not a valid block id.
-# @accepts_block false
-# @since 2.5.0
-# @example
-#   puts mc_block_ids #=> [0, 1, 2, 3, 4, 5...
-#
-def mc_block_ids
-  #This is a stub, used for indexing
-end
-
-# Minecraft Pi - normalise block name
-# Given a block id or a block name will return a symbol representing the block name or throw an exception if the id or name isn't valid.
-# @accepts_block false
-# @param _id [number_or_symbol]
-# @since 2.5.0
-# @example
-#   puts mc_block_name :air #=> :air
-#
-# @example
-#   puts mc_block_name 0   #=> :air
-#
-# @example
-#   puts mc_block_name 19 #=> Throws an invalid block id exception
-#
-# @example
-#   puts mc_block_name :foo #=> Throws an invalid block name exception
-#
-def mc_block_name(_id = nil)
-  #This is a stub, used for indexing
-end
-
-# Minecraft Pi - list all block names
-# Returns a list of all the valid block names as symbols
-# @accepts_block false
-# @since 2.5.0
-# @example
-#   puts mc_block_names #=> [:air, :stone, :grass, :dirt, :cobblestone...
-#
-def mc_block_names
-  #This is a stub, used for indexing
-end
-
-# Minecraft Pi - fixed camera mode
-# Set the camera mode to fixed.
-# @accepts_block false
-# @since 2.5.0
-# @example
-#
-def mc_camera_fixed
-  #This is a stub, used for indexing
-end
-
-# Minecraft Pi - normal camera mode
-# Set the camera mode to normal.
-# @accepts_block false
-# @since 2.5.0
-# @example
-#
-def mc_camera_normal
-  #This is a stub, used for indexing
-end
-
-# Minecraft Pi - move camera
-# Move the camera to a new location.
-# @accepts_block false
-# @since 2.5.0
-# @example
-#
-def mc_camera_set_location
-  #This is a stub, used for indexing
-end
-
-# Minecraft Pi - third person camera mode
-# Set the camera mode to third person
-# @accepts_block false
-# @since 2.5.0
-# @example
-#
-def mc_camera_third_person
-  #This is a stub, used for indexing
-end
-
-# Minecraft Pi - synonym for mc_message
-# See mc_message
-# @accepts_block false
-# @since 2.5.0
-def mc_chat_post
-  #This is a stub, used for indexing
-end
-
-# Minecraft Pi - restore checkpoint
-# Restore the world to the last snapshot taken with `mc_checkpoint_save`.
-# @accepts_block false
-# @since 2.5.0
-# @example
-#
-def mc_checkpoint_restore
-  #This is a stub, used for indexing
-end
-
-# Minecraft Pi - save checkpoint
-# Take a snapshot of the world and save it. Restore back with `mc_checkpoint_restore`
-# @accepts_block false
-# @since 2.5.0
-# @example
-#
-def mc_checkpoint_save
-  #This is a stub, used for indexing
-end
-
-# Minecraft Pi - get type of block at coords
-# Returns the type of the block at the coords `x`, `y`, `z` as a symbol.
-# @accepts_block false
-# @param _x [number]
-# @param _y [number]
-# @param _z [number]
-# @since 2.5.0
-# @example
-#   puts mc_get_block 40, 50, 60 #=> :air
-#
-def mc_get_block(_x = nil, _y = nil, _z = nil)
-  #This is a stub, used for indexing
-end
-
-# Minecraft Pi - synonym for mc_ground_height
-# See `mc_ground_height`
-# @accepts_block false
-# @since 2.5.0
-def mc_get_height
-  #This is a stub, used for indexing
-end
-
-# Minecraft Pi - synonym for mc_location
-# See `mc_location`
-# @accepts_block false
-# @since 2.5.0
-def mc_get_pos
-  #This is a stub, used for indexing
-end
-
-# Minecraft Pi - get location of current tile/block
-# Returns the coordinates of the nearest block that the player is next to. This is more course grained than `mc_location` as it only returns whole number coordinates.
-# @accepts_block false
-# @since 2.5.0
-# @example
-#   puts mc_get_tile #=> [10, 20, 101]
-#
-def mc_get_tile
-  #This is a stub, used for indexing
-end
-
-# Minecraft Pi - get ground height at x, z coords
-# Returns the height of the ground at the specified `x` and `z` coords.
-# @accepts_block false
-# @param _x [number]
-# @param _z [number]
-# @since 2.5.0
-# @example
-#   puts mc_ground_height 40, 50 #=> 43 (height of world at x=40, z=50)
-#
-def mc_ground_height(_x = nil, _z = nil)
-  #This is a stub, used for indexing
-end
-
-# Minecraft Pi - get current location
-# Returns a list of floats `[x, y, z]` coords of the current location for Steve. The coordinates are finer grained than raw block coordinates but may be used anywhere you might use block coords.
-# @accepts_block false
-# @since 2.5.0
-# @example
-#   puts mc_location    #=> [10.1, 20.67, 101.34]
-#
-# @example
-#   x, y, z = mc_location       #=> Find the current location and store in x, y and z variables.
-#
-def mc_location
-  #This is a stub, used for indexing
-end
-
-# Minecraft Pi - post a chat message
-# Post contents of `msg` on the Minecraft chat display. You may pass multiple arguments and all will be joined to form a single message (with spaces).
-# @accepts_block false
-# @param _msg [string]
-# @since 2.5.0
-# @example
-#   mc_message "Hello from Sonic Pi" #=> Displays "Hello from Sonic Pi" on Minecraft's chat display
-#
-def mc_message(_msg = nil)
-  #This is a stub, used for indexing
-end
-
-# Minecraft Pi - set area of blocks
-# Set an area/box of blocks of type `block_name` defined by two distinct sets of coordinates.
-# @accepts_block false
-# @param _block_name [symbol_or_number]
-# @param _x [number]
-# @param _y [number]
-# @param _z [number]
-# @param _x2 [number]
-# @param _y2 [number]
-# @param _z2 [number]
-# @since 2.5.0
-def mc_set_area(_block_name = nil, _x = nil, _y = nil, _z = nil, _x2 = nil, _y2 = nil, _z2 = nil)
-  #This is a stub, used for indexing
-end
-
-# Minecraft Pi - set block at specific coord
-# Change the block type of the block at coords `x`, `y`, `z` to `block_type`. The block type may be specified either as a symbol such as `:air` or a number. See `mc_block_ids` and `mc_block_types` for lists of valid symbols and numbers.
-# @accepts_block false
-# @param _x [number]
-# @param _y [number]
-# @param _z [number]
-# @param _block_name [symbol_or_number]
-# @since 2.5.0
-# @example
-#   mc_set_block :glass, 40, 50, 60 #=> set block at coords 40, 50, 60 to type glass
-#
-def mc_set_block(_x = nil, _y = nil, _z = nil, _block_name = nil)
-  #This is a stub, used for indexing
-end
-
-# Minecraft Pi - synonym for mc_teleport
-# See `mc_teleport`
-# @accepts_block false
-# @since 2.5.0
-def mc_set_pos
-  #This is a stub, used for indexing
-end
-
-# Minecraft Pi - set location to coords of specified tile/block
-# @accepts_block false
-# @param _x [number]
-# @param _y [number]
-# @param _z [number]
-# @since 2.5.0
-# @example
-#
-def mc_set_tile(_x = nil, _y = nil, _z = nil)
-  #This is a stub, used for indexing
-end
-
-# Minecraft Pi - teleport to world surface at x and z coords
-# Teleports you to the specified x and z coordinates with the y automatically set to place you on the surface of the world. For example, if the x and z coords target a mountain, you'll be placed on top of the mountain, not in the air or under the ground. See mc_ground_height for discovering the height of the ground at a given x, z point.
-# @accepts_block false
-# @param _x [number]
-# @param _z [number]
-# @since 2.5.0
-# @example
-#   mc_surface_teleport 40, 50 #=> Teleport user to coords x = 40, y = height of surface, z = 50
-#
-def mc_surface_teleport(_x = nil, _z = nil)
-  #This is a stub, used for indexing
-end
-
-# Minecraft Pi - teleport to a new location
-# Magically teleport the player to the location specified by the `x`, `y`, `z` coordinates. Use this for automatically moving the player either small or large distances around the world.
-# @accepts_block false
-# @param _x [number]
-# @param _y [number]
-# @param _z [number]
-# @since 2.5.0
-# @example
-#   mc_teleport 40, 50, 60  # The player will be moved to the position with coords:
-#                           # x: 40, y: 50, z: 60
-#
-def mc_teleport(_x = nil, _y = nil, _z = nil)
-  #This is a stub, used for indexing
-end
-
 # Trigger and release an external synth via MIDI
 # Sends a MIDI note on event to *all* connected MIDI devices and *all* channels and then after sustain beats sends a MIDI note off event. Ensures MIDI trigger is synchronised with standard calls to play and sample. Co-operates completely with Sonic Pi's timing system including `time_warp`.
 # 
@@ -2279,7 +2141,7 @@ end
 # 
 # When an All Notes Off event is received, all oscillators will turn off.
 # 
-# [MIDI 1.0 Specification - Channel Mode Messages - All Notes Off](https://www.midi.org/specifications/item/table-1-summary-of-midi-message)
+# [MIDI 1.0 Specification - Channel Mode Messages - All Notes Off](https://www.midi.org/specifications-old/item/table-1-summary-of-midi-message)
 # @accepts_block false
 # @param channel Channel to send the all notes off message to
 # @param port MIDI port to send to
@@ -2302,7 +2164,7 @@ end
 # 
 # You may also optionally pass the control value as a floating point value between 0 and 1 such as 0.2 or 0.785 (which will be mapped to MIDI values between 0 and 127) using the `val_f:` opt.
 # 
-# [MIDI 1.0 Specification - Channel Voice Messages - Control change](https://www.midi.org/specifications/item/table-1-summary-of-midi-message)
+# [MIDI 1.0 Specification - Channel Voice Messages - Control change](https://www.midi.org/specifications-old/item/table-1-summary-of-midi-message)
 # @accepts_block false
 # @param _control_num [midi]
 # @param _value [midi]
@@ -2338,7 +2200,7 @@ end
 # 
 # You may also optionally pass the pressure value as a floating point value between 0 and 1 such as 0.2 or 0.785 (which will be mapped to MIDI values between 0 and 127) using the `val_f:` opt.
 # 
-# [MIDI 1.0 Specification - Channel Voice Messages - Channel Pressure (Aftertouch)](https://www.midi.org/specifications/item/table-1-summary-of-midi-message)
+# [MIDI 1.0 Specification - Channel Voice Messages - Channel Pressure (Aftertouch)](https://www.midi.org/specifications-old/item/table-1-summary-of-midi-message)
 # @accepts_block false
 # @param _val [midi]
 # @param channel Channel(s) to send to
@@ -2373,10 +2235,13 @@ end
 # @param on If specified and false/nil/0 will stop the midi clock tick messages from being sent out. (Ensures all opts are evaluated in this call to `midi_clock_beat` regardless of value).
 # @since 3.0.0
 # @example
-#   midi_clock_beat #=> Send 24 clock ticks over a period of 1 beat
+#   midi_clock_beat #=> Send 24 clock ticks over a period of 1 beat to all connected MIDI devices
 #
 # @example
-#   midi_clock_beat 0.5 #=> Send 24 clock ticks over a period of 0.5 beats
+#   midi_clock_beat 0.5 #=> Send 24 clock ticks over a period of 0.5 beats to all connected MIDI devices
+#
+# @example
+#   midi_clock_beat port: "moog_subphatty" #=> Send 24 clock ticks over a period of 1 beat to just the MIDI port with name moog_subphatty
 #
 # @example
 #   live_loop :clock do  # Create a live loop which continually sends out MIDI clock
@@ -2401,7 +2266,7 @@ end
 # 
 # Typical MIDI devices expect the clock to send 24 ticks per quarter note (typically a beat). See `midi_clock_beat` for a simple way of sending all the ticks for a given beat.
 # 
-# [MIDI 1.0 Specification - System Real-Time Messages - Timing Clock](https://www.midi.org/specifications/item/table-1-summary-of-midi-message)
+# [MIDI 1.0 Specification - System Real-Time Messages - Timing Clock](https://www.midi.org/specifications-old/item/table-1-summary-of-midi-message)
 # @accepts_block false
 # @param port MIDI port to send to
 # @param on If specified and false/nil/0 will stop the midi clock tick message from being sent out. (Ensures all opts are evaluated in this call to `midi_clock_tick` regardless of value).
@@ -2418,7 +2283,7 @@ end
 # 
 # Upon receiving the MIDI continue event, the MIDI device(s) will continue at the point the sequence was stopped.
 # 
-# [MIDI 1.0 Specification - System Real-Time Messages - Continue](https://www.midi.org/specifications/item/table-1-summary-of-midi-message)
+# [MIDI 1.0 Specification - System Real-Time Messages - Continue](https://www.midi.org/specifications-old/item/table-1-summary-of-midi-message)
 # @accepts_block false
 # @param port MIDI Port(s) to send the continue message to
 # @since 3.0.0
@@ -2434,7 +2299,7 @@ end
 # 
 # All devices on a given channel will respond only to data received over MIDI. Played data, etc. will be ignored. See `midi_local_control_on` to enable local control.
 # 
-# [MIDI 1.0 Specification - Channel Mode Messages - Local Control Off](https://www.midi.org/specifications/item/table-1-summary-of-midi-message)
+# [MIDI 1.0 Specification - Channel Mode Messages - Local Control Off](https://www.midi.org/specifications-old/item/table-1-summary-of-midi-message)
 # @accepts_block false
 # @param channel Channel to send the local control off message to
 # @param port MIDI port to send to
@@ -2455,7 +2320,7 @@ end
 # 
 # All devices on a given channel will respond both to data received over MIDI and played data, etc. See `midi_local_control_off` to disable local control.
 # 
-# [MIDI 1.0 Specification - Channel Mode Messages - Local Control On](https://www.midi.org/specifications/item/table-1-summary-of-midi-message)
+# [MIDI 1.0 Specification - Channel Mode Messages - Local Control On](https://www.midi.org/specifications-old/item/table-1-summary-of-midi-message)
 # @accepts_block false
 # @param channel Channel to send the local control on message to
 # @param port MIDI port to send to
@@ -2483,7 +2348,7 @@ end
 # 
 # Note that this fn also includes the behaviour of `midi_all_notes_off`.
 # 
-# [MIDI 1.0 Specification - Channel Mode Messages - Omni Mode Off | Omni Mode On | Mono Mode On (Poly Off) | Poly Mode On](https://www.midi.org/specifications/item/table-1-summary-of-midi-message)
+# [MIDI 1.0 Specification - Channel Mode Messages - Omni Mode Off | Omni Mode On | Mono Mode On (Poly Off) | Poly Mode On](https://www.midi.org/specifications-old/item/table-1-summary-of-midi-message)
 # @accepts_block false
 # @param _mode [mode_keyword]
 # @param channel Channel to send the MIDI mode message to
@@ -2517,7 +2382,7 @@ end
 # 
 # You may also optionally pass the release velocity value as a floating point value between 0 and 1 such as 0.2 or 0.785 (which will be mapped to MIDI values between 0 and 127) using the `vel_f:` opt.
 # 
-# [MIDI 1.0 Specification - Channel Voice Messages - Note off event](https://www.midi.org/specifications/item/table-1-summary-of-midi-message)
+# [MIDI 1.0 Specification - Channel Voice Messages - Note off event](https://www.midi.org/specifications-old/item/table-1-summary-of-midi-message)
 # @accepts_block false
 # @param _note [midi]
 # @param _release_velocity [midi]
@@ -2528,31 +2393,31 @@ end
 # @param on If specified and false/nil/0 will stop the midi note off message from being sent out. (Ensures all opts are evaluated in this call to `midi_note_off` regardless of value).
 # @since 3.0.0
 # @example
-#   midi_note_off :e3 #=> Sends MIDI note off for :e3 with the default release velocity of 127 to all ports and channels
+#   midi_note_off :e3 #=> Sends MIDI note off for note :e3 with the default release velocity of 127 to all ports and channels
 #
 # @example
-#   midi_note_off :e3, 12  #=> Sends MIDI note off on :e3 with velocity 12 on all channels
+#   midi_note_off :e3, 12  #=> Sends MIDI note off for note :e3 with velocity 12 on all channels
 #
 # @example
-#   midi_note_off :e3, 12, channel: 3  #=> Sends MIDI note off on :e3 with velocity 12 to channel 3
+#   midi_note_off :e3, 12, channel: 3  #=> Sends MIDI note off for note :e3 with velocity 12 to channel 3
 #
 # @example
-#   midi_note_off :e3, velocity: 100 #=> Sends MIDI note on for :e3 with release velocity 100
+#   midi_note_off :e3, velocity: 100 #=> Sends MIDI note off for note :e3 with release velocity 100
 #
 # @example
-#   midi_note_off :e3, vel_f: 0.8 #=> Scales release velocity 0.8 to MIDI value 102 and sends MIDI note off for :e3 with release velocity 102
+#   midi_note_off :e3, vel_f: 0.8 #=> Scales release velocity 0.8 to MIDI value 102 and sends MIDI note off for note :e3 with release velocity 102
 #
 # @example
-#   midi_note_off 60.3, 50.5 #=> Rounds params up or down to the nearest whole number and sends MIDI note off for note 60 with velocity 51
+#   midi_note_off 60.3, 50.5 #=> Rounds params up or down to the nearest whole number and sends MIDI note off for note 60 with release velocity 51
 #
 # @example
-#   midi_note_off :e3, channel: [1, 3, 5] #=> Send MIDI note off on :e3 to channels 1, 3, 5 on all connected ports
+#   midi_note_off :e3, channel: [1, 3, 5] #=> Send MIDI note off for note :e3 to channels 1, 3, 5 on all connected ports
 #
 # @example
-#   midi_note_off :e3, port: ["foo", "bar"] #=> Send MIDI note off on :e3 to on all channels on ports named "foo" and "bar"
+#   midi_note_off :e3, port: ["foo", "bar"] #=> Send MIDI note off for note :e3 to all channels on ports named "foo" and "bar"
 #
 # @example
-#   midi_note_off :e3, channel: 1, port: "foo" #=> Send MIDI note off on :e3 only on channel 1 on port "foo"
+#   midi_note_off :e3, channel: 1, port: "foo" #=> Send MIDI note off for note :e3 only on channel 1 on port "foo"
 #
 def midi_note_off(_note = nil, _release_velocity = nil, channel: nil, port: nil, velocity: nil, vel_f: nil, on: nil)
   #This is a stub, used for indexing
@@ -2567,7 +2432,7 @@ end
 # 
 # You may also optionally pass the velocity value as a floating point value between 0 and 1 such as 0.2 or 0.785 (which will be linearly mapped to MIDI values between 0 and 127) using the vel_f: opt.
 # 
-# [MIDI 1.0 Specification - Channel Voice Messages - Note on event](https://www.midi.org/specifications/item/table-1-summary-of-midi-message)
+# [MIDI 1.0 Specification - Channel Voice Messages - Note on event](https://www.midi.org/specifications-old/item/table-1-summary-of-midi-message)
 # @accepts_block false
 # @param _note [midi]
 # @param _velocity [midi]
@@ -2578,31 +2443,31 @@ end
 # @param on If specified and false/nil/0 will stop the midi note on message from being sent out. (Ensures all opts are evaluated in this call to `midi_note_on` regardless of value).
 # @since 3.0.0
 # @example
-#   midi_note_on :e3  #=> Sends MIDI note on :e3 with the default velocity of 12 to all ports and channels
+#   midi_note_on :e3  #=> Sends MIDI note on for note :e3 with the default velocity of 12 to all ports and channels
 #
 # @example
-#   midi_note_on :e3, 12  #=> Sends MIDI note on :e3 with velocity 12 to all channels
+#   midi_note_on :e3, 12  #=> Sends MIDI note on for note :e3 with velocity 12 to all channels
 #
 # @example
-#   midi_note_on :e3, 12, channel: 3  #=> Sends MIDI note on :e3 with velocity 12 on channel 3
+#   midi_note_on :e3, 12, channel: 3  #=> Sends MIDI note on for note :e3 with velocity 12 on channel 3
 #
 # @example
-#   midi_note_on :e3, velocity: 100 #=> Sends MIDI note on for :e3 with velocity 100
+#   midi_note_on :e3, velocity: 100 #=> Sends MIDI note on for note :e3 with velocity 100
 #
 # @example
-#   midi_note_on :e3, vel_f: 0.8 #=> Scales velocity 0.8 to MIDI value 102 and sends MIDI note on for :e3 with velocity 102
+#   midi_note_on :e3, vel_f: 0.8 #=> Scales velocity 0.8 to MIDI value 102 and sends MIDI note on for note :e3 with velocity 102
 #
 # @example
 #   midi_note_on 60.3, 50.5 #=> Rounds params up or down to the nearest whole number and sends MIDI note on for note 60 with velocity 51
 #
 # @example
-#   midi_note_on :e3, channel: [1, 3, 5] #=> Send MIDI note :e3 on to channels 1, 3, 5 on all connected ports
+#   midi_note_on :e3, channel: [1, 3, 5] #=> Send MIDI note on for note :e3 to channels 1, 3, 5 on all connected ports
 #
 # @example
-#   midi_note_on :e3, port: ["foo", "bar"] #=> Send MIDI note :e3 on to on all channels on ports named "foo" and "bar"
+#   midi_note_on :e3, port: ["foo", "bar"] #=> Send MIDI note on for note :e3 to all channels on ports named "foo" and "bar"
 #
 # @example
-#   midi_note_on :e3, channel: 1, port: "foo" #=> Send MIDI note :e3 on only on channel 1 on port "foo"
+#   midi_note_on :e3, channel: 1, port: "foo" #=> Send MIDI note on for note :e3 only on channel 1 on port "foo"
 #
 def midi_note_on(_note = nil, _velocity = nil, channel: nil, port: nil, velocity: nil, vel_f: nil, on: nil)
   #This is a stub, used for indexing
@@ -2628,13 +2493,13 @@ end
 # 
 # Program number can be passed as a note such as `:e3` and decimal values will be rounded down or up to the nearest whole number - so values between 3.5 and 4 will be rounded up to 4 and values between 3.49999... and 3 will be rounded down to 3.
 # 
-# [MIDI 1.0 Specification - Channel Voice Messages - Program change](https://www.midi.org/specifications/item/table-1-summary-of-midi-message)
+# [MIDI 1.0 Specification - Channel Voice Messages - Program change](https://www.midi.org/specifications-old/item/table-1-summary-of-midi-message)
 # @accepts_block false
 # @param _program_num [midi]
 # @param channel Channel(s) to send to
 # @param port MIDI port(s) to send to
 # @param on If specified and false/nil/0 will stop the midi pc message from being sent out. (Ensures all opts are evaluated in this call to `midi_pc` regardless of value).
-# @since 3.0.2
+# @since 3.1.0
 # @example
 #   midi_pc 100  #=> Sends MIDI pc message to all ports and channels
 #
@@ -2645,7 +2510,7 @@ end
 #   midi_pc 100, channel: 5  #=> Sends MIDI pc message on channel 5 to all ports
 #
 # @example
-#   midi_pc 100, channel: 5  #=> Sends MIDI pc message on channel 5 to all ports
+#   midi_pc 100, port: ["foo", "bar"], channel: 5  #=> Sends MIDI pc message on channel 5 to ports named "foo" and "bar"
 #
 # @example
 #   midi_pc 100, channel: [1, 5]  #=> Sends MIDI pc message on channel 1 and 5 to all ports
@@ -2664,7 +2529,7 @@ end
 # * It is also possible to specify the delta value as a (14 bit) MIDI pitch bend value between 0 and 16383 using the `delta_midi:` opt.
 # * When using the `delta_midi:` opt no pitch bend is the value 8192
 # 
-# [MIDI 1.0 Specification - Channel Voice Messages - Pitch Bend Change](https://www.midi.org/specifications/item/table-1-summary-of-midi-message)
+# [MIDI 1.0 Specification - Channel Voice Messages - Pitch Bend Change](https://www.midi.org/specifications-old/item/table-1-summary-of-midi-message)
 # @accepts_block false
 # @param _delta [float01]
 # @param channel Channel(s) to send to
@@ -2699,7 +2564,7 @@ end
 # 
 # You may also optionally pass the pressure value as a floating point value between 0 and 1 such as 0.2 or 0.785 (which will be mapped to MIDI values between 0 and 127) using the `val_f:` opt.
 # 
-# [MIDI 1.0 Specification - Channel Voice Messages - Polyphonic Key Pressure (Aftertouch)](https://www.midi.org/specifications/item/table-1-summary-of-midi-message)
+# [MIDI 1.0 Specification - Channel Voice Messages - Polyphonic Key Pressure (Aftertouch)](https://www.midi.org/specifications-old/item/table-1-summary-of-midi-message)
 # @accepts_block false
 # @param _note [midi]
 # @param _value [midi]
@@ -2733,7 +2598,7 @@ end
 # 
 # A raw MIDI message consists of multiple bytes as numbers in decimal notation (i.e. 176), hex (0xb0) or binary (0b10110000).
 # 
-# See https://www.midi.org/specifications/item/table-1-summary-of-midi-message for a summary of MIDI messages and their corresponding byte structures.
+# See https://www.midi.org/specifications-old/item/table-1-summary-of-midi-message for a summary of MIDI messages and their corresponding byte structures.
 # @accepts_block false
 # @param port Port(s) to send the raw MIDI message events to
 # @param on If specified and false/nil/0 will stop the raw midi message from being sent out. (Ensures all opts are evaluated in this call to `midi_raw` regardless of value).
@@ -2759,7 +2624,7 @@ end
 # 
 # All controller values are reset to their defaults.
 # 
-# [MIDI 1.0 Specification - Channel Mode Messages - Reset All Controllers](https://www.midi.org/specifications/item/table-1-summary-of-midi-message)
+# [MIDI 1.0 Specification - Channel Mode Messages - Reset All Controllers](https://www.midi.org/specifications-old/item/table-1-summary-of-midi-message)
 # @accepts_block false
 # @param _value [number]
 # @param channel Channel to send the midi reset message to
@@ -2782,7 +2647,7 @@ end
 # 
 # All oscillators will turn off, and their volume envelopes are set to zero as soon as possible.
 # 
-# [MIDI 1.0 Specification - Channel Mode Messages - All Sound Off](https://www.midi.org/specifications/item/table-1-summary-of-midi-message)
+# [MIDI 1.0 Specification - Channel Mode Messages - All Sound Off](https://www.midi.org/specifications-old/item/table-1-summary-of-midi-message)
 # @accepts_block false
 # @param channel Channel to send the sound off message to
 # @param port MIDI port to send to
@@ -2803,7 +2668,7 @@ end
 # 
 # Start the current sequence playing. (This message should be followed with calls to `midi_clock_tick` or `midi_clock_beat`).
 # 
-# [MIDI 1.0 Specification - System Real-Time Messages - Start](https://www.midi.org/specifications/item/table-1-summary-of-midi-message)
+# [MIDI 1.0 Specification - System Real-Time Messages - Start](https://www.midi.org/specifications-old/item/table-1-summary-of-midi-message)
 # @accepts_block false
 # @since 3.0.0
 # @example
@@ -2818,7 +2683,7 @@ end
 # 
 # Stops the current sequence.
 # 
-# [MIDI 1.0 Specification - System Real-Time Messages - Start](https://www.midi.org/specifications/item/table-1-summary-of-midi-message)
+# [MIDI 1.0 Specification - System Real-Time Messages - Start](https://www.midi.org/specifications-old/item/table-1-summary-of-midi-message)
 # @accepts_block false
 # @param port MIDI Port(s) to send the stop message to
 # @since 3.0.0
@@ -2910,14 +2775,17 @@ def note_info(_note = nil, octave: nil)
 end
 
 # Get a range of notes
-# Produces a ring of all the notes between a low note and a high note. By default this is chromatic (all the notes) but can be filtered with a pitches: argument. This opens the door to arpeggiator style sequences and other useful patterns. If you try to specify only pitches which aren't in the range it will raise an error - you have been warned!
+# Produces a ring of all the notes between a start note and an end note. By default this is chromatic (all the notes) but can be filtered with a pitches: argument. This opens the door to arpeggiator style sequences and other useful patterns. If you try to specify only pitches which aren't in the range it will raise an error - you have been warned!
 # @accepts_block false
-# @param _low_note [note]
-# @param _high_note [note]
+# @param _start_note [note]
+# @param _end_note [note]
 # @param pitches An array of notes (symbols or ints) to filter on. Octave information is ignored.
 # @since 2.6.0
 # @example
 #   (note_range :c4, :c5) # => (ring 60,61,62,63,64,65,66,67,68,69,70,71,72)
+#
+# @example
+#   (note_range :c5, :c4) # => (ring 72,71,70,69,68,67,66,65,64,63,62,61,60)
 #
 # @example
 #   (note_range :c4, :c5, pitches: (chord :c, :major)) # => (ring 60,64,67,72)
@@ -2938,7 +2806,7 @@ end
 #     sleep 0.125
 #   end
 #
-def note_range(_low_note = nil, _high_note = nil, pitches: nil)
+def note_range(_start_note = nil, _end_note = nil, pitches: nil)
   #This is a stub, used for indexing
 end
 
@@ -3030,7 +2898,7 @@ end
 # 
 # OSC (Open Sound Control) is a simple way of passing messages between two separate programs on the same computer or even on different computers via a local network or even the internet. `osc` enables you to send well-timed OSC messages from within Sonic Pi. `osc` will ensure that the OSC message is sent at the correct time using the same timing system shared with the synthesis functionality via `sample`, `synth` and friends. `osc` even works seamlessly within `time_warp` - see examples.
 # 
-# A typical OSC message has two parts: a descriptive `path` which looks simalar to a URL (website address), and an optional list of `arguments` that are either numbers or strings.
+# A typical OSC message has two parts: a descriptive `path` which looks similar to a URL (website address), and an optional list of `arguments` that are either numbers or strings.
 # 
 # For example, a hypothetical synth program might accept this OSC message:
 # 
@@ -3049,13 +2917,13 @@ end
 # `osc "/set/filter", "lowpass", 80, 0.5`
 # 
 # 
-# Note, by default, Sonic Pi listens for OSC messages on port `4560`, so you may send messages to an external machine running Sonic Pi if you know the IP address of that external machine. Any OSC messages received on port `4559` are automatically converted to standard cue events and displayed in the GUI's cue log. This also means that you can use `sync` to wait for the next incoming OSC message with a given path (see example).
+# Note, by default, Sonic Pi listens for OSC messages on port `4560`, so you may send messages to an external machine running Sonic Pi if you know the IP address of that external machine. Any OSC messages received on port `4560` are automatically converted to standard cue events and displayed in the GUI's cue log. This also means that you can use `sync` to wait for the next incoming OSC message with a given path (see example).
 # 
-# Finally, it is also very useful to send OSC messages to aother programs on the same computer. This can be achieved by specifying "localhost" as the hostname and the port as normal (depending on which port the other program is listening on).
+# Finally, it is also very useful to send OSC messages to other programs on the same computer. This can be achieved by specifying "localhost" as the hostname and the port as normal (depending on which port the other program is listening on).
 # 
 # See `osc_send` for a version which allows you to specify the hostname and port directly (ignoring any values set via `use_osc` or `with_osc`).
 # 
-# For further information see the OSC spec: [http://opensoundcontrol.org/spec-1_0](http://opensoundcontrol.org/spec-1_0)
+# For further information see the OSC spec: [http://opensoundcontrol.org/spec-1_0.html](http://opensoundcontrol.org/spec-1_0.html)
 # @accepts_block false
 # @param _path [arguments]
 # @since 3.0.0
@@ -3067,7 +2935,7 @@ end
 #                                # and no arguments
 #
 # @example
-#   # Send an OSC messages with arguments to another program on the same machine
+#   # Send an OSC message with arguments to another program on the same machine
 #   
 #   use_osc "localhost", 7000        # Specify port 7000 on this machine
 #   osc "/foo/bar", 1, 3.89, "baz" # Send an OSC message with path "/foo/bar"
@@ -3077,7 +2945,7 @@ end
 #                                      # 3) The string "baz"
 #
 # @example
-#   # Send an OSC messages with arguments to another program on a different machine
+#   # Send an OSC message with arguments to another program on a different machine
 #   
 #   use_osc "10.0.1.5", 7000         # Specify port 7000 on the machine with address 10.0.1.5
 #   osc "/foo/bar", 1, 3.89, "baz" # Send an OSC message with path "/foo/bar"
@@ -3318,98 +3186,6 @@ end
 #   play_chord chord(:e3, :minor)
 #
 def play_chord(_notes = nil, amp: nil, amp_slide: nil, pan: nil, pan_slide: nil, attack: nil, decay: nil, sustain: nil, release: nil, attack_level: nil, decay_level: nil, sustain_level: nil, env_curve: nil, slide: nil, pitch: nil, on: nil)
-  #This is a stub, used for indexing
-end
-
-# Play a nested pattern of notes, samples or lambdas
-# Using a nested array to represent rhythm, you can use this method to structure melodies, beats and other rhythmic patterns.
-# 
-#   A nested array is just an array that contains other arrays inside it e.g. `[1, [2, 2], 1, 1]`. Here we can see three elements at the top level of the array (the ones) and two elements which are nested two arrays deep (the twos).
-# 
-#   We can use this nesting to play through the contents of the array at faster and faster rates. Things nested at the second level will play twice as fast, things nested at the third level will play four times as fast and so on.
-# 
-#   It might help to think about music notation - if the level 1 is a crotchet/quarter note, then level two is like a quaver/eighth note and so on, all the way down to hemidemisemiquavers and beyond.
-# 
-#   If you want to use a triplet rhythm you can use a special notation to spread across multiple beats e.g. `[:d5, :cs5, {over: 2, val: [:c5,:c5,:c5]}, :b4, :bb4, :a4]`. This spaces the three `:c5` notes over the space of two normal notes which gives you a quaver triplet rhythm. You might recognize this from Bizet's opera Carmen.
-# @accepts_block false
-# @param _pattern []
-# @param beat_length Length of a single (top level) beat - defaults to 1
-# @param mode One of `:notes`, `:samples` or `:lambdas` depending on what is in your nested pattern. See examples below.
-# @since 2.8.0
-# @example
-#   play_nested_pattern [:c, [:d, :f], :e, :c]
-#                                   # Same as:
-#                                   #   play :c
-#                                   #   sleep 1
-#                                   #   play :d
-#                                   #   sleep 0.5
-#                                   #   play :f
-#                                   #   sleep 0.5
-#                                   #   play :e
-#                                   #   sleep 1
-#                                   #   play :c
-#                                   #   sleep 1
-#
-# @example
-#   # We can also use sample names with `:samples` as the mode option
-#         rock_you_pattern =
-#           [:bd_haus, :elec_snare, [:bd_haus, :bd_haus], :elec_snare]
-#   
-#         play_nested_pattern(rock_you_pattern, mode: :samples) # Same as:
-#                                   #   sample :bd_haus
-#                                   #   sleep 1
-#                                   #   sample :elec_snare
-#                                   #   sleep 1
-#                                   #   sample :bd_haus
-#                                   #   sleep 0.5
-#                                   #   sample :bd_haus
-#                                   #   sleep 0.5
-#                                   #   sample :elec_snare
-#                                   #   sleep 1
-#
-# @example
-#   # We can also use lambdas with `:lambdas` as the mode option
-#         rand_notes = lambda {
-#           notes = scale(:c3, :minor_pentatonic, num_octaves: 3)
-#           play_pattern_timed(notes.shuffle.take(3), 0.33)
-#         }
-#         random_pattern = [rand_notes, rand_notes, [rand_notes, rand_notes], rand_notes]
-#         loop do
-#           # because we already sleep inside play_pattern_timed,
-#           # we set the :beat_length to zero
-#           play_nested_pattern(random_pattern, mode: :lambdas, beat_length: 0)
-#         end
-#
-# @example
-#   # Triplets and cross rhythms
-#         # By using a hash with :over and :val keys, we can spread, for example, three notes over the space of two
-#         # This creates the equivalent of triplets in music
-#         carmen_pattern = [:d5, :cs5, {over: 2, val: [:c5,:c5,:c5]}, :b4, :bb4, :a4]
-#         # This spaces the three `:c5` notes (our `:val`) over the space of two (our `:over`) normal notes which gives you a quaver triplet rhythm.
-#         # You might recognize this from Bizet's opera Carmen.
-#         play_nested_pattern(carmen_pattern, beat_length: 0.5)
-#
-# @example
-#   # Advanced version - a randomised drum beat
-#         live_loop :beatz do
-#           use_bpm 120
-#   
-#           bd = lambda { sample :bd_haus, rate: 2}
-#           sn = lambda { sample :drum_snare_hard, rate: 4 }
-#           hh = lambda { sample :drum_cymbal_closed, rate: rrand(3,4)}
-#           rest = lambda { nil }
-#   
-#           drumbeat = [bd, sn, [bd, [bd,bd]], [sn, hh]]
-#           drumbreak = [[bd,bd,bd,bd], {over: 2, val: [sn,sn,sn]}, [rest,hh,rest,hh]]
-#   
-#           3.times do
-#             play_nested_pattern(drumbeat, mode: :lambdas)
-#           end
-#           # We use .shuffle to get a different break each time
-#           play_nested_pattern(drumbreak.shuffle, mode: :lambdas)
-#         end
-#
-def play_nested_pattern(_pattern = nil, beat_length: nil, mode: nil)
   #This is a stub, used for indexing
 end
 
@@ -3682,14 +3458,16 @@ end
 # @param _max [number_or_range]
 # @since 2.11.0
 # @example
-#   print rand_i_look(5) #=> will print either 0, 1, 2, 3, or 4 to the output pane
+#   print rand_i_look(5) # will print either 0, 1, 2, 3, or 4 to the output pane
 #
 # @example
-#   print rand_i_look(5) #=> will print either 0, 1, 2, 3, or 4 to the output pane
-#   print rand_i_look(5) #=> will print the same number again
-#   print rand_i_look(5) #=> will print the same number again
-#   print rand_i(5) #=> will print either 0, 1, 2, 3, or 4 to the output pane
-#   print rand_i_look(5) #=> will print the same number as the previous statement
+#   print rand_i_look(5) # will print either 0, 1, 2, 3, or 4 to the output pane
+#   print rand_i_look(5) # will print the same number again
+#   print rand_i_look(5) # will print the same number again
+#   print rand_i(5) # will still print the same number again
+#                   # (this is the number rand_i_look was 'looking ahead' at)
+#                   # the number is now consumed
+#   print rand_i_look(5) # will print either 0, 1, 2, 3, or 4 to the output pane
 #
 def rand_i_look(_max = nil)
   #This is a stub, used for indexing
@@ -3703,14 +3481,16 @@ end
 # @param _max [number_or_range]
 # @since 2.11.0
 # @example
-#   print rand_look(0.5) #=> will print a number like 0.375030517578125 to the output pane
+#   print rand_look(0.5) # will print a number like 0.375030517578125 to the output pane
 #
 # @example
-#   print rand_look(0.5) #=> will print a number like 0.375030517578125 to the output pane
-#     print rand_look(0.5) #=> will print the same number again
-#     print rand_look(0.5) #=> will print the same number again
-#     print rand(0.5) #=> will print a different random number
-#     print rand_look(0.5) #=> will print the same number as the previous line again.
+#   print rand_look(0.5) # will print a number like 0.375030517578125 to the output pane
+#   print rand_look(0.5) # will print the same number again
+#   print rand_look(0.5) # will print the same number again
+#   print rand(0.5) # will still print the same number again
+#                   # (this is the number rand_look was 'looking ahead' at)
+#                   # the number is now consumed
+#   print rand_look(0.5) # will print a new number like 0.3669586181640625 to the output pane
 #
 def rand_look(_max = nil)
   #This is a stub, used for indexing
@@ -5128,6 +4908,34 @@ def set_control_delta!(_time = nil)
   #This is a stub, used for indexing
 end
 
+# Set the tempo for the link metronome.
+# Set the tempo for the link metronome in BPM. This is 'global' in that the BPM of all threads/live_loops in Link BPM mode will be affected.
+# 
+# Note that this will *also* change the tempo of *all link metronomes* connected to the local network. This includes other instances of Sonic Pi, Music Production tools like Ableton Live, VJ tools like Resolume, DJ hardware like the MPC and many iPad music apps.
+# 
+# For a full list of link-compatible apps and devices see:  [https://www.ableton.com/en/link/products/](https://www.ableton.com/en/link/products/)
+# 
+# Also note that the current thread does not have to be in Link BPM mode for this function to affect the Link clock's BPM.
+# 
+# To change the current thread/live_loop to Link BPM mode see: `use_bpm :link`
+# @accepts_block false
+# @param _bpm [number]
+# @since 4.0.0
+# @example
+#   use_bpm :link                                 # Switch to Link BPM mode
+#   set_link_bpm! 30                              # Change Link BPM to 30
+#   
+#   8.times do
+#     bpm += 10
+#     set_link_bpm! bpm                           # Gradually increase the Link BPM
+#     sample :loop_amen, beat_stretch: 2
+#     sleep 2
+#   end
+#
+def set_link_bpm!(_bpm = nil)
+  #This is a stub, used for indexing
+end
+
 # Control main mixer
 # The main mixer is the final mixer that all sound passes through. This fn gives you control over the main mixer allowing you to manipulate all the sound playing through Sonic Pi at once. For example, you can sweep a lpf or hpf over the entire sound. You can reset the controls back to their defaults with `reset_mixer!`.
 # @accepts_block false
@@ -6264,7 +6072,7 @@ end
 # 
 # OSC (Open Sound Control) is a simple way of passing messages between two separate programs on the same computer or even on different computers via a local network or even the internet. `use_osc` allows you to specify which computer (`hostname`) and program (`port`) to send messages to.
 # 
-# It is possible to send messages to the same computer by using the host name `"localhost"`
+# It is possible to send messages to the same computer by using the host name `"localhost"`.
 # 
 # This is a thread-local setting - therefore each thread (or live loop) can have their own separate `use_osc` values.
 # 
@@ -6282,23 +6090,23 @@ end
 #                                # and no arguments
 #
 # @example
-#   # Send an OSC messages with arguments to another program on the same machine
+#   # Send an OSC message with arguments to another program on the same machine
 #   
 #   use_osc "localhost", 7000        # Specify port 7000 on this machine
 #   osc "/foo/bar" 1, 3.89, "baz"  # Send an OSC message with path "/foo/bar"
 #                                      # and three arguments:
 #                                      # 1) The whole number (integer) 1
-#                                      # 2) The fractional number (float) 3,89
+#                                      # 2) The fractional number (float) 3.89
 #                                      # 3) The string "baz"
 #
 # @example
-#   # Send an OSC messages with arguments to another program on a different machine
+#   # Send an OSC message with arguments to another program on a different machine
 #   
 #   use_osc "10.0.1.5", 7000         # Specify port 7000 on the machine with address 10.0.1.5
 #   osc "/foo/bar" 1, 3.89, "baz"  # Send an OSC message with path "/foo/bar"
 #                                      # and three arguments:
 #                                      # 1) The whole number (integer) 1
-#                                      # 2) The fractional number (float) 3,89
+#                                      # 2) The fractional number (float) 3.89
 #                                      # 3) The string "baz"
 #
 # @example
@@ -6308,7 +6116,7 @@ end
 #   osc "/foo/bar"             # Send an OSC message to port 7000
 #   osc "/foo/baz"             # Send another OSC message to port 7000
 #   
-#   use_osc "localhost", 7005  # Specify port 7000 on this machine
+#   use_osc "localhost", 7005  # Specify port 7005 on this machine
 #   osc "/foo/bar"             # Send an OSC message to port 7005
 #   osc "/foo/baz"             # Send another OSC message to port 7005
 #
@@ -6365,9 +6173,9 @@ end
 #   ## Basic usage
 #   
 #     use_random_seed 1 # reset random seed to 1
-#     puts rand # => 0.417022004702574
+#     puts rand # => 0.733917236328125
 #     use_random_seed 1 # reset random seed back to 1
-#     puts rand  #=> 0.417022004702574
+#     puts rand  #=> 0.733917236328125
 #
 # @example
 #   ## Generating melodies
@@ -6461,7 +6269,7 @@ end
 # @accepts_block false
 # @since 3.0.0
 # @example
-#   use_real_time 1 # Code will now run approximately 1 second ahead of audio.
+#   use_real_time # Code will now produce sound without a scheduling delay.
 #
 def use_real_time
   #This is a stub, used for indexing
@@ -7123,7 +6931,7 @@ end
 # @param _port [number]
 # @since 3.0.0
 # @example
-#   use_osc "localhost", 7000  # Specify port 7010
+#   use_osc "localhost", 7000  # Specify port 7000
 #   osc "/foo/baz"             # Send an OSC message to port 7000
 #   
 #   with_osc "localhost", 7010 do # set hostname and port for the duration
@@ -7169,15 +6977,15 @@ end
 # @since 2.0.0
 # @example
 #   use_random_seed 1 # reset random seed to 1
-#     puts rand # => 0.417022004702574
-#     puts rand  #=> 0.7203244934421581
+#     puts rand # => 0.733917236328125
+#     puts rand  #=> 0.464202880859375
 #     use_random_seed 1 # reset it back to 1
-#     puts rand # => 0.417022004702574
+#     puts rand # => 0.733917236328125
 #     with_random_seed 1 do # reset seed back to 1 just for this block
-#       puts rand # => 0.417022004702574
-#       puts rand #=> 0.7203244934421581
+#       puts rand # => 0.733917236328125
+#       puts rand #=> 0.464202880859375
 #     end
-#     puts rand # => 0.7203244934421581
+#     puts rand # => 0.464202880859375
 #               # notice how the original generator is restored
 #
 # @example
@@ -7258,7 +7066,11 @@ end
 # @accepts_block false
 # @since 3.0.0
 # @example
-#   use_real_time 1 # Code will now run approximately 1 second ahead of audio.
+#   with_real_time do
+#     play 70  # Sound will happen without a scheduling delay.
+#   end
+#   
+#   play 70  # Sound will happen with the default latency (0.5s).
 #
 def with_real_time
   #This is a stub, used for indexing
@@ -7351,7 +7163,7 @@ end
 # @example
 #   live_loop :foo do
 #     with_swing 0.1 do
-#       sample :elec_beep      # plays the :elec_beep sample late except for every 4th time
+#       sample :elec_beep      # plays the :elec_beep sample late except on the 1st beat of every 4
 #     end
 #     sleep 0.25
 #   end
@@ -7360,7 +7172,7 @@ end
 #   live_loop :foo do
 #     with_swing -0.1 do
 #       sample :elec_beep      # plays the :elec_beep sample slightly early
-#     end                      # except for every 4th time
+#     end                      # on the 1st beat of every 4
 #     sleep 0.25
 #   end
 #
@@ -7368,7 +7180,7 @@ end
 #   live_loop :foo do
 #     with_swing -0.1, pulse: 8 do
 #       sample :elec_beep      # plays the :elec_beep sample slightly early
-#     end                      # except for every 8th time
+#     end                      #  on the 1st beat of every 8
 #     sleep 0.25
 #   end
 #
@@ -7378,11 +7190,11 @@ end
 #   live_loop :foo do
 #     with_swing 0.14, tick: :a do
 #       sample :elec_beep      # plays the :elec_beep sample slightly late
-#     end                      # except for every 4th time
+#     end                      #  on the 1st beat of every 4
 #   
 #     with_swing -0.1, tick: :b do
 #       sample :elec_beep, rate: 2  # plays the :elec_beep sample at double rate
-#     end                           #  slightly early except for every 4th time
+#     end                           #  slightly early except  on the 1st beat of every 4
 #     sleep 0.25
 #   end
 #
@@ -7399,6 +7211,22 @@ end
 #     sample :elec_beep       # sync on the swing cue messages to bring the swing into
 #                             # another live loop (sync will match the timing and clock of
 #                             # the sending live loop)
+#   end
+#
+# @example
+#   live_loop :foo do
+#     with_swing 0.1, offset: 2 do
+#       sample :elec_beep      # plays the :elec_beep sample slightly late
+#     end                      # on the the 3rd beat of every 4
+#     sleep 0.25
+#   end
+#
+# @example
+#   live_loop :foo do
+#     with_swing 0.1, pulse: 2, offset: 1 do
+#       sample :elec_beep      # plays the :elec_beep sample slightly late
+#     end                      # on the 2nd beat of every 2
+#     sleep 0.25
 #   end
 #
 def with_swing(_shift = nil, _pulse = nil, _tick = nil, shift: nil, pulse: nil, tick: nil, offset: nil)
