@@ -2341,14 +2341,14 @@ end
 # 
 # Valid modes are:
 # 
-# :omni_off - Omni Mode Off
-# :omni_on  - Omni Mode On
-# :mono     - Mono Mode On (Poly Off). Set num_chans: to be the number of channels to use (Omni Off) or 0 (Omni On). Default for num_chans: is 16.
-# :poly     - Poly Mode On (Mono Off)
+# - :omni_off - Omni Mode Off
+# - :omni_on  - Omni Mode On
+# - :mono     - Mono Mode On (Poly Off). Set num_chans: to be the number of channels to use (Omni Off) or 0 (Omni On). Default for num_chans: is 16.
+# - :poly     - Poly Mode On (Mono Off)
 # 
 # Note that this fn also includes the behaviour of `midi_all_notes_off`.
 # 
-# [MIDI 1.0 Specification - Channel Mode Messages - Omni Mode Off | Omni Mode On | Mono Mode On (Poly Off) | Poly Mode On](https://www.midi.org/specifications-old/item/table-1-summary-of-midi-message)
+# [MIDI 1.0 Specification - Channel Mode Messages - Omni Mode Off / Omni Mode On / Mono Mode On (Poly Off) / Poly Mode On](https://www.midi.org/specifications-old/item/table-1-summary-of-midi-message)
 # @accepts_block false
 # @param _mode [mode_keyword]
 # @param channel Channel to send the MIDI mode message to
@@ -4261,7 +4261,7 @@ end
 #                                                           # the same as using onset: 0 with the side effect of also printing out
 #                                                           # the full ring of onsets:
 #   
-#   sample :loop_tabla, onset: l                            # (ring {:start=>0.0, :finish=>0.0076}, {:start=>0.0076, :finish 0.015}...)
+#   sample :loop_tabla, onset: l                            # (ring {:start=>0.0, :finish=>0.015110842894865981, :index=>0}, {:start=>0.015110842894865981, :finish=>0.030374580804422135, :index=>1}...)
 #   
 #                                                           # We are therefore free to define this lambda to do anything we want.
 #                                                           # This gives us very powerful control over the choice of onset. It is
@@ -6533,9 +6533,11 @@ end
 # @since 2.0.0
 # @example
 #   use_bpm 120
-#   play 50, release: 2 # release is actually 1 due to bpm scaling
+#   play 50, release: 2   # release is actually 1 due to bpm scaling
+#   sleep 2               # actually sleeps for 1 second 
 #   with_arg_bpm_scaling false do
 #     play 50, release: 2 # release is now 2
+#     sleep 2             # still sleeps for 1 second
 #   end
 #
 # @example
@@ -7155,6 +7157,7 @@ end
 # @param _shift [beats]
 # @param _pulse [number]
 # @param _tick [symbol]
+# @param _offset [number]
 # @param shift How much time to delay/forward the block. Greater values produce more emphasised swing. Defaults to 0.1 beats.
 # @param pulse How often to apply the swing. Defaults to 4.
 # @param tick A key for the tick with which to count pulses. Override this if you have more than one `with_swing` block in your `live_loop` or thread to stop them interfering with each other.
@@ -7229,7 +7232,7 @@ end
 #     sleep 0.25
 #   end
 #
-def with_swing(_shift = nil, _pulse = nil, _tick = nil, shift: nil, pulse: nil, tick: nil, offset: nil)
+def with_swing(_shift = nil, _pulse = nil, _tick = nil, _offset = nil, shift: nil, pulse: nil, tick: nil, offset: nil)
   #This is a stub, used for indexing
 end
 
